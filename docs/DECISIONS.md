@@ -11,3 +11,5 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **GPU:** vizuelizacija uključuje usisavanje odozdo i izbacivanje toplog vazduha.
 - **Aura GC1/GC5/GC6/GC7:** specifikacije iz zvaničnih linkova koje dostavlja vlasnik projekta.
 - **Testiranje:** UI se testira kao web build u headless browseru; Tauri build proverava vlasnik na Windowsu.
+- **Wraith stock cooler:** vizuelno duva napred, ka staklenom bočnom panelu (ka posmatraču), vazduh se širi oko hladnjaka.
+- **Profili kućišta:** `src/data/cases/*.json`, sa izvorima. `directionVerified: false` znači da je smer fabričkog ventilatora standardan (front intake / rear exhaust), ali nije eksplicitno naveden u izvoru.

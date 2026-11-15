@@ -1,0 +1,24 @@
+{
+  "id": "gamdias-aura-gc7",
+  "name": "GAMDIAS AURA GC7",
+  "manufacturer": "GAMDIAS",
+  "dimensionsMm": { "depth": 350, "width": 188, "height": 430 },
+  "clearanceMm": { "gpuMaxLength": 300, "cpuCoolerMaxHeight": 155, "psuMaxLength": 160 },
+  "fanMounts": {
+    "front": { "max120": 3 },
+    "top":   { "max120": 2 },
+    "rear":  { "max120": 1 }
+  },
+  "radiatorMounts": {
+    "rear": [120]
+  },
+  "factoryFans": [
+    { "position": "front", "count": 2, "direction": "intake", "directionVerified": false },
+    { "position": "rear",  "count": 1, "direction": "exhaust", "directionVerified": false }
+  ],
+  "sources": [
+    "https://www.gamdias.com/en/aura/component/case/AURA_GC7",
+    "https://www.tehnomedia.rs/proizvod/gamdias-aura-gc7",
+    "https://jubocomputer.com/?p=36920"
+  ]
+}
