@@ -29,3 +29,4 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Čuvanje podataka:** jedan `data.json`. Instalirana verzija (pored exe-a postoji `uninstall.exe`) → `%APPDATA%\com.cirovic.airflowsim`; portable → folder `AirflowSimData` pored exe-a. Upis ide preko privremenog fajla da se ne pokvari pri padu.
 - **Konfiguracija** čuva: kućište, ventilatore (mesto, smer, radijator), GPU, CPU hladnjak, brzinu ventilatora i boje protoka. JSON export ima zaglavlje `{"app": "PC Airflow Simulator", "format": 1}`; import proverava svako polje i odbacuje nepoznato.
 - **Simulator ostaje učitan** kad se pređe na drugi ekran (stanje se ne gubi), a animacija se tada pauzira.
+- **Uticaj komponenti na vazduh:** GPU ventilatori usisavaju vazduh odozdo (svaki iz svoje zone), vazduh prolazi kroz karticu i izlazi gore zagrejan. Tower/Wraith zagrevaju vazduh koji prođe kroz hladnjak. Vazduh koji ulazi kroz AIO radijator je već topliji. Boja čestice = toplota (plava hladno → narandžasta toplo).

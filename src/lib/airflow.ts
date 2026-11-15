@@ -28,6 +28,8 @@ interface Particle {
   life: number;
   /** Outside the case: moves straight, ignoring the grid. */
   outside: boolean;
+  /** 0 = fresh cool air, 1 = hot. Rises when the air passes the GPU or CPU cooler. */
+  heat: number;
 }
 
 interface Emitter {
@@ -39,6 +41,8 @@ interface Emitter {
   /** Edge fans: spread across the fan width. Face fans: spawn in a disk. */
   face: boolean;
   outside: boolean;
+  /** Air coming in through an AIO radiator is already warm. */
+  heat: number;
 }
 
 interface Opening {
@@ -67,6 +71,10 @@ export class AirflowEngine {
   private shroud: Shroud | null = null;
   private openings: Opening[] = [];
   private faceSinks: { x: number; y: number }[] = [];
+  private gpuRect: Rect | null = null;
+  private gpuFanXs: number[] = [];
+  private gpuFanHalf = 0;
+  private cpuHeatZone: { x: number; y: number; w: number; h: number } | null = null;
   private emitters: Emitter[] = [];
   private particles: Particle[] = [];
   private spawnBudget = 0;
@@ -87,6 +95,24 @@ export class AirflowEngine {
     const gpuLength = getGpuLength(scene.gpu);
     const gpuRect = gpuLength ? { x: GPU_X, y: PCIE_Y + 6, w: gpuLength, h: GPU_THICK } : null;
     if (gpuRect) this.obstacles.push(gpuRect);
+    this.gpuRect = gpuRect;
+    this.gpuFanXs = [];
+    if (gpuRect) {
+      const segment = gpuRect.w / scene.gpu.fans;
+      this.gpuFanHalf = Math.min(46, segment / 2 - 5);
+      for (let i = 0; i < scene.gpu.fans; i++) this.gpuFanXs.push(gpuRect.x + segment * (i + 0.5));
+    }
+
+    // Area around the CPU cooler where passing air picks up heat.
+    const cx = SOCKET.x + SOCKET.size / 2;
+    const cy = SOCKET.y + SOCKET.size / 2;
+    const cooler = scene.cooler;
+    this.cpuHeatZone =
+      cooler.type === "tower"
+        ? { x: cx - 30, y: cy - 75, w: 60, h: 150 }
+        : cooler.type === "wraith"
+          ? { x: cx - 46, y: cy - 46, w: 92, h: 92 }
+          : null; // AIO: the heat leaves through the radiator instead
 
     // Openings in the walls that particles may leave through.
     this.openings = [];
@@ -109,6 +135,7 @@ export class AirflowEngine {
           dy,
           face,
           outside: !face,
+          heat: fan.radiator ? 0.45 : 0,
         });
       }
     }
@@ -116,7 +143,7 @@ export class AirflowEngine {
     // No intake fans: air leaks in through gaps, here the rear slot covers.
     if (this.emitters.length === 0 && placed.length > 0) {
       for (const y of [250, 300]) {
-        this.emitters.push({ x: 8, y, dx: 1, dy: 0, face: false, outside: false });
+        this.emitters.push({ x: 8, y, dx: 1, dy: 0, face: false, outside: false, heat: 0 });
       }
     }
 
@@ -153,6 +180,27 @@ export class AirflowEngine {
 
       let nx = p.x + p.vx * dt;
       let ny = p.y + p.vy * dt;
+
+      // GPU: air pulled into a fan from below goes through the heatsink
+      // and comes out of the top of the card, hot.
+      const g = this.gpuRect;
+      if (g && nx > g.x && nx < g.x + g.w && ny > g.y && p.y >= g.y + g.h - 1) {
+        const fanX = this.gpuFanXs.find((fx) => Math.abs(nx - fx) < this.gpuFanHalf);
+        if (fanX !== undefined) {
+          p.x = p.px = nx + (Math.random() - 0.5) * 30;
+          p.y = p.py = g.y - 2;
+          p.vx = (Math.random() - 0.5) * 90;
+          p.vy = -speed * 1.1;
+          p.heat = Math.min(1, p.heat + 0.6);
+          continue;
+        }
+      }
+
+      // CPU cooler warms the air passing through it.
+      const z = this.cpuHeatZone;
+      if (z && nx > z.x && nx < z.x + z.w && ny > z.y && ny < z.y + z.h) {
+        p.heat = Math.min(1, p.heat + dt * 1.6);
+      }
 
       // Slide around obstacles.
       if (this.hitsObstacle(nx, ny)) {
@@ -206,8 +254,9 @@ export class AirflowEngine {
 
     const { intake, exhaust } = this.colors;
     for (const p of this.particles) {
-      // Air "warms up" from the intake color to the exhaust color as it ages.
-      const heat = Math.min(1, p.age / (p.life * 0.75));
+      // Cool air has the intake color, hot air the exhaust color. Heat comes mostly
+      // from the GPU and CPU cooler, plus a little from time spent in the case.
+      const heat = Math.min(1, p.heat + (0.35 * p.age) / p.life);
       const r = Math.round(intake[0] + (exhaust[0] - intake[0]) * heat);
       const g = Math.round(intake[1] + (exhaust[1] - intake[1]) * heat);
       const b = Math.round(intake[2] + (exhaust[2] - intake[2]) * heat);
@@ -262,6 +311,7 @@ export class AirflowEngine {
         age: 0,
         life: 3.5 + Math.random() * 2.6,
         outside: e.outside,
+        heat: e.heat,
       });
     }
   }
@@ -345,12 +395,24 @@ export class AirflowEngine {
           vy += (sign * k * ry) / r2;
         }
 
-        // GPU fans pull air up from below the card; warm air rises off its top.
-        if (gpuRect && x > gpuRect.x && x < gpuRect.x + gpuRect.w) {
-          const below = y - (gpuRect.y + gpuRect.h);
+        // GPU fans suck air in from below, each toward its own fan;
+        // hot air rises off the top of the card.
+        if (gpuRect) {
+          const bottom = gpuRect.y + gpuRect.h;
+          if (y > bottom - 4) {
+            for (const fx of this.gpuFanXs) {
+              const ax = fx - x;
+              const ay = bottom - y;
+              const d = Math.hypot(ax, ay) || 1;
+              if (d < 140) {
+                const pull = 2.4 * (1 - d / 140);
+                vx += (ax / d) * pull;
+                vy += (ay / d) * pull;
+              }
+            }
+          }
           const above = gpuRect.y - y;
-          if (below > 0 && below < 70) vy -= 0.9 * (1 - below / 70);
-          if (above > 0 && above < 60) vy -= 0.5 * (1 - above / 60);
+          if (above > 0 && above < 70 && x > gpuRect.x && x < gpuRect.x + gpuRect.w) vy -= 1.0 * (1 - above / 70);
         }
 
         // Air turns away just before it reaches the top of the shroud or the GPU.
