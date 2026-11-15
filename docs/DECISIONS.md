@@ -17,3 +17,4 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Raspored na crtežu:** koje pozicije postoje i koliko ventilatora staje dolazi iz verifikovanih podataka proizvođača; tačni mm položaji na crtežu su aproksimirani iz dimenzija kućišta (`src/lib/layout.ts`).
 - **Fabrički ventilatori** zauzimaju prva mesta na svojoj poziciji (napred odozgo nadole, gore od pozadi ka napred).
 - **Interakcija:** klik na prazno mesto dodaje ventilator (napred/bočno/dole = intake, gore/pozadi = exhaust), klik na ventilator menja smer, × uklanja.
+- **Orijentacija crteža:** pogled kroz stakleni (levi) panel na ploču – zadnji deo (I/O, zadnji ventilator) levo, prednji panel desno.

@@ -56,10 +56,10 @@ export function CaseView({ caseProfile, slots, fans, onAdd, onToggle, onRemove }
 
 function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
   const { depth, height } = caseProfile.dimensionsMm;
-  const boardX = depth - BOARD.rearGap - BOARD.width;
+  // Rear of the case is on the left (x = 0), front on the right (x = depth).
+  const boardX = BOARD.rearGap;
   const shroudY = height - SHROUD_HEIGHT;
-  const hasFrontFans = !!caseProfile.fanMounts.front;
-  const shroudX = hasFrontFans ? 40 : 0;
+  const shroudWidth = caseProfile.fanMounts.front ? depth - 40 : depth;
 
   return (
     <g className="shell">
@@ -67,7 +67,7 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
 
       {caseProfile.frontPanel && (
         <rect
-          x="0"
+          x={depth - 8}
           y="0"
           width="8"
           height={height}
@@ -79,17 +79,17 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
 
       {/* Motherboard with CPU socket and PCIe slot */}
       <rect className="board" x={boardX} y={BOARD.topGap} width={BOARD.width} height={BOARD.height} rx="3" />
-      <rect className="socket" x={boardX + 110} y={BOARD.topGap + 60} width="40" height="40" rx="3" />
+      <rect className="socket" x={boardX + 94} y={BOARD.topGap + 60} width="40" height="40" rx="3" />
       <rect className="pcie" x={boardX + 20} y={BOARD.topGap + 170} width={BOARD.width - 40} height="5" rx="2" />
 
-      {/* Rear I/O and expansion slot covers */}
-      <rect className="rear-io" x={depth - 6} y={BOARD.topGap + 4} width="6" height="44" />
+      {/* Rear I/O (below the rear fan) and expansion slot covers */}
+      <rect className="rear-io" x="0" y="168" width="6" height="40" />
       {Array.from({ length: 7 }, (_, i) => (
-        <rect key={i} className="slot-cover" x={depth - 5} y={BOARD.topGap + 160 + i * 20} width="5" height="14" />
+        <rect key={i} className="slot-cover" x="0" y={215 + i * 16} width="5" height="11" />
       ))}
 
       {/* PSU shroud */}
-      <rect className="shroud" x={shroudX} y={shroudY} width={depth - shroudX} height={SHROUD_HEIGHT} rx="4" />
+      <rect className="shroud" x="0" y={shroudY} width={shroudWidth} height={SHROUD_HEIGHT} rx="4" />
     </g>
   );
 }

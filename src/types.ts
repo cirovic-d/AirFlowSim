@@ -36,7 +36,7 @@ export interface Slot {
   id: string;
   position: MountPosition;
   index: number;
-  /** Center in mm, measured from the case's top-front corner (side view). */
+  /** Center in mm from the top-left corner of the side view (rear is on the left). */
   cx: number;
   cy: number;
 }

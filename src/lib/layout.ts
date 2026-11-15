@@ -1,7 +1,7 @@
 import type { CaseProfile, MountPosition, Slot } from "../types";
 
-// All sizes in millimetres. The side view looks at the glass (left) panel:
-// the case front is on the left, the rear I/O on the right.
+// All sizes in millimetres. The side view looks through the glass (left) panel
+// at the motherboard: the rear I/O is on the left, the case front on the right.
 export const FAN = 120;
 export const FAN_THICK = 25;
 const EDGE = 16; // distance from an outer wall to the fan's center line
@@ -12,8 +12,8 @@ export const BOARD = { width: 244, height: 305, rearGap: 15, topGap: 32 }; // AT
 
 // Which way is "into the case" for a fan mounted at each position.
 export const INWARD: Record<MountPosition, [number, number]> = {
-  front: [1, 0],
-  rear: [-1, 0],
+  front: [-1, 0],
+  rear: [1, 0],
   top: [0, 1],
   bottom: [0, -1],
   side: [0, 0], // side fans face the viewer
@@ -42,11 +42,11 @@ export function getSlots(c: CaseProfile): Slot[] {
   }
 
   const half = FAN / 2;
-  addRow("front", [EDGE, MARGIN + half], [0, FAN]); // top to bottom
-  addRow("side", [MARGIN + half, MARGIN + half], [0, FAN]); // top to bottom
-  addRow("top", [depth - 50 - half, EDGE], [-FAN, 0]); // rear to front
-  addRow("rear", [depth - EDGE, MARGIN + half], [0, FAN]);
-  addRow("bottom", [MARGIN + half, height - EDGE], [FAN, 0]); // front to rear
+  addRow("front", [depth - EDGE, MARGIN + half], [0, FAN]); // top to bottom
+  addRow("side", [depth - MARGIN - half, MARGIN + half], [0, FAN]); // top to bottom
+  addRow("top", [50 + half, EDGE], [FAN, 0]); // rear to front
+  addRow("rear", [EDGE, MARGIN + half], [0, FAN]);
+  addRow("bottom", [depth - MARGIN - half, height - EDGE], [-FAN, 0]); // front to rear
 
   return slots;
 }
