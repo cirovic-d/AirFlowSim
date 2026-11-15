@@ -1,4 +1,4 @@
-import type { CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition } from "../types";
+import type { AioSize, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition } from "../types";
 import { CASES } from "../data/cases";
 import { DEFAULT_GPU, getAioPositions, mountAio } from "./components";
 import { getSlots } from "./layout";
@@ -121,16 +121,18 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
     else fans.push({ slotId: f.slotId, direction: f.direction });
   }
 
-  // CPU cooler. A 360 AIO is kept only where this case supports it.
+  // CPU cooler. An AIO is kept only where this case supports that radiator size.
+  // Files from before 240 mm support have no size: they were all 360 mm.
   let cooler: CpuCooler = { type: "tower", direction: "rear" };
   let finalFans = fans;
   const c = (r.cooler ?? {}) as Record<string, unknown>;
   if (c.type === "wraith") cooler = { type: "wraith" };
   if (c.type === "tower") cooler = { type: "tower", direction: c.direction === "front" ? "front" : "rear" };
-  if (c.type === "aio" && getAioPositions(caseProfile).includes(c.position as MountPosition)) {
+  const size: AioSize = c.size === 240 ? 240 : 360;
+  if (c.type === "aio" && getAioPositions(caseProfile, size).includes(c.position as MountPosition)) {
     const position = c.position as MountPosition;
-    cooler = { type: "aio", position };
-    finalFans = mountAio(fans, slots, position).map((f) =>
+    cooler = { type: "aio", size, position };
+    finalFans = mountAio(fans, slots, position, size).map((f) =>
       f.radiator ? { ...f, direction: radiatorDirections.get(f.slotId) ?? f.direction } : f,
     );
   }

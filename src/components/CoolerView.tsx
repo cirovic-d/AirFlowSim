@@ -81,9 +81,20 @@ function Pump({ radSlots }: { radSlots: Slot[] }) {
   );
 }
 
-/** 360 mm radiator body, on the inner side of its three fans. */
+/** Radiator body (240 or 360 mm), on the inner side of its fans. */
 export function RadiatorView({ slots }: { slots: Slot[] }) {
   if (slots.length === 0) return null;
+
+  // Side panel (Antec C3): the fans face the viewer, so the radiator sits right behind them.
+  if (slots[0].position === "side") {
+    const top = Math.min(...slots.map((s) => s.cy)) - FAN / 2 - 6;
+    return (
+      <g className="radiator">
+        <rect x={slots[0].cx - FAN / 2 - 6} y={top} width={FAN + 12} height={FAN * slots.length + 12} rx="3" fill="url(#fins-h)" />
+      </g>
+    );
+  }
+
   const [ix, iy] = INWARD[slots[0].position];
   const offset = FAN_THICK / 2 + RAD_THICK / 2;
   const xs = slots.map((s) => s.cx + ix * offset);
@@ -92,8 +103,9 @@ export function RadiatorView({ slots }: { slots: Slot[] }) {
 
   const x = vertical ? xs[0] - RAD_THICK / 2 : Math.min(...xs) - FAN / 2 - 12;
   const y = vertical ? Math.min(...ys) - FAN / 2 - 12 : ys[0] - RAD_THICK / 2;
-  const w = vertical ? RAD_THICK : FAN * 3 + 24;
-  const h = vertical ? FAN * 3 + 24 : RAD_THICK;
+  const length = FAN * slots.length + 24;
+  const w = vertical ? RAD_THICK : length;
+  const h = vertical ? length : RAD_THICK;
 
   return (
     <g className="radiator">

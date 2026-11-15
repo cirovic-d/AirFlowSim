@@ -41,3 +41,4 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Protok kroz GPU (v0.2):** vazduh ispod kartice ide ka nasumično izabranom ventilatoru kartice (svi ventilatori dobijaju vazduh), prolazi kroz hladnjak i izlazi duž cele gornje ivice. Ispred kraja kartice vazduh se deli – donji deo ide ispod kartice, gornji preko.
 - **Čestice (v0.2):** interpolacija polja (glatke putanje), blago talasanje umesto nasumičnog drhtanja, mek sjaj oko traga.
 - **NZXT S340 Elite (CA-S340W-W2):** puni prednji panel (bez mesha/stakla), fabrički 1 gore + 1 pozadi, oba exhaust (potvrđeno u GamersNexus recenziji). Maks. dužina napajanja nije objavljena pa se ne prikazuje. AIO 360 nije podržan (napred max 280).
+- **AIO 240/360 (v0.3.0):** AIO ima veličinu; 240 zauzima 2 mesta, 360 tri. Nude se samo pozicije gde proizvođač navodi tu veličinu (npr. S340 Elite i GC1: 240 napred; Antec C3: 240 gore ili sa strane). Stare sačuvane konfiguracije bez veličine se čitaju kao 360.

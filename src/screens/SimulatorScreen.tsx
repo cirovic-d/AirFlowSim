@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
+import type { AioSize, CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { shortName } from "../data/cases";
-import { DEFAULT_GPU, getAioPositions, getGpuFit, mountAio, removeAio } from "../lib/components";
+import { DEFAULT_GPU, getAioPositions, getAioSizes, getGpuFit, mountAio, removeAio } from "../lib/components";
 import type { Setup } from "../lib/configs";
 import { particlesFor, type Settings } from "../lib/settings";
 import { SaveDialog } from "../components/SaveDialog";
@@ -72,7 +72,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
 
   function restoreFactory() {
     const factory = getFactoryFans(caseProfile, slots);
-    setFans(cooler.type === "aio" ? mountAio(factory, slots, cooler.position) : factory);
+    setFans(cooler.type === "aio" ? mountAio(factory, slots, cooler.position, cooler.size) : factory);
   }
 
   // ---------- CPU cooler ----------
@@ -91,10 +91,12 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   function setCoolerType(type: CpuCooler["type"]) {
     if (type === cooler.type) return;
     if (type === "aio") {
-      const position = getAioPositions(caseProfile)[0];
-      if (!position) return;
-      setCooler({ type: "aio", position });
-      setFans((prev) => mountAio(prev, slots, position));
+      const sizes = getAioSizes(caseProfile);
+      if (sizes.length === 0) return;
+      const size = sizes.includes(360) ? 360 : sizes[0];
+      const position = getAioPositions(caseProfile, size)[0];
+      setCooler({ type: "aio", size, position });
+      setFans((prev) => mountAio(prev, slots, position, size));
       return;
     }
     setFans((prev) => refillFactory(removeAio(prev), prev));
@@ -102,8 +104,19 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   }
 
   function setAioPosition(position: MountPosition) {
-    setCooler({ type: "aio", position });
-    setFans((prev) => refillFactory(mountAio(prev, slots, position), prev));
+    if (cooler.type !== "aio") return;
+    const size = cooler.size;
+    setCooler({ type: "aio", size, position });
+    setFans((prev) => refillFactory(mountAio(prev, slots, position, size), prev));
+  }
+
+  function setAioSize(size: AioSize) {
+    if (cooler.type !== "aio") return;
+    const positions = getAioPositions(caseProfile, size);
+    const position = positions.includes(cooler.position) ? cooler.position : positions[0];
+    if (!position) return;
+    setCooler({ type: "aio", size, position });
+    setFans((prev) => refillFactory(mountAio(prev, slots, position, size), prev));
   }
 
   function setRadiatorDirection(direction: FanDirection) {
@@ -191,6 +204,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             fans={fans}
             onCoolerType={setCoolerType}
             onAioPosition={setAioPosition}
+            onAioSize={setAioSize}
             onRadiatorDirection={setRadiatorDirection}
             onTowerDirection={(direction) => setCooler({ type: "tower", direction })}
             onToggleFan={toggleFan}

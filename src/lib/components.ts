@@ -1,4 +1,4 @@
-import type { CaseProfile, GpuConfig, GpuSize, InstalledFan, MountPosition, Slot } from "../types";
+import type { AioSize, CaseProfile, GpuConfig, GpuSize, InstalledFan, MountPosition, Slot } from "../types";
 
 // ---------- GPU ----------
 
@@ -31,18 +31,25 @@ export function getGpuFit(c: CaseProfile, gpu: GpuConfig): GpuFit {
   return length <= max ? "compatible" : "incompatible";
 }
 
-// ---------- 360 mm AIO ----------
+// ---------- AIO (240 mm or 360 mm) ----------
 
-/** Positions where this case officially supports a 360 mm radiator. */
-export function getAioPositions(c: CaseProfile): MountPosition[] {
+export const AIO_SIZES: AioSize[] = [240, 360];
+
+/** Positions where this case officially supports a radiator of this size. */
+export function getAioPositions(c: CaseProfile, size: AioSize): MountPosition[] {
   return (Object.keys(c.radiatorMounts) as MountPosition[]).filter(
-    (p) => c.radiatorMounts[p]!.includes(360) && (c.fanMounts[p]?.max120 ?? 0) >= 3,
+    (p) => c.radiatorMounts[p]!.includes(size) && (c.fanMounts[p]?.max120 ?? 0) >= size / 120,
   );
 }
 
-/** Puts the three radiator fans on the first three slots of a position. */
-export function mountAio(fans: InstalledFan[], slots: Slot[], position: MountPosition): InstalledFan[] {
-  const radSlots = slots.filter((s) => s.position === position).slice(0, 3);
+/** Radiator sizes this case supports somewhere. */
+export function getAioSizes(c: CaseProfile): AioSize[] {
+  return AIO_SIZES.filter((size) => getAioPositions(c, size).length > 0);
+}
+
+/** Puts the radiator fans (2 or 3) on the first slots of a position. */
+export function mountAio(fans: InstalledFan[], slots: Slot[], position: MountPosition, size: AioSize): InstalledFan[] {
+  const radSlots = slots.filter((s) => s.position === position).slice(0, size / 120);
   const radIds = new Set(radSlots.map((s) => s.id));
   const direction = position === "front" || position === "bottom" ? "intake" : "exhaust";
   return [

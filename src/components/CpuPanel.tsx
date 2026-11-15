@@ -1,5 +1,5 @@
-import type { CaseProfile, CpuCooler, FanDirection, InstalledFan, MountPosition, Slot } from "../types";
-import { getAioPositions } from "../lib/components";
+import type { AioSize, CaseProfile, CpuCooler, FanDirection, InstalledFan, MountPosition, Slot } from "../types";
+import { AIO_SIZES, getAioPositions, getAioSizes } from "../lib/components";
 import { useT } from "../lib/i18n";
 import { Segmented } from "./Segmented";
 
@@ -10,6 +10,7 @@ interface Props {
   fans: InstalledFan[];
   onCoolerType: (type: CpuCooler["type"]) => void;
   onAioPosition: (position: MountPosition) => void;
+  onAioSize: (size: AioSize) => void;
   onRadiatorDirection: (direction: FanDirection) => void;
   onTowerDirection: (direction: "rear" | "front") => void;
   onToggleFan: (slotId: string) => void;
@@ -18,7 +19,7 @@ interface Props {
 export function CpuPanel(props: Props) {
   const t = useT();
   const { cooler } = props;
-  const aioPositions = getAioPositions(props.caseProfile);
+  const aioSizes = getAioSizes(props.caseProfile);
   const radFans = props.fans.filter((f) => f.radiator);
   const slotById = new Map(props.slots.map((s) => [s.id, s]));
 
@@ -29,20 +30,31 @@ export function CpuPanel(props: Props) {
         value={cooler.type}
         onChange={props.onCoolerType}
         options={[
-          { value: "aio", label: t("aio360"), disabled: aioPositions.length === 0 },
+          { value: "aio", label: t("aio"), disabled: aioSizes.length === 0 },
           { value: "tower", label: t("towerCooler") },
           { value: "wraith", label: t("wraith") },
         ]}
       />
-      {aioPositions.length === 0 && <p className="note">{t("aioUnsupported")}</p>}
+      {aioSizes.length === 0 && <p className="note">{t("aioUnsupported")}</p>}
 
       {cooler.type === "aio" && (
         <>
+          <h3>{t("radiatorSize")}</h3>
+          <Segmented
+            value={String(cooler.size) as "240" | "360"}
+            onChange={(v) => props.onAioSize(Number(v) as AioSize)}
+            options={AIO_SIZES.map((size) => ({
+              value: String(size) as "240" | "360",
+              label: `${size} mm`,
+              disabled: !aioSizes.includes(size),
+            }))}
+          />
+
           <h3>{t("radiatorPosition")}</h3>
           <Segmented
             value={cooler.position}
             onChange={props.onAioPosition}
-            options={aioPositions.map((p) => ({ value: p, label: t(p) }))}
+            options={getAioPositions(props.caseProfile, cooler.size).map((p) => ({ value: p, label: t(p) }))}
           />
 
           <h3>{t("radiatorFans")}</h3>
