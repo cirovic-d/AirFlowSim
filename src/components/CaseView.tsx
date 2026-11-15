@@ -1,22 +1,30 @@
-import type { CaseProfile, FanDirection, InstalledFan, Slot } from "../types";
-import { BOARD, FAN, FAN_THICK, INWARD, SHROUD_HEIGHT } from "../lib/layout";
+import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Slot } from "../types";
+import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SHROUD_HEIGHT, SOCKET } from "../lib/layout";
 import { useT } from "../lib/i18n";
+import { Arrow, FaceFanShape } from "./FanShapes";
+import { CoolerView, RadiatorView } from "./CoolerView";
+import { GpuView } from "./GpuView";
 
 interface Props {
   caseProfile: CaseProfile;
   slots: Slot[];
   fans: InstalledFan[];
+  gpu: GpuConfig;
+  cooler: CpuCooler;
   onAdd: (slot: Slot) => void;
   onToggle: (slotId: string) => void;
   onRemove: (slotId: string) => void;
+  onToggleTower: () => void;
 }
 
 const PAD = 48; // room around the case for exhaust arrows
 
-/** Side view of the case, drawn to scale in millimetres. */
-export function CaseView({ caseProfile, slots, fans, onAdd, onToggle, onRemove }: Props) {
+/** Side view of the case through the glass panel, drawn to scale in millimetres. */
+export function CaseView(props: Props) {
+  const { caseProfile, slots, fans, gpu, cooler } = props;
   const { depth, height } = caseProfile.dimensionsMm;
   const fanBySlot = new Map(fans.map((f) => [f.slotId, f]));
+  const radSlots = slots.filter((s) => fanBySlot.get(s.id)?.radiator);
 
   return (
     <svg
@@ -32,9 +40,18 @@ export function CaseView({ caseProfile, slots, fans, onAdd, onToggle, onRemove }
           <stop offset="0" stopColor="rgba(255,255,255,0.10)" />
           <stop offset="1" stopColor="rgba(255,255,255,0.02)" />
         </linearGradient>
+        <pattern id="fins" width="4" height="4" patternUnits="userSpaceOnUse">
+          <path d="M2 0v4" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+        </pattern>
+        <pattern id="fins-h" width="4" height="4" patternUnits="userSpaceOnUse">
+          <path d="M0 2h4" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+        </pattern>
       </defs>
 
       <CaseShell caseProfile={caseProfile} />
+      <GpuView caseProfile={caseProfile} gpu={gpu} />
+      {cooler.type === "aio" && <RadiatorView slots={radSlots} />}
+      <CoolerView cooler={cooler} radSlots={radSlots} onToggleTower={props.onToggleTower} />
 
       {slots.map((slot) => {
         const fan = fanBySlot.get(slot.id);
@@ -42,12 +59,12 @@ export function CaseView({ caseProfile, slots, fans, onAdd, onToggle, onRemove }
           <FanView
             key={slot.id}
             slot={slot}
-            direction={fan.direction}
-            onToggle={() => onToggle(slot.id)}
-            onRemove={() => onRemove(slot.id)}
+            fan={fan}
+            onToggle={() => props.onToggle(slot.id)}
+            onRemove={() => props.onRemove(slot.id)}
           />
         ) : (
-          <EmptySlot key={slot.id} slot={slot} onAdd={() => onAdd(slot)} />
+          <EmptySlot key={slot.id} slot={slot} onAdd={() => props.onAdd(slot)} />
         );
       })}
     </svg>
@@ -79,8 +96,8 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
 
       {/* Motherboard with CPU socket and PCIe slot */}
       <rect className="board" x={boardX} y={BOARD.topGap} width={BOARD.width} height={BOARD.height} rx="3" />
-      <rect className="socket" x={boardX + 94} y={BOARD.topGap + 60} width="40" height="40" rx="3" />
-      <rect className="pcie" x={boardX + 20} y={BOARD.topGap + 170} width={BOARD.width - 40} height="5" rx="2" />
+      <rect className="socket" x={SOCKET.x} y={SOCKET.y} width={SOCKET.size} height={SOCKET.size} rx="3" />
+      <rect className="pcie" x={boardX + 20} y={PCIE_Y} width={BOARD.width - 40} height="5" rx="2" />
 
       {/* Rear I/O (below the rear fan) and expansion slot covers */}
       <rect className="rear-io" x="0" y="168" width="6" height="40" />
@@ -99,7 +116,7 @@ function isFaceOn(slot: Slot) {
 }
 
 /** Rectangle of a fan seen edge-on, or the square frame of a face-on fan. */
-function fanBox(slot: Slot) {
+export function fanBox(slot: Slot) {
   if (isFaceOn(slot)) return { x: slot.cx - FAN / 2, y: slot.cy - FAN / 2, w: FAN, h: FAN };
   const vertical = slot.position === "front" || slot.position === "rear";
   const w = vertical ? FAN_THICK : FAN;
@@ -127,34 +144,41 @@ function EmptySlot({ slot, onAdd }: { slot: Slot; onAdd: () => void }) {
 
 interface FanViewProps {
   slot: Slot;
-  direction: FanDirection;
+  fan: InstalledFan;
   onToggle: () => void;
   onRemove: () => void;
 }
 
-function FanView({ slot, direction, onToggle, onRemove }: FanViewProps) {
+function FanView({ slot, fan, onToggle, onRemove }: FanViewProps) {
   const t = useT();
   const b = fanBox(slot);
-  const label = `${t(slot.position)} ${slot.index + 1}: ${t(direction)} – ${t("clickToToggle")}`;
+  const label = `${t(slot.position)} ${slot.index + 1}: ${t(fan.direction)} – ${t("clickToToggle")}`;
 
   return (
-    <g className={"fan " + direction} onClick={onToggle} role="button" aria-label={label}>
+    <g className={"fan " + fan.direction} onClick={onToggle} role="button" aria-label={label}>
       <title>{label}</title>
-      {isFaceOn(slot) ? <FaceFan slot={slot} direction={direction} /> : <EdgeFan slot={slot} direction={direction} />}
+      {isFaceOn(slot) ? (
+        <FaceFanShape cx={slot.cx} cy={slot.cy} size={FAN} label={fan.direction === "intake" ? "IN" : "OUT"} />
+      ) : (
+        <EdgeFan slot={slot} direction={fan.direction} />
+      )}
 
-      <g
-        className="remove"
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove();
-        }}
-        role="button"
-        aria-label={t("remove")}
-      >
-        <title>{t("remove")}</title>
-        <circle cx={b.x + b.w} cy={b.y} r="9" />
-        <path d={`M${b.x + b.w - 3.5} ${b.y - 3.5}l7 7m0 -7l-7 7`} />
-      </g>
+      {/* Radiator fans belong to the AIO and can't be removed one by one. */}
+      {!fan.radiator && (
+        <g
+          className="remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          role="button"
+          aria-label={t("remove")}
+        >
+          <title>{t("remove")}</title>
+          <circle cx={b.x + b.w} cy={b.y} r="9" />
+          <path d={`M${b.x + b.w - 3.5} ${b.y - 3.5}l7 7m0 -7l-7 7`} />
+        </g>
+      )}
     </g>
   );
 }
@@ -166,62 +190,24 @@ function EdgeFan({ slot, direction }: { slot: Slot; direction: FanDirection }) {
   const sign = direction === "intake" ? 1 : -1;
   const dx = ix * sign;
   const dy = iy * sign;
+  const horizontal = b.w > b.h;
 
   // Arrow starts just past the fan and points in the airflow direction.
   const start = FAN_THICK / 2 + 6;
   const end = start + 26;
-  const x1 = slot.cx + dx * start;
-  const y1 = slot.cy + dy * start;
-  const x2 = slot.cx + dx * end;
-  const y2 = slot.cy + dy * end;
-  // Arrow head: two short lines going back from the tip.
-  const hx = -dx * 8;
-  const hy = -dy * 8;
-  const px = -dy * 7;
-  const py = dx * 7;
 
   return (
     <>
       <rect className="fan-frame" x={b.x} y={b.y} width={b.w} height={b.h} rx="4" />
       <rect
         className="fan-rotor"
-        x={b.x + (b.w > b.h ? 10 : 6)}
-        y={b.y + (b.w > b.h ? 6 : 10)}
-        width={b.w > b.h ? b.w - 20 : b.w - 12}
-        height={b.w > b.h ? b.h - 12 : b.h - 20}
+        x={b.x + (horizontal ? 10 : 6)}
+        y={b.y + (horizontal ? 6 : 10)}
+        width={horizontal ? b.w - 20 : b.w - 12}
+        height={horizontal ? b.h - 12 : b.h - 20}
         rx="3"
       />
-      <path
-        className="fan-arrow"
-        d={`M${x1} ${y1}L${x2} ${y2}M${x2} ${y2}l${hx + px} ${hy + py}M${x2} ${y2}l${hx - px} ${hy - py}`}
-      />
-    </>
-  );
-}
-
-/** A fan facing the viewer: frame, blades and an IN/OUT label. */
-function FaceFan({ slot, direction }: { slot: Slot; direction: FanDirection }) {
-  const r = FAN / 2 - 6;
-  const blades = Array.from({ length: 7 }, (_, i) => i * (360 / 7));
-
-  return (
-    <>
-      <rect className="fan-frame" x={slot.cx - FAN / 2 + 2} y={slot.cy - FAN / 2 + 2} width={FAN - 4} height={FAN - 4} rx="12" />
-      <circle className="fan-ring" cx={slot.cx} cy={slot.cy} r={r} />
-      <g transform={`translate(${slot.cx} ${slot.cy})`}>
-        {blades.map((angle) => (
-          <path
-            key={angle}
-            className="fan-blade"
-            transform={`rotate(${angle})`}
-            d={`M0 -14 C 18 -22, 30 -34, 22 -${r - 6} C 12 -40, 4 -30, 0 -14Z`}
-          />
-        ))}
-        <circle className="fan-hub" r="14" />
-        <text className="fan-label" y="1">
-          {direction === "intake" ? "IN" : "OUT"}
-        </text>
-      </g>
+      <Arrow x1={slot.cx + dx * start} y1={slot.cy + dy * start} x2={slot.cx + dx * end} y2={slot.cy + dy * end} />
     </>
   );
 }

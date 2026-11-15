@@ -9,6 +9,9 @@ const MARGIN = 40; // space before the first fan in a row
 
 export const SHROUD_HEIGHT = 100;
 export const BOARD = { width: 244, height: 305, rearGap: 15, topGap: 32 }; // ATX board
+export const SOCKET = { x: BOARD.rearGap + 94, y: BOARD.topGap + 60, size: 40 };
+export const PCIE_Y = BOARD.topGap + 170;
+export const GPU_THICK = 42; // dual-slot card seen from the side
 
 // Which way is "into the case" for a fan mounted at each position.
 export const INWARD: Record<MountPosition, [number, number]> = {

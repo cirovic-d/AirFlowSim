@@ -25,14 +25,19 @@ export function FanList({ slots, fans, onToggle, onRemove }: Props) {
             <li key={slot.id}>
               <span>
                 {t(slot.position)} {slot.index + 1}
+                {fan.radiator && <span className="muted"> · {t("radiator")}</span>}
               </span>
               <button className={"dir-pill " + fan.direction} onClick={() => onToggle(slot.id)}>
                 <i className={"dot " + fan.direction} />
                 {t(fan.direction)}
               </button>
-              <button className="icon-btn" onClick={() => onRemove(slot.id)} aria-label={t("remove")} title={t("remove")}>
-                ×
-              </button>
+              {fan.radiator ? (
+                <span className="icon-btn-spacer" />
+              ) : (
+                <button className="icon-btn" onClick={() => onRemove(slot.id)} aria-label={t("remove")} title={t("remove")}>
+                  ×
+                </button>
+              )}
             </li>
           );
         })}

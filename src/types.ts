@@ -44,4 +44,22 @@ export interface Slot {
 export interface InstalledFan {
   slotId: string;
   direction: FanDirection;
+  /** True for the three fans that belong to a 360 mm AIO radiator. */
+  radiator?: boolean;
 }
+
+export type GpuSize = "small" | "medium" | "large" | "custom";
+
+export interface GpuConfig {
+  fans: 1 | 2 | 3;
+  size: GpuSize;
+  /** Used only when size is "custom". */
+  customLength: number;
+}
+
+export type TowerDirection = "rear" | "front";
+
+export type CpuCooler =
+  | { type: "aio"; position: MountPosition }
+  | { type: "tower"; direction: TowerDirection }
+  | { type: "wraith" };

@@ -1,8 +1,9 @@
 import type { InstalledFan } from "../types";
 import { getFanStats } from "../lib/pressure";
+import type { GpuFit } from "../lib/components";
 import { useT } from "../lib/i18n";
 
-export function StatsBar({ fans }: { fans: InstalledFan[] }) {
+export function StatsBar({ fans, gpuFit }: { fans: InstalledFan[]; gpuFit: GpuFit }) {
   const t = useT();
   const stats = getFanStats(fans);
 
@@ -14,6 +15,10 @@ export function StatsBar({ fans }: { fans: InstalledFan[] }) {
       <div className="stat pressure" title={t("approxNote")}>
         <span className="stat-label">{t("pressure")} ≈</span>
         <span className={"stat-value pressure-" + stats.pressure}>{t(stats.pressure)}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-label">{t("gpuFit")}</span>
+        <span className={"stat-value fit-" + gpuFit}>{t(gpuFit)}</span>
       </div>
       <p className="stats-note">{t("approxNote")}</p>
     </footer>

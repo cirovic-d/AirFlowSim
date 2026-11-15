@@ -18,3 +18,7 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Fabrički ventilatori** zauzimaju prva mesta na svojoj poziciji (napred odozgo nadole, gore od pozadi ka napred).
 - **Interakcija:** klik na prazno mesto dodaje ventilator (napred/bočno/dole = intake, gore/pozadi = exhaust), klik na ventilator menja smer, × uklanja.
 - **Orijentacija crteža:** pogled kroz stakleni (levi) panel na ploču – zadnji deo (I/O, zadnji ventilator) levo, prednji panel desno.
+- **GPU preseti:** Small 200 mm, Medium 270 mm, Large 330 mm; ručni unos 100–450 mm. Kompatibilnost se poredi samo sa zvaničnom maks. dužinom GPU-a; bez validne dužine prikazuje se "Unknown".
+- **360 AIO:** dostupan samo gde proizvođač navodi 360 mm radijator (Antec C3 gore, GC5/GC6 napred). Radijator zauzima 3 mesta na toj poziciji; njegovi ventilatori se ne mogu ukloniti pojedinačno, ali im se menja smer (pojedinačno ili svi odjednom).
+- **Tower:** jedan 120 mm ventilator, smer ka pozadini ili ka prednjem delu. **Wraith:** fiksan, duva ka staklu.
+- **Pritisak:** broje se samo ventilatori kućišta i radijatora; CPU i GPU ventilatori ne ulaze u procenu.

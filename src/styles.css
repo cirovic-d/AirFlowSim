@@ -194,7 +194,7 @@ h3 {
   overflow-y: auto;
 }
 .panel h2 { margin-bottom: 12px; }
-.specs { margin-top: 28px; }
+
 .spec-list { margin: 0; }
 .spec-row {
   display: flex;
@@ -285,3 +285,97 @@ h3 {
   .panel { width: 240px; }
 }
 
+
+/* ---------- Right panel tabs and controls ---------- */
+.tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 20px;
+  padding: 3px;
+  background: var(--bg);
+  border-radius: 9px;
+}
+.tabs button {
+  flex: 1;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+.tabs button:hover { color: var(--text); }
+.tabs button.active { background: var(--surface-2); color: var(--text); }
+
+.segmented.full { width: 100%; }
+.segmented.full button { flex: 1; padding: 6px 4px; font-size: 12px; }
+.segmented button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.size-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.size-btn {
+  padding: 8px 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.size-btn:hover { color: var(--text); }
+.size-btn.active { border-color: var(--accent); color: var(--text); }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; font-size: 12px; }
+.field input {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.field input:focus { outline: none; border-color: var(--accent); }
+.field-error { color: #ef6b73; }
+
+.fit-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  font-size: 12px;
+}
+.fit-badge span { color: var(--muted); }
+.fit-badge.compatible strong, .fit-compatible { color: #5fd38d; }
+.fit-badge.incompatible strong, .fit-incompatible { color: #ef6b73; }
+.fit-badge.unknown strong, .fit-unknown { color: var(--muted); }
+.fit-badge.compatible { border-color: rgba(95, 211, 141, 0.35); }
+.fit-badge.incompatible { border-color: rgba(239, 107, 115, 0.45); }
+
+.row-actions { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; }
+.row-actions .muted { margin-right: auto; }
+.btn.small { padding: 4px 10px; font-size: 12px; }
+.icon-btn-spacer { width: 26px; }
+
+/* ---------- GPU and CPU cooler drawing ---------- */
+.gpu-body { fill: #2a2c33; stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.4; }
+.gpu-stripe { fill: rgba(255, 255, 255, 0.12); }
+.gpu-bracket { fill: rgba(255, 255, 255, 0.3); }
+.gpu-fan { fill: rgba(255, 255, 255, 0.45); }
+.gpu-arrow { fill: none; stroke: var(--intake); stroke-opacity: 0.55; stroke-width: 2; stroke-linecap: round; }
+.gpu.incompatible .gpu-body { stroke: #ef6b73; stroke-width: 2; }
+.gpu-limit path { stroke: #ef6b73; stroke-width: 1.4; stroke-dasharray: 5 4; }
+.gpu-limit text { fill: #ef6b73; font-size: 10px; text-anchor: end; }
+
+.cpu-cooler { color: #cfd2da; cursor: pointer; }
+.cpu-cooler.static { cursor: default; }
+.heatsink { fill: #26282e; stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.2; }
+.fins { fill: url(#fins); }
+.cpu-cooler:hover .fan-frame { fill: #2b2c32; }
+.pump { fill: #2a2c33; stroke: rgba(255, 255, 255, 0.35); stroke-width: 1.4; }
+.pump-cap { fill: none; stroke: var(--accent); stroke-opacity: 0.6; stroke-width: 1.4; }
+.tube { fill: none; stroke: #3a3c44; stroke-width: 7; stroke-linecap: round; }
+.radiator rect { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.2; }
