@@ -442,3 +442,45 @@ h3 {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+
+/* ---------- Settings ---------- */
+.page > h3:first-of-type { margin-top: 4px; }
+.settings-card { padding: 4px 20px; margin-bottom: 8px; }
+.settings-card .setting { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.settings-card .setting:last-child { border-bottom: 0; }
+.setting-text { min-width: 0; }
+.setting-hint { font-size: 12px; overflow-wrap: anywhere; }
+.seg-fixed { width: 240px; }
+.range-row { display: flex; align-items: center; gap: 10px; }
+.range-row input { width: 160px; accent-color: var(--accent); }
+
+.toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #3a3c44;
+  transition: background 0.15s;
+}
+.toggle span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.toggle.on { background: var(--accent); }
+.toggle.on span { transform: translateX(16px); }
+
+.color-picker { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.color-picker input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.color-swatch { width: 26px; height: 26px; border-radius: 7px; border: 1px solid rgba(255, 255, 255, 0.2); }
+.color-hex { width: 64px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); }
+
+/* Interface animations turned off */
+.no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; }

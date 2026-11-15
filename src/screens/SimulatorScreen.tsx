@@ -3,6 +3,7 @@ import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Mou
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { DEFAULT_GPU, getAioPositions, getGpuFit, mountAio, removeAio } from "../lib/components";
 import type { Setup } from "../lib/configs";
+import { PARTICLES, type Settings } from "../lib/settings";
 import { SaveDialog } from "../components/SaveDialog";
 import { useT, type TKey } from "../lib/i18n";
 import { AirflowCanvas } from "../components/AirflowCanvas";
@@ -29,11 +30,12 @@ interface Props {
   /** False while another screen is shown: the screen stays mounted (keeps its state) but stops animating. */
   active: boolean;
   onSave: (setup: Setup, name: string) => void;
+  settings: Settings;
 }
 
 // App.tsx gives this screen a new key when the case changes or a configuration
 // is loaded, so it starts fresh from `initial` or the factory setup.
-export function SimulatorScreen({ caseProfile, initial, active, onSave }: Props) {
+export function SimulatorScreen({ caseProfile, initial, active, onSave, settings }: Props) {
   const t = useT();
   const slots = useMemo(() => getSlots(caseProfile), [caseProfile]);
   const [fans, setFans] = useState<InstalledFan[]>(() => initial?.fans ?? getFactoryFans(caseProfile, slots));
@@ -134,7 +136,15 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave }: Props)
                 onRemove={removeFan}
                 onToggleTower={toggleTower}
               />
-              <AirflowCanvas scene={scene} playing={playing && active} fanSpeed={fanSpeed} restartKey={restartKey} />
+              <AirflowCanvas
+                scene={scene}
+                playing={playing && active}
+                fanSpeed={fanSpeed}
+                restartKey={restartKey}
+                colors={{ intake: settings.intakeColor, exhaust: settings.exhaustColor }}
+                animationSpeed={settings.animationSpeed}
+                maxParticles={PARTICLES[settings.density]}
+              />
             </div>
           </div>
           <AnimationBar

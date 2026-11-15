@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { AirflowEngine, type FlowScene } from "../lib/airflow";
+import { AirflowEngine, hexToRgb, type FlowScene } from "../lib/airflow";
 import { VIEW_PAD } from "../lib/layout";
 
 interface Props {
@@ -8,13 +8,16 @@ interface Props {
   fanSpeed: number;
   /** Changing this number clears all particles and starts over. */
   restartKey: number;
+  colors: { intake: string; exhaust: string };
+  animationSpeed: number;
+  maxParticles: number;
 }
 
 /**
  * Transparent canvas laid exactly over the case drawing. It ignores the mouse,
  * so the fans underneath stay clickable.
  */
-export function AirflowCanvas({ scene, playing, fanSpeed, restartKey }: Props) {
+export function AirflowCanvas({ scene, playing, fanSpeed, restartKey, colors, animationSpeed, maxParticles }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef(new AirflowEngine());
 
@@ -24,8 +27,12 @@ export function AirflowCanvas({ scene, playing, fanSpeed, restartKey }: Props) {
   }, [scene]);
 
   useEffect(() => {
-    engineRef.current.fanSpeed = fanSpeed;
-  }, [fanSpeed]);
+    const engine = engineRef.current;
+    engine.fanSpeed = fanSpeed;
+    engine.animationSpeed = animationSpeed;
+    engine.maxParticles = maxParticles;
+    engine.colors = { intake: hexToRgb(colors.intake), exhaust: hexToRgb(colors.exhaust) };
+  }, [fanSpeed, animationSpeed, maxParticles, colors.intake, colors.exhaust]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

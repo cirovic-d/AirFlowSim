@@ -30,3 +30,6 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Konfiguracija** čuva: kućište, ventilatore (mesto, smer, radijator), GPU, CPU hladnjak, brzinu ventilatora i boje protoka. JSON export ima zaglavlje `{"app": "PC Airflow Simulator", "format": 1}`; import proverava svako polje i odbacuje nepoznato.
 - **Simulator ostaje učitan** kad se pređe na drugi ekran (stanje se ne gubi), a animacija se tada pauzira.
 - **Uticaj komponenti na vazduh:** GPU ventilatori usisavaju vazduh odozdo (svaki iz svoje zone), vazduh prolazi kroz karticu i izlazi gore zagrejan. Tower/Wraith zagrevaju vazduh koji prođe kroz hladnjak. Vazduh koji ulazi kroz AIO radijator je već topliji. Boja čestice = toplota (plava hladno → narandžasta toplo).
+- **Settings:** jezik, animacije interfejsa, boje usisa/izduva, brzina animacije (0.5–2×), gustina čestica (160/320/520), provera ažuriranja pri pokretanju, prikaz foldera sa podacima, reset (konfiguracije ostaju). Sve se čuva u `data.json` zajedno sa konfiguracijama.
+- **Tema:** samo tamna (grafitna) – svetla tema nije planirana za v1.
+- **Otvaranje konfiguracije primenjuje njene boje** protoka, jer su deo konfiguracije.

@@ -2,6 +2,7 @@ import type { CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition } 
 import { CASES } from "../data/cases";
 import { DEFAULT_GPU, getAioPositions, mountAio } from "./components";
 import { getSlots } from "./layout";
+import { sanitizeSettings, type Settings } from "./settings";
 
 /** Everything needed to rebuild one simulator setup. */
 export interface Setup {
@@ -27,6 +28,8 @@ export interface SavedConfig extends Setup {
 export interface StoreData {
   version: 1;
   configs: SavedConfig[];
+  /** Null when the file has no settings yet (first start). */
+  settings: Settings | null;
 }
 
 const EXPORT_APP = "PC Airflow Simulator";
@@ -42,9 +45,10 @@ export function parseStore(text: string): StoreData {
   try {
     const raw = JSON.parse(text);
     const configs = Array.isArray(raw?.configs) ? raw.configs.map(sanitizeConfig).filter(Boolean) : [];
-    return { version: 1, configs: configs as SavedConfig[] };
+    const settings = raw?.settings ? sanitizeSettings(raw.settings) : null;
+    return { version: 1, configs: configs as SavedConfig[], settings };
   } catch {
-    return { version: 1, configs: [] };
+    return { version: 1, configs: [], settings: null };
   }
 }
 

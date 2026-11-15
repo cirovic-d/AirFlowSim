@@ -59,6 +59,7 @@ const HALF = FAN / 2;
 
 export class AirflowEngine {
   fanSpeed = 0.7; // 0..1
+  animationSpeed = 1; // time multiplier from Settings
   maxParticles = 320;
   colors: { intake: RGB; exhaust: RGB } = { intake: hexToRgb("#3ad0f0"), exhaust: hexToRgb("#ff8a3d") };
 
@@ -156,7 +157,8 @@ export class AirflowEngine {
   }
 
   /** Advances the animation by dt seconds. */
-  step(dt: number) {
+  step(realDt: number) {
+    const dt = realDt * this.animationSpeed;
     const speed = BASE_SPEED * (0.25 + 0.75 * this.fanSpeed);
     this.spawn(dt);
 

@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import type { Screen } from "./types";
 import { CASES, findCase } from "./data/cases";
-import { LangContext, type Lang } from "./lib/i18n";
+import { LangContext } from "./lib/i18n";
 import { newId, parseStore, type SavedConfig, type Setup } from "./lib/configs";
+import { DEFAULT_SETTINGS, type Settings } from "./lib/settings";
 import { loadStore, saveStore } from "./lib/storage";
 import { Sidebar } from "./components/Sidebar";
 import { SimulatorScreen } from "./screens/SimulatorScreen";
 import { SavedScreen } from "./screens/SavedScreen";
-import { AboutScreen, SettingsScreen } from "./screens/OtherScreens";
+import { SettingsScreen } from "./screens/SettingsScreen";
+import { AboutScreen } from "./screens/OtherScreens";
 
-const DEFAULT_COLORS = { intake: "#3ad0f0", exhaust: "#ff8a3d" };
-
-function loadLang(): Lang {
+/** Language from older versions, which kept it in localStorage. */
+function legacyLang(): Settings["lang"] {
   try {
     return localStorage.getItem("lang") === "sr" ? "sr" : "en";
   } catch {
@@ -22,10 +23,10 @@ function loadLang(): Lang {
 export default function App() {
   const [screen, setScreen] = useState<Screen>("simulator");
   const [caseId, setCaseId] = useState(CASES[0].id);
-  const [lang, setLang] = useState<Lang>(loadLang);
 
-  // Saved configurations. `loaded` stops us from overwriting the file before it was read.
+  // Saved data. `loaded` stops us from overwriting the file before it was read.
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
+  const [settings, setSettings] = useState<Settings>({ ...DEFAULT_SETTINGS, lang: legacyLang() });
   const [loaded, setLoaded] = useState(false);
 
   // A loaded configuration to start the simulator from, and a counter that
@@ -35,22 +36,22 @@ export default function App() {
 
   useEffect(() => {
     loadStore()
-      .then((text) => setConfigs(parseStore(text).configs))
-      .catch(() => setConfigs([]))
+      .then((text) => {
+        const data = parseStore(text);
+        setConfigs(data.configs);
+        if (data.settings) setSettings(data.settings);
+      })
+      .catch(() => {})
       .finally(() => setLoaded(true));
   }, []);
 
   useEffect(() => {
-    if (loaded) saveStore(JSON.stringify({ version: 1, configs }, null, 2)).catch(() => {});
-  }, [configs, loaded]);
+    if (loaded) saveStore(JSON.stringify({ version: 1, configs, settings }, null, 2)).catch(() => {});
+  }, [configs, settings, loaded]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("lang", lang);
-    } catch {
-      // Storage unavailable: language just won't be remembered.
-    }
-  }, [lang]);
+  function updateSettings(patch: Partial<Settings>) {
+    setSettings((prev) => ({ ...prev, ...patch }));
+  }
 
   function selectCase(id: string) {
     setInitial(null);
@@ -59,20 +60,31 @@ export default function App() {
   }
 
   function saveConfig(setup: Setup, name: string) {
-    const config: SavedConfig = { ...setup, id: newId(), name, savedAt: new Date().toISOString(), colors: DEFAULT_COLORS };
+    const config: SavedConfig = {
+      ...setup,
+      id: newId(),
+      name,
+      savedAt: new Date().toISOString(),
+      colors: { intake: settings.intakeColor, exhaust: settings.exhaustColor },
+    };
     setConfigs((prev) => [config, ...prev]);
   }
 
   function openConfig(config: SavedConfig) {
+    // The airflow colors are part of a configuration, so opening one applies them.
+    updateSettings({ intakeColor: config.colors.intake, exhaustColor: config.colors.exhaust });
     setInitial(config);
     setCaseId(config.caseId);
     setSimKey((k) => k + 1);
     setScreen("simulator");
   }
 
+  // Airflow colors are also used by the CSS (fan outlines, legend dots).
+  const style = { "--intake": settings.intakeColor, "--exhaust": settings.exhaustColor } as CSSProperties;
+
   return (
-    <LangContext.Provider value={lang}>
-      <div className="app">
+    <LangContext.Provider value={settings.lang}>
+      <div className={"app" + (settings.uiAnimations ? "" : " no-anim")} style={style}>
         <Sidebar screen={screen} onScreen={setScreen} cases={CASES} caseId={caseId} onCase={selectCase} />
         <main className="content">
           {/* The simulator stays mounted (hidden) so switching screens keeps your setup. */}
@@ -83,6 +95,7 @@ export default function App() {
               initial={initial}
               active={screen === "simulator"}
               onSave={saveConfig}
+              settings={settings}
             />
           </div>
           {screen === "saved" && (
@@ -93,7 +106,9 @@ export default function App() {
               onImport={(config) => setConfigs((prev) => [config, ...prev])}
             />
           )}
-          {screen === "settings" && <SettingsScreen lang={lang} onLang={setLang} />}
+          {screen === "settings" && (
+            <SettingsScreen settings={settings} onChange={updateSettings} onReset={() => setSettings(DEFAULT_SETTINGS)} />
+          )}
           {screen === "about" && <AboutScreen />}
         </main>
       </div>

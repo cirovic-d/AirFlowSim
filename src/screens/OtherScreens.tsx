@@ -1,31 +1,6 @@
-import { useT, type Lang } from "../lib/i18n";
+import { useT } from "../lib/i18n";
 
 const REPO_URL = "https://github.com/cirovic-d/AirFlowSim";
-
-export function SettingsScreen({ lang, onLang }: { lang: Lang; onLang: (l: Lang) => void }) {
-  const t = useT();
-  return (
-    <div className="page">
-      <h1>{t("navSettings")}</h1>
-      <div className="card">
-        <div className="setting">
-          <div>
-            <div className="setting-title">{t("language")}</div>
-            <div className="muted">{t("languageHint")}</div>
-          </div>
-          <div className="segmented">
-            <button className={lang === "en" ? "active" : ""} onClick={() => onLang("en")}>
-              English
-            </button>
-            <button className={lang === "sr" ? "active" : ""} onClick={() => onLang("sr")}>
-              Srpski
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function AboutScreen() {
   const t = useT();
