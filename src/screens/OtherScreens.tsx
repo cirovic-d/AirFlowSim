@@ -2,19 +2,6 @@ import { useT, type Lang } from "../lib/i18n";
 
 const REPO_URL = "https://github.com/cirovic-d/AirFlowSim";
 
-export function SavedScreen() {
-  const t = useT();
-  return (
-    <div className="page">
-      <h1>{t("navSaved")}</h1>
-      <div className="empty">
-        <h2>{t("savedEmptyTitle")}</h2>
-        <p className="muted">{t("savedEmptyText")}</p>
-      </div>
-    </div>
-  );
-}
-
 export function SettingsScreen({ lang, onLang }: { lang: Lang; onLang: (l: Lang) => void }) {
   const t = useT();
   return (

@@ -6,7 +6,7 @@ This is a visual simulation, not a CFD calculation, and it never controls real f
 
 ## Status
 
-Phases 1–6 of 11 done – app shell, case drawings, fans, CPU cooler, GPU fit check and animated airflow.
+Phases 1–8 of 11 done – case drawings, fans, CPU cooler, GPU fit check, animated airflow, pressure estimate, save/load and JSON export/import.
 
 ## Download
 

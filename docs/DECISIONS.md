@@ -26,3 +26,6 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Animacija se pauzira** kad je prozor sakriven/minimizovan.
 - **Brzina ventilatora:** jedan globalni klizač 20–100 %, utiče samo na brzinu čestica.
 - **Antec C3 shroud:** nagnut (niži ka prednjem delu, ugao aproksimiran); iznad donjeg ventilatora je perforirani deo kroz koji vazduh prolazi (HDD kavez izvađen). Ostala kućišta: ravan shroud.
+- **Čuvanje podataka:** jedan `data.json`. Instalirana verzija (pored exe-a postoji `uninstall.exe`) → `%APPDATA%\com.cirovic.airflowsim`; portable → folder `AirflowSimData` pored exe-a. Upis ide preko privremenog fajla da se ne pokvari pri padu.
+- **Konfiguracija** čuva: kućište, ventilatore (mesto, smer, radijator), GPU, CPU hladnjak, brzinu ventilatora i boje protoka. JSON export ima zaglavlje `{"app": "PC Airflow Simulator", "format": 1}`; import proverava svako polje i odbacuje nepoznato.
+- **Simulator ostaje učitan** kad se pređe na drugi ekran (stanje se ne gubi), a animacija se tada pauzira.

@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { DEFAULT_GPU, getAioPositions, getGpuFit, mountAio, removeAio } from "../lib/components";
+import type { Setup } from "../lib/configs";
+import { SaveDialog } from "../components/SaveDialog";
 import { useT, type TKey } from "../lib/i18n";
 import { AirflowCanvas } from "../components/AirflowCanvas";
 import { AnimationBar } from "../components/AnimationBar";
@@ -20,17 +22,27 @@ const TABS: { tab: Tab; label: TKey }[] = [
   { tab: "case", label: "tabCase" },
 ];
 
-// App.tsx gives this screen key={caseId}, so switching cases starts fresh
-// with that case's factory fans.
-export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
+interface Props {
+  caseProfile: CaseProfile;
+  /** A loaded configuration to start from. Without one, the case's factory setup is used. */
+  initial: Setup | null;
+  /** False while another screen is shown: the screen stays mounted (keeps its state) but stops animating. */
+  active: boolean;
+  onSave: (setup: Setup, name: string) => void;
+}
+
+// App.tsx gives this screen a new key when the case changes or a configuration
+// is loaded, so it starts fresh from `initial` or the factory setup.
+export function SimulatorScreen({ caseProfile, initial, active, onSave }: Props) {
   const t = useT();
   const slots = useMemo(() => getSlots(caseProfile), [caseProfile]);
-  const [fans, setFans] = useState<InstalledFan[]>(() => getFactoryFans(caseProfile, slots));
-  const [cooler, setCooler] = useState<CpuCooler>({ type: "tower", direction: "rear" });
-  const [gpu, setGpu] = useState<GpuConfig>(DEFAULT_GPU);
+  const [fans, setFans] = useState<InstalledFan[]>(() => initial?.fans ?? getFactoryFans(caseProfile, slots));
+  const [cooler, setCooler] = useState<CpuCooler>(() => initial?.cooler ?? { type: "tower", direction: "rear" });
+  const [gpu, setGpu] = useState<GpuConfig>(() => initial?.gpu ?? DEFAULT_GPU);
   const [tab, setTab] = useState<Tab>("fans");
   const [playing, setPlaying] = useState(true);
-  const [fanSpeed, setFanSpeed] = useState(0.7);
+  const [fanSpeed, setFanSpeed] = useState(() => initial?.fanSpeed ?? 0.7);
+  const [saving, setSaving] = useState(false);
   const [restartKey, setRestartKey] = useState(0);
 
   // One object per configuration, so the airflow is rebuilt only when it changes.
@@ -100,9 +112,14 @@ export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
                 {depth} × {width} × {height} mm
               </p>
             </div>
-            <button className="btn" onClick={restoreFactory}>
-              {t("restoreFactory")}
-            </button>
+            <div className="header-actions">
+              <button className="btn" onClick={restoreFactory}>
+                {t("restoreFactory")}
+              </button>
+              <button className="btn primary" onClick={() => setSaving(true)}>
+                {t("saveConfig")}
+              </button>
+            </div>
           </header>
           <div className="stage-canvas">
             <div className="view-wrap">
@@ -117,7 +134,7 @@ export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
                 onRemove={removeFan}
                 onToggleTower={toggleTower}
               />
-              <AirflowCanvas scene={scene} playing={playing} fanSpeed={fanSpeed} restartKey={restartKey} />
+              <AirflowCanvas scene={scene} playing={playing && active} fanSpeed={fanSpeed} restartKey={restartKey} />
             </div>
           </div>
           <AnimationBar
@@ -157,6 +174,17 @@ export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
         {tab === "gpu" && <GpuPanel caseProfile={caseProfile} gpu={gpu} cooler={cooler} onChange={setGpu} />}
         {tab === "case" && <SpecsPanel caseProfile={caseProfile} />}
       </aside>
+
+      {saving && (
+        <SaveDialog
+          defaultName={`${caseProfile.name.replace("GAMDIAS ", "")} – ${new Date().toLocaleDateString()}`}
+          onCancel={() => setSaving(false)}
+          onSave={(name) => {
+            onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed }, name);
+            setSaving(false);
+          }}
+        />
+      )}
     </div>
   );
 }
