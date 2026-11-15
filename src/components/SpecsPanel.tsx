@@ -23,6 +23,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
         ))}
       </dl>
       <p className="note">{t("layoutNote")}</p>
+      {c.shroud?.note && <p className="note">{c.shroud.note}</p>}
 
       <h3>{t("radiators")}</h3>
       <dl className="spec-list">

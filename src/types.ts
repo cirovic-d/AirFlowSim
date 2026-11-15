@@ -22,6 +22,8 @@ export interface CaseProfile {
   clearanceMm: { gpuMaxLength: number; cpuCoolerMaxHeight: number; psuMaxLength: number };
   /** Omitted when the front panel material is not confirmed. */
   frontPanel?: "mesh" | "glass";
+  /** Optional details of the PSU shroud. Default: flat box along the bottom. */
+  shroud?: { inclined?: boolean; bottomFanVent?: boolean; note?: string };
   fanMounts: Partial<Record<MountPosition, FanMount>>;
   radiatorMounts: Partial<Record<MountPosition, number[]>>;
   radiatorNotes?: string;

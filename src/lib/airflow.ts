@@ -1,6 +1,6 @@
 import type { CaseProfile, CpuCooler, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { getGpuLength } from "./components";
-import { FAN, GPU_THICK, GPU_X, INWARD, PCIE_Y, SOCKET, getShroud, type Rect } from "./layout";
+import { FAN, GPU_THICK, GPU_X, INWARD, PCIE_Y, SOCKET, getShroud, inShroud, shroudTopAt, type Rect, type Shroud } from "./layout";
 
 // A lightweight visual airflow model, NOT a fluid simulation.
 // 1. A coarse grid stores an air direction for every cell. It is built once
@@ -64,6 +64,7 @@ export class AirflowEngine {
   private rows = 0;
   private field = new Float32Array(0); // vx, vy per cell
   private obstacles: Rect[] = [];
+  private shroud: Shroud | null = null;
   private openings: Opening[] = [];
   private faceSinks: { x: number; y: number }[] = [];
   private emitters: Emitter[] = [];
@@ -81,7 +82,8 @@ export class AirflowEngine {
       .filter((p): p is { fan: InstalledFan; slot: Slot } => !!p.slot);
 
     // Obstacles the air goes around.
-    this.obstacles = [getShroud(caseProfile)];
+    this.shroud = getShroud(caseProfile);
+    this.obstacles = [];
     const gpuLength = getGpuLength(scene.gpu);
     const gpuRect = gpuLength ? { x: GPU_X, y: PCIE_Y + 6, w: gpuLength, h: GPU_THICK } : null;
     if (gpuRect) this.obstacles.push(gpuRect);
@@ -275,6 +277,7 @@ export class AirflowEngine {
   }
 
   private hitsObstacle(x: number, y: number) {
+    if (this.shroud && inShroud(this.shroud, x, y)) return true;
     return this.obstacles.some((r) => x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h);
   }
 
@@ -351,11 +354,14 @@ export class AirflowEngine {
         }
 
         // Air turns away just before it reaches the top of the shroud or the GPU.
-        for (const o of this.obstacles) {
-          if (x > o.x && x < o.x + o.w) {
-            const gap = o.y - y;
-            if (gap > 0 && gap < 30) vy -= 0.8 * (1 - gap / 30);
-          }
+        const sh = this.shroud;
+        const tops = this.obstacles.filter((o) => x > o.x && x < o.x + o.w).map((o) => o.y);
+        if (sh && x > sh.x && x < sh.x + sh.w && !(sh.vent && x > sh.vent.from && x < sh.vent.to)) {
+          tops.push(shroudTopAt(sh, x));
+        }
+        for (const top of tops) {
+          const gap = top - y;
+          if (gap > 0 && gap < 30) vy -= 0.8 * (1 - gap / 30);
         }
 
         // CPU coolers stir the air around the socket.

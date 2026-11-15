@@ -129,7 +129,8 @@ h3 {
 .socket { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
 .pcie { fill: rgba(255, 255, 255, 0.08); }
 .rear-io, .slot-cover { fill: rgba(255, 255, 255, 0.1); }
-.shroud { fill: #1e1f24; stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+.shroud { fill: #1e1f24; stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; stroke-linejoin: round; }
+.shroud-vent { fill: url(#mesh); stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; stroke-dasharray: 3 3; }
 
 .empty-slot { cursor: pointer; }
 .empty-slot rect, .empty-slot circle {

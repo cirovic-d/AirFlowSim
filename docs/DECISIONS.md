@@ -25,3 +25,4 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Animacija protoka:** Canvas 2D preko SVG crteža (ne prima klikove). Grid 6 mm sa smerom vazduha se računa samo kad se konfiguracija promeni; čestice (do ~320) ga prate i crtaju se kao kratke linije koje blede (efekat dima). Boja prelazi iz intake u exhaust boju kako vazduh "stari". Čestice izlaze samo kroz exhaust ventilatore; vazduh pritisnut uz zid brzo izbledi (curenje kroz procepe). Bez intake ventilatora vazduh ulazi kroz poklopce slotova pozadi.
 - **Animacija se pauzira** kad je prozor sakriven/minimizovan.
 - **Brzina ventilatora:** jedan globalni klizač 20–100 %, utiče samo na brzinu čestica.
+- **Antec C3 shroud:** nagnut (niži ka prednjem delu, ugao aproksimiran); iznad donjeg ventilatora je perforirani deo kroz koji vazduh prolazi (HDD kavez izvađen). Ostala kućišta: ravan shroud.

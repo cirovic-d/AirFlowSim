@@ -22,10 +22,45 @@ export interface Rect {
   h: number;
 }
 
-/** PSU shroud. It stops short of the front when the case has front fans. */
-export function getShroud(c: CaseProfile): Rect {
+export interface Shroud {
+  x: number;
+  w: number;
+  /** Height of the shroud's top edge at the rear and at the front end. */
+  rearTop: number;
+  frontTop: number;
+  bottom: number;
+  /** Open (perforated) part above a bottom fan, if the case has one. */
+  vent: { from: number; to: number } | null;
+}
+
+/**
+ * PSU shroud. It stops short of the front when the case has front fans.
+ * Some cases (Antec C3) have an inclined top that is lower toward the front.
+ */
+export function getShroud(c: CaseProfile): Shroud {
   const { depth, height } = c.dimensionsMm;
-  return { x: 0, y: height - SHROUD_HEIGHT, w: c.fanMounts.front ? depth - 40 : depth, h: SHROUD_HEIGHT };
+  const w = c.fanMounts.front ? depth - 40 : depth;
+  const rearTop = height - SHROUD_HEIGHT;
+  const frontTop = c.shroud?.inclined ? height - SHROUD_HEIGHT * 0.65 : rearTop;
+
+  let vent = null;
+  if (c.shroud?.bottomFanVent && c.fanMounts.bottom) {
+    const xs = getSlots(c).filter((s) => s.position === "bottom").map((s) => s.cx);
+    vent = { from: Math.min(...xs) - FAN / 2, to: Math.max(...xs) + FAN / 2 };
+  }
+  return { x: 0, w, rearTop, frontTop, bottom: height, vent };
+}
+
+/** Y of the shroud's top edge at a given x. */
+export function shroudTopAt(s: Shroud, x: number) {
+  const t = Math.min(1, Math.max(0, (x - s.x) / s.w));
+  return s.rearTop + (s.frontTop - s.rearTop) * t;
+}
+
+/** True when the point is inside the solid part of the shroud. */
+export function inShroud(s: Shroud, x: number, y: number) {
+  if (x <= s.x || x >= s.x + s.w || y <= shroudTopAt(s, x)) return false;
+  return !(s.vent && x > s.vent.from && x < s.vent.to);
 }
 
 // Which way is "into the case" for a fan mounted at each position.

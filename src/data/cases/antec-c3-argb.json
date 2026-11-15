@@ -13,6 +13,11 @@
     "psuMaxLength": 195
   },
   "frontPanel": "glass",
+  "shroud": {
+    "inclined": true,
+    "bottomFanVent": true,
+    "note": "Inclined PSU shroud. The bottom fan mounts under the shroud's front part after removing the HDD cage and blows up through it. Exact angle is approximated."
+  },
   "fanMounts": {
     "top": {
       "max120": 3
@@ -60,6 +65,7 @@
   ],
   "sources": [
     "https://antec.com/product/case/c3",
-    "https://www.antec.com/documents/product/case-2401012_Antec_C3%20ARGB_Manual-OL.pdf"
+    "https://www.antec.com/documents/product/case-2401012_Antec_C3%20ARGB_Manual-OL.pdf",
+    "https://www.evetech.co.za/antec-c3-rgb-constellation-gaming-case/best-deal/21077"
   ]
 }

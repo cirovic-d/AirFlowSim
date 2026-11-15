@@ -1,5 +1,5 @@
 import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Slot } from "../types";
-import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SOCKET, VIEW_PAD as PAD, getShroud } from "../lib/layout";
+import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SOCKET, VIEW_PAD as PAD, getShroud, shroudTopAt } from "../lib/layout";
 import { useT } from "../lib/i18n";
 import { Arrow, FaceFanShape } from "./FanShapes";
 import { CoolerView, RadiatorView } from "./CoolerView";
@@ -102,8 +102,17 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
         <rect key={i} className="slot-cover" x="0" y={215 + i * 16} width="5" height="11" />
       ))}
 
-      {/* PSU shroud */}
-      <rect className="shroud" x={shroud.x} y={shroud.y} width={shroud.w} height={shroud.h} rx="4" />
+      {/* PSU shroud (flat or inclined), with a perforated part above a bottom fan */}
+      <path
+        className="shroud"
+        d={`M${shroud.x} ${shroud.rearTop}L${shroud.x + shroud.w} ${shroud.frontTop}V${shroud.bottom}H${shroud.x}Z`}
+      />
+      {shroud.vent && (
+        <path
+          className="shroud-vent"
+          d={`M${shroud.vent.from} ${shroudTopAt(shroud, shroud.vent.from)}L${shroud.vent.to} ${shroudTopAt(shroud, shroud.vent.to)}V${shroud.bottom}H${shroud.vent.from}Z`}
+        />
+      )}
     </g>
   );
 }
