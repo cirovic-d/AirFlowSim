@@ -6,14 +6,20 @@ This is a visual simulation, not a CFD calculation, and it never controls real f
 
 ## Status
 
-Phases 1–9 of 11 done – case drawings, fans, CPU cooler, GPU fit check, animated airflow, pressure estimate, save/load, JSON export/import and settings.
+All 11 phases of the v1.0 spec implemented: case drawings, fans, CPU cooler, GPU fit check, animated airflow, pressure estimate, save/load, JSON export/import, settings, automatic updates, installer and portable builds.
 
 ## Download
 
-Every push to `main` builds the app on GitHub Actions. Open the latest run under **Actions → Build Windows** and download the `PC-Airflow-Simulator-windows` artifact. It contains:
+Get the latest version from **[Releases](https://github.com/cirovic-d/AirFlowSim/releases/latest)**:
 
-- `PC Airflow Simulator_x.y.z_x64-setup.exe` – installer
-- `PC-Airflow-Simulator-portable.exe` – portable version
+- `PC-Airflow-Simulator_x.y.z_x64-setup.exe` – installer (Start Menu shortcut, optional desktop shortcut, uninstaller). Installed copies update themselves.
+- `PC-Airflow-Simulator_x.y.z_portable.exe` – portable, no installation. Keeps its data in an `AirflowSimData` folder next to the .exe.
+
+Windows may show a SmartScreen warning because the app isn't code-signed: click **More info → Run anyway**.
+
+## Releasing
+
+Bump the version in `package.json`, `src-tauri/tauri.conf.json` and `src-tauri/Cargo.toml`, then push to `main`. If that version has no release yet, GitHub Actions builds, signs and publishes it.
 
 ## Development
 
