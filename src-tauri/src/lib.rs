@@ -2,6 +2,16 @@ use std::fs;
 use std::path::PathBuf;
 use tauri::Manager;
 
+fn exe_dir() -> Result<PathBuf, String> {
+    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+    Ok(exe.parent().ok_or("cannot find the app folder")?.to_path_buf())
+}
+
+/// True when the app was installed with the installer (not run as a portable .exe).
+fn is_installed() -> bool {
+    exe_dir().map(|d| d.join("uninstall.exe").exists()).unwrap_or(false)
+}
+
 /// Folder for saved configurations and settings.
 ///
 /// The installer puts `uninstall.exe` next to the app. If it is there, the app
@@ -9,11 +19,8 @@ use tauri::Manager;
 /// app runs portable and keeps user data in a folder next to the .exe.
 /// Either way, user data is never mixed with the program files.
 fn data_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
-    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-    let exe_dir = exe.parent().ok_or("cannot find the app folder")?.to_path_buf();
-    let installed = exe_dir.join("uninstall.exe").exists();
-
-    let dir = if installed {
+    let exe_dir = exe_dir()?;
+    let dir = if is_installed() {
         app.path().app_data_dir().map_err(|e| e.to_string())?
     } else {
         exe_dir.join("AirflowSimData")
@@ -47,6 +54,13 @@ fn data_location(app: tauri::AppHandle) -> Result<String, String> {
     Ok(data_dir(&app)?.to_string_lossy().into_owned())
 }
 
+/// Portable copies can't update themselves (the update is an installer),
+/// so the app only offers a link to the download page.
+#[tauri::command]
+fn is_portable() -> bool {
+    !is_installed()
+}
+
 /// Used by JSON export, with a path the user picked in a save dialog.
 #[tauri::command]
 fn write_text_file(path: String, content: String) -> Result<(), String> {
@@ -62,10 +76,13 @@ fn read_text_file(path: String) -> Result<String, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             load_store,
             save_store,
             data_location,
+            is_portable,
             write_text_file,
             read_text_file
         ])

@@ -5,6 +5,8 @@ import { LangContext } from "./lib/i18n";
 import { newId, parseStore, type SavedConfig, type Setup } from "./lib/configs";
 import { DEFAULT_SETTINGS, type Settings } from "./lib/settings";
 import { loadStore, saveStore } from "./lib/storage";
+import { canCheckForUpdates, checkForUpdate, type AvailableUpdate } from "./lib/updates";
+import { UpdateBanner } from "./components/UpdateBanner";
 import { Sidebar } from "./components/Sidebar";
 import { SimulatorScreen } from "./screens/SimulatorScreen";
 import { SavedScreen } from "./screens/SavedScreen";
@@ -34,6 +36,9 @@ export default function App() {
   const [initial, setInitial] = useState<Setup | null>(null);
   const [simKey, setSimKey] = useState(0);
 
+  const [update, setUpdate] = useState<AvailableUpdate | null>(null);
+  const [startupCheckDone, setStartupCheckDone] = useState(false);
+
   useEffect(() => {
     loadStore()
       .then((text) => {
@@ -48,6 +53,24 @@ export default function App() {
   useEffect(() => {
     if (loaded) saveStore(JSON.stringify({ version: 1, configs, settings }, null, 2)).catch(() => {});
   }, [configs, settings, loaded]);
+
+  // Check for updates once, after the saved settings are known.
+  useEffect(() => {
+    if (!loaded || startupCheckDone) return;
+    setStartupCheckDone(true);
+    if (settings.checkUpdates) checkForUpdate().then(setUpdate, () => {});
+  }, [loaded, startupCheckDone, settings.checkUpdates]);
+
+  async function checkNow(): Promise<"latest" | "available" | "failed" | "unavailable"> {
+    if (!canCheckForUpdates()) return "unavailable";
+    try {
+      const found = await checkForUpdate();
+      setUpdate(found);
+      return found ? "available" : "latest";
+    } catch {
+      return "failed";
+    }
+  }
 
   function updateSettings(patch: Partial<Settings>) {
     setSettings((prev) => ({ ...prev, ...patch }));
@@ -107,10 +130,16 @@ export default function App() {
             />
           )}
           {screen === "settings" && (
-            <SettingsScreen settings={settings} onChange={updateSettings} onReset={() => setSettings(DEFAULT_SETTINGS)} />
+            <SettingsScreen
+              settings={settings}
+              onChange={updateSettings}
+              onReset={() => setSettings(DEFAULT_SETTINGS)}
+              onCheckNow={checkNow}
+            />
           )}
           {screen === "about" && <AboutScreen />}
         </main>
+        {update && <UpdateBanner key={update.version} update={update} onLater={() => setUpdate(null)} />}
       </div>
     </LangContext.Provider>
   );

@@ -33,3 +33,6 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Settings:** jezik, animacije interfejsa, boje usisa/izduva, brzina animacije (0.5–2×), gustina čestica (160/320/520), provera ažuriranja pri pokretanju, prikaz foldera sa podacima, reset (konfiguracije ostaju). Sve se čuva u `data.json` zajedno sa konfiguracijama.
 - **Tema:** samo tamna (grafitna) – svetla tema nije planirana za v1.
 - **Otvaranje konfiguracije primenjuje njene boje** protoka, jer su deo konfiguracije.
+- **Automatski update:** Tauri updater, izvor je GitHub Releases (`latest.json`). Provera pri pokretanju (može se isključiti) i dugme "Check now" u Settings. Ništa se ne instalira bez klika na "Install now"; obaveštenje upozorava da instalacija zatvara aplikaciju. Portable verzija ne instalira update – nudi link ka stranici izdanja.
+- **Potpisivanje update-a:** javni ključ je u `tauri.conf.json`, privatni u GitHub secretu `TAURI_SIGNING_PRIVATE_KEY`. Obični buildovi ne potpisuju (ne treba ključ); samo tag `vX.Y.Z` pravi potpisan release.
+- **Izdavanje verzije:** podigni verziju u `package.json`, `src-tauri/tauri.conf.json` i `src-tauri/Cargo.toml`, pa pushuj tag `vX.Y.Z`. CI proverava da se tag i verzija slažu.

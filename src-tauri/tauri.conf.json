@@ -21,16 +21,32 @@
         "backgroundColor": "#141518"
       }
     ],
-    "security": { "csp": null }
+    "security": {
+      "csp": null
+    }
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": false
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDYyNjE4QUM5RjE4REY4NDQKUldSRStJM3h5WXBoWW5zRFA4aW1WSWsyV3k3c3o2b3JPUk9zRzlpMHVGK0tVZVFMcEtCY3NSUy8K",
+      "endpoints": [
+        "https://github.com/cirovic-d/AirFlowSim/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

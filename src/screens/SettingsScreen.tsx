@@ -8,12 +8,28 @@ interface Props {
   settings: Settings;
   onChange: (patch: Partial<Settings>) => void;
   onReset: () => void;
+  onCheckNow: () => Promise<"latest" | "available" | "failed" | "unavailable">;
 }
 
-export function SettingsScreen({ settings, onChange, onReset }: Props) {
+export function SettingsScreen({ settings, onChange, onReset, onCheckNow }: Props) {
   const t = useT();
   const [dataLocation, setDataLocation] = useState<string | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [checkState, setCheckState] = useState<"idle" | "checking" | "latest" | "available" | "failed" | "unavailable">("idle");
+
+  async function checkNow() {
+    setCheckState("checking");
+    setCheckState(await onCheckNow());
+  }
+
+  const checkText = {
+    idle: `${t("version")} ${__APP_VERSION__}`,
+    checking: t("checking"),
+    latest: t("upToDate"),
+    available: t("updateFound"),
+    failed: t("updateCheckFailed"),
+    unavailable: t("updatesUnavailable"),
+  }[checkState];
 
   useEffect(() => {
     getDataLocation().then(setDataLocation, () => setDataLocation(null));
@@ -80,6 +96,11 @@ export function SettingsScreen({ settings, onChange, onReset }: Props) {
       <div className="card settings-card">
         <Row title={t("checkUpdates")} hint={t("checkUpdatesHint")}>
           <Toggle value={settings.checkUpdates} onChange={(checkUpdates) => onChange({ checkUpdates })} />
+        </Row>
+        <Row title={t("checkNow")} hint={checkText}>
+          <button className="btn" disabled={checkState === "checking"} onClick={checkNow}>
+            {t("checkNow")}
+          </button>
         </Row>
       </div>
 
