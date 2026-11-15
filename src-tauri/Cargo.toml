@@ -1,6 +1,6 @@
 [package]
 name = "airflowsim"
-version = "0.1.0"
+version = "0.1.1"
 description = "PC Airflow Simulator"
 edition = "2021"
 
