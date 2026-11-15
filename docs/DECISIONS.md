@@ -40,3 +40,4 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Količina vazduha:** kontinualni slider (0.1–1 → 120–660 čestica) umesto Low/Medium/High; staro podešavanje se automatski prevodi.
 - **Protok kroz GPU (v0.2):** vazduh ispod kartice ide ka nasumično izabranom ventilatoru kartice (svi ventilatori dobijaju vazduh), prolazi kroz hladnjak i izlazi duž cele gornje ivice. Ispred kraja kartice vazduh se deli – donji deo ide ispod kartice, gornji preko.
 - **Čestice (v0.2):** interpolacija polja (glatke putanje), blago talasanje umesto nasumičnog drhtanja, mek sjaj oko traga.
+- **NZXT S340 Elite (CA-S340W-W2):** puni prednji panel (bez mesha/stakla), fabrički 1 gore + 1 pozadi, oba exhaust (potvrđeno u GamersNexus recenziji). Maks. dužina napajanja nije objavljena pa se ne prikazuje. AIO 360 nije podržan (napred max 280).

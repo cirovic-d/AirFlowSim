@@ -14,7 +14,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
       <dl className="spec-list">
         <Row label={t("gpuMax")} value={`${c.clearanceMm.gpuMaxLength} mm`} />
         <Row label={t("cpuMax")} value={`${c.clearanceMm.cpuCoolerMaxHeight} mm`} />
-        <Row label={t("psuMax")} value={`${c.clearanceMm.psuMaxLength} mm`} />
+        {c.clearanceMm.psuMaxLength && <Row label={t("psuMax")} value={`${c.clearanceMm.psuMaxLength} mm`} />}
       </dl>
 
       <h3>{t("fanMounts")}</h3>

@@ -19,7 +19,7 @@ export interface CaseProfile {
   manufacturer: string;
   variantNote?: string;
   dimensionsMm: { depth: number; width: number; height: number };
-  clearanceMm: { gpuMaxLength: number; cpuCoolerMaxHeight: number; psuMaxLength: number };
+  clearanceMm: { gpuMaxLength: number; cpuCoolerMaxHeight: number; /** Omitted when not published. */ psuMaxLength?: number };
   /** Omitted when the front panel material is not confirmed. */
   frontPanel?: "mesh" | "glass";
   /**

@@ -1,0 +1,27 @@
+{
+  "id": "nzxt-s340-elite",
+  "name": "NZXT S340 Elite",
+  "manufacturer": "NZXT",
+  "variantNote": "S340 Elite (CA-S340W-W2, matte white, HDMI for VR). The original S340 (CA-S340W-W1/B1) has the same fan and radiator layout.",
+  "dimensionsMm": { "depth": 432, "width": 203, "height": 474 },
+  "clearanceMm": { "gpuMaxLength": 364, "cpuCoolerMaxHeight": 161 },
+  "fanMounts": {
+    "front": { "max120": 2 },
+    "top": { "max120": 1 },
+    "rear": { "max120": 1 }
+  },
+  "radiatorMounts": {
+    "front": [120, 140, 240, 280],
+    "rear": [120]
+  },
+  "radiatorNotes": "GPU clearance drops from 364 mm to 334 mm with a front radiator.",
+  "factoryFans": [
+    { "position": "top", "count": 1, "direction": "exhaust", "directionVerified": true },
+    { "position": "rear", "count": 1, "direction": "exhaust", "directionVerified": true }
+  ],
+  "sources": [
+    "https://www.bhphotovideo.com/c/product/1302684-REG/nzxt_ca_s340w_w2_s340_elite_computer_chasis.html",
+    "https://evatech.com.au/product/4668/nzxt-source-340-elite-matte-white",
+    "https://gamersnexus.net/hwreviews/2709-nzxt-s340-elite-review-temperature-noise-cable-management?showall=1"
+  ]
+}
