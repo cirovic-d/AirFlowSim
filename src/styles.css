@@ -1,0 +1,204 @@
+:root {
+  --bg: #141518;
+  --surface: #1b1c20;
+  --surface-2: #222328;
+  --line: rgba(255, 255, 255, 0.07);
+  --text: #e8e9ec;
+  --muted: #8b8e97;
+  --accent: #3ad0f0;
+  --intake: #3ad0f0;
+  --exhaust: #ff8a3d;
+  --radius: 10px;
+
+  color-scheme: dark;
+  font-family: "Segoe UI Variable", "Segoe UI", Inter, system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { margin: 0; font-weight: 600; }
+h1 { font-size: 20px; letter-spacing: -0.01em; }
+h2 { font-size: 15px; }
+h3 {
+  margin: 22px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.muted { color: var(--muted); }
+
+/* ---------- App shell ---------- */
+.app { display: flex; height: 100vh; }
+.content { flex: 1; min-width: 0; display: flex; }
+
+/* ---------- Left sidebar ---------- */
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 12px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 8px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-item, .case-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-item:hover, .case-item:hover { background: var(--surface-2); color: var(--text); }
+.nav-item.active { background: var(--surface-2); color: var(--text); }
+.nav-item.active .icon { color: var(--accent); }
+
+.case-list { margin-top: 26px; display: flex; flex-direction: column; gap: 2px; }
+.section-label {
+  padding: 0 10px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.case-item { justify-content: space-between; }
+.case-item.active { background: var(--surface-2); color: var(--text); box-shadow: inset 2px 0 0 var(--accent); }
+.case-maker { font-size: 11px; opacity: 0.7; }
+
+/* ---------- Simulator ---------- */
+.simulator { flex: 1; display: flex; min-width: 0; }
+.sim-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.stage { flex: 1; display: flex; flex-direction: column; padding: 22px 26px 0; min-height: 0; }
+.stage-header p { margin: 4px 0 0; font-size: 12px; }
+.stage-canvas {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+.case-outline { max-width: 100%; max-height: 100%; height: 100%; }
+.case-body {
+  fill: rgba(255, 255, 255, 0.02);
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 2;
+}
+.stage-hint { fill: var(--muted); font-size: 13px; text-anchor: middle; dominant-baseline: middle; }
+
+/* ---------- Bottom stats ---------- */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  margin: 0 26px 20px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.stat { display: flex; flex-direction: column; gap: 3px; }
+.stat-label { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.stat-value { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pressure-positive { color: var(--intake); }
+.pressure-negative { color: var(--exhaust); }
+.stats-note { flex-basis: 100%; margin: 4px 0 0; font-size: 11px; color: var(--muted); }
+
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.intake { background: var(--intake); }
+.dot.exhaust { background: var(--exhaust); }
+
+/* ---------- Right panel ---------- */
+.panel {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 22px 20px;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  overflow-y: auto;
+}
+.panel > h2 { margin-bottom: 12px; }
+.spec-list { margin: 0; }
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+}
+.spec-row dt { color: var(--muted); }
+.spec-row dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.spec-row.wrap dd { white-space: normal; }
+.note { margin: 8px 0 0; font-size: 11px; line-height: 1.5; color: var(--muted); }
+
+.fan-list, .sources { list-style: none; margin: 0; padding: 0; }
+.fan-list li {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+}
+.assumed { margin-left: 2px; cursor: help; }
+.sources li { padding: 4px 0; font-size: 12px; }
+
+/* ---------- Other pages ---------- */
+.page { flex: 1; padding: 26px 32px; overflow-y: auto; }
+.page > h1 { margin-bottom: 20px; }
+.card {
+  max-width: 640px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.empty { max-width: 640px; padding: 48px 0; text-align: center; }
+.empty p { margin: 8px 0 0; }
+.setting { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.setting-title { font-weight: 600; margin-bottom: 3px; }
+.segmented { display: flex; padding: 3px; background: var(--bg); border-radius: 8px; }
+.segmented button {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+.segmented button.active { background: var(--surface-2); color: var(--text); }
+.about { display: flex; gap: 18px; align-items: flex-start; }
+.about p { margin: 0 0 12px; line-height: 1.55; }
+
+/* Narrower windows: slimmer side panels. */
+@media (max-width: 1100px) {
+  .panel { width: 240px; }
+}
+
