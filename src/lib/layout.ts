@@ -12,6 +12,21 @@ export const BOARD = { width: 244, height: 305, rearGap: 15, topGap: 32 }; // AT
 export const SOCKET = { x: BOARD.rearGap + 94, y: BOARD.topGap + 60, size: 40 };
 export const PCIE_Y = BOARD.topGap + 170;
 export const GPU_THICK = 42; // dual-slot card seen from the side
+export const GPU_X = 4; // the card's bracket sits at the rear wall
+export const VIEW_PAD = 48; // room around the case in the drawing, for arrows
+
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** PSU shroud. It stops short of the front when the case has front fans. */
+export function getShroud(c: CaseProfile): Rect {
+  const { depth, height } = c.dimensionsMm;
+  return { x: 0, y: height - SHROUD_HEIGHT, w: c.fanMounts.front ? depth - 40 : depth, h: SHROUD_HEIGHT };
+}
 
 // Which way is "into the case" for a fan mounted at each position.
 export const INWARD: Record<MountPosition, [number, number]> = {

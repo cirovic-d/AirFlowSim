@@ -107,7 +107,7 @@ h3 {
   padding: 24px 0;
 }
 .stage-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
-.stage-hint { margin: 0 0 12px; text-align: center; font-size: 12px; color: var(--muted); }
+
 
 .btn {
   padding: 7px 14px;
@@ -379,3 +379,14 @@ h3 {
 .pump-cap { fill: none; stroke: var(--accent); stroke-opacity: 0.6; stroke-width: 1.4; }
 .tube { fill: none; stroke: #3a3c44; stroke-width: 7; stroke-linecap: round; }
 .radiator rect { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.2; }
+
+/* ---------- Airflow animation ---------- */
+.view-wrap { position: relative; width: 100%; height: 100%; }
+.airflow-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.anim-bar { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; flex-wrap: wrap; }
+.btn.icon { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; font-size: 12px; }
+.speed { display: flex; align-items: center; gap: 10px; margin-left: 10px; font-size: 12px; }
+.speed input { width: 120px; accent-color: var(--accent); }
+.speed-value { width: 34px; font-variant-numeric: tabular-nums; }
+.anim-hint { margin-left: auto; font-size: 11px; color: var(--muted); }

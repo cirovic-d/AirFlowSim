@@ -6,7 +6,7 @@ This is a visual simulation, not a CFD calculation, and it never controls real f
 
 ## Status
 
-Phases 1–5 of 11 done – app shell, case drawings, fans, CPU cooler (360 AIO / tower / Wraith) and GPU with fit check.
+Phases 1–6 of 11 done – app shell, case drawings, fans, CPU cooler, GPU fit check and animated airflow.
 
 ## Download
 

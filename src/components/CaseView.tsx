@@ -1,5 +1,5 @@
 import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Slot } from "../types";
-import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SHROUD_HEIGHT, SOCKET } from "../lib/layout";
+import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SOCKET, VIEW_PAD as PAD, getShroud } from "../lib/layout";
 import { useT } from "../lib/i18n";
 import { Arrow, FaceFanShape } from "./FanShapes";
 import { CoolerView, RadiatorView } from "./CoolerView";
@@ -16,8 +16,6 @@ interface Props {
   onRemove: (slotId: string) => void;
   onToggleTower: () => void;
 }
-
-const PAD = 48; // room around the case for exhaust arrows
 
 /** Side view of the case through the glass panel, drawn to scale in millimetres. */
 export function CaseView(props: Props) {
@@ -75,8 +73,7 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
   const { depth, height } = caseProfile.dimensionsMm;
   // Rear of the case is on the left (x = 0), front on the right (x = depth).
   const boardX = BOARD.rearGap;
-  const shroudY = height - SHROUD_HEIGHT;
-  const shroudWidth = caseProfile.fanMounts.front ? depth - 40 : depth;
+  const shroud = getShroud(caseProfile);
 
   return (
     <g className="shell">
@@ -106,7 +103,7 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
       ))}
 
       {/* PSU shroud */}
-      <rect className="shroud" x="0" y={shroudY} width={shroudWidth} height={SHROUD_HEIGHT} rx="4" />
+      <rect className="shroud" x={shroud.x} y={shroud.y} width={shroud.w} height={shroud.h} rx="4" />
     </g>
   );
 }

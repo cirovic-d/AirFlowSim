@@ -1,9 +1,7 @@
 import type { CaseProfile, GpuConfig } from "../types";
 import { getGpuFit, getGpuLength } from "../lib/components";
-import { GPU_THICK, PCIE_Y } from "../lib/layout";
+import { GPU_THICK, GPU_X as BRACKET_X, PCIE_Y } from "../lib/layout";
 import { Arrow } from "./FanShapes";
-
-const BRACKET_X = 4; // the card's bracket sits at the rear wall
 
 /** Graphics card seen from the side, with its fans on the underside. */
 export function GpuView({ caseProfile, gpu }: { caseProfile: CaseProfile; gpu: GpuConfig }) {

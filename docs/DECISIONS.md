@@ -22,3 +22,6 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **360 AIO:** dostupan samo gde proizvođač navodi 360 mm radijator (Antec C3 gore, GC5/GC6 napred). Radijator zauzima 3 mesta na toj poziciji; njegovi ventilatori se ne mogu ukloniti pojedinačno, ali im se menja smer (pojedinačno ili svi odjednom).
 - **Tower:** jedan 120 mm ventilator, smer ka pozadini ili ka prednjem delu. **Wraith:** fiksan, duva ka staklu.
 - **Pritisak:** broje se samo ventilatori kućišta i radijatora; CPU i GPU ventilatori ne ulaze u procenu.
+- **Animacija protoka:** Canvas 2D preko SVG crteža (ne prima klikove). Grid 6 mm sa smerom vazduha se računa samo kad se konfiguracija promeni; čestice (do ~320) ga prate i crtaju se kao kratke linije koje blede (efekat dima). Boja prelazi iz intake u exhaust boju kako vazduh "stari". Čestice izlaze samo kroz exhaust ventilatore; vazduh pritisnut uz zid brzo izbledi (curenje kroz procepe). Bez intake ventilatora vazduh ulazi kroz poklopce slotova pozadi.
+- **Animacija se pauzira** kad je prozor sakriven/minimizovan.
+- **Brzina ventilatora:** jedan globalni klizač 20–100 %, utiče samo na brzinu čestica.

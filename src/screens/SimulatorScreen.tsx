@@ -3,6 +3,8 @@ import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Mou
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { DEFAULT_GPU, getAioPositions, getGpuFit, mountAio, removeAio } from "../lib/components";
 import { useT, type TKey } from "../lib/i18n";
+import { AirflowCanvas } from "../components/AirflowCanvas";
+import { AnimationBar } from "../components/AnimationBar";
 import { CaseView } from "../components/CaseView";
 import { CpuPanel } from "../components/CpuPanel";
 import { FanList } from "../components/FanList";
@@ -27,6 +29,12 @@ export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
   const [cooler, setCooler] = useState<CpuCooler>({ type: "tower", direction: "rear" });
   const [gpu, setGpu] = useState<GpuConfig>(DEFAULT_GPU);
   const [tab, setTab] = useState<Tab>("fans");
+  const [playing, setPlaying] = useState(true);
+  const [fanSpeed, setFanSpeed] = useState(0.7);
+  const [restartKey, setRestartKey] = useState(0);
+
+  // One object per configuration, so the airflow is rebuilt only when it changes.
+  const scene = useMemo(() => ({ caseProfile, slots, fans, gpu, cooler }), [caseProfile, slots, fans, gpu, cooler]);
 
   // ---------- Case fans ----------
 
@@ -97,19 +105,28 @@ export function SimulatorScreen({ caseProfile }: { caseProfile: CaseProfile }) {
             </button>
           </header>
           <div className="stage-canvas">
-            <CaseView
-              caseProfile={caseProfile}
-              slots={slots}
-              fans={fans}
-              gpu={gpu}
-              cooler={cooler}
-              onAdd={addFan}
-              onToggle={toggleFan}
-              onRemove={removeFan}
-              onToggleTower={toggleTower}
-            />
+            <div className="view-wrap">
+              <CaseView
+                caseProfile={caseProfile}
+                slots={slots}
+                fans={fans}
+                gpu={gpu}
+                cooler={cooler}
+                onAdd={addFan}
+                onToggle={toggleFan}
+                onRemove={removeFan}
+                onToggleTower={toggleTower}
+              />
+              <AirflowCanvas scene={scene} playing={playing} fanSpeed={fanSpeed} restartKey={restartKey} />
+            </div>
           </div>
-          <p className="stage-hint">{t("interactionHint")}</p>
+          <AnimationBar
+            playing={playing}
+            onPlaying={setPlaying}
+            onRestart={() => setRestartKey((k) => k + 1)}
+            fanSpeed={fanSpeed}
+            onFanSpeed={setFanSpeed}
+          />
         </section>
         <StatsBar fans={fans} gpuFit={getGpuFit(caseProfile, gpu)} />
       </div>
