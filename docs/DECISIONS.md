@@ -13,3 +13,7 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Testiranje:** UI se testira kao web build u headless browseru; Tauri build proverava vlasnik na Windowsu.
 - **Wraith stock cooler:** vizuelno duva napred, ka staklenom bočnom panelu (ka posmatraču), vazduh se širi oko hladnjaka.
 - **Profili kućišta:** `src/data/cases/*.json`, sa izvorima. `directionVerified: false` znači da je smer fabričkog ventilatora standardan (front intake / rear exhaust), ali nije eksplicitno naveden u izvoru.
+- **Aura GC1:** koristi se obična verzija (ne ELITE).
+- **Raspored na crtežu:** koje pozicije postoje i koliko ventilatora staje dolazi iz verifikovanih podataka proizvođača; tačni mm položaji na crtežu su aproksimirani iz dimenzija kućišta (`src/lib/layout.ts`).
+- **Fabrički ventilatori** zauzimaju prva mesta na svojoj poziciji (napred odozgo nadole, gore od pozadi ka napred).
+- **Interakcija:** klik na prazno mesto dodaje ventilator (napred/bočno/dole = intake, gore/pozadi = exhaust), klik na ventilator menja smer, × uklanja.

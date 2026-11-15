@@ -2,21 +2,52 @@
   "id": "gamdias-aura-gc6",
   "name": "GAMDIAS AURA GC6",
   "manufacturer": "GAMDIAS",
-  "dimensionsMm": { "depth": 370, "width": 210, "height": 450 },
-  "clearanceMm": { "gpuMaxLength": 300, "cpuCoolerMaxHeight": 160, "psuMaxLength": 150 },
+  "dimensionsMm": {
+    "depth": 370,
+    "width": 210,
+    "height": 450
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 300,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 150
+  },
+  "frontPanel": "mesh",
   "fanMounts": {
-    "front": { "max120": 3 },
-    "top":   { "max120": 2 },
-    "rear":  { "max120": 1 }
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
   },
   "radiatorMounts": {
-    "front": [120, 240, 360],
-    "rear":  [120]
+    "front": [
+      120,
+      240,
+      360
+    ],
+    "rear": [
+      120
+    ]
   },
   "radiatorNotes": "Manual spec table lists top 2x120 mm radiator, but the radiator compatibility diagram shows only front and rear. Top radiator treated as unsupported until confirmed.",
   "factoryFans": [
-    { "position": "front", "count": 2, "direction": "intake", "directionVerified": false },
-    { "position": "rear",  "count": 1, "direction": "exhaust", "directionVerified": false }
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
   ],
   "sources": [
     "https://www.gamdias.com/en/aura/component/case/AURA_GC6",

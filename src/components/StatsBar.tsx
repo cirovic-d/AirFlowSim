@@ -1,8 +1,8 @@
-import type { FactoryFanGroup } from "../types";
+import type { InstalledFan } from "../types";
 import { getFanStats } from "../lib/pressure";
 import { useT } from "../lib/i18n";
 
-export function StatsBar({ fans }: { fans: FactoryFanGroup[] }) {
+export function StatsBar({ fans }: { fans: InstalledFan[] }) {
   const t = useT();
   const stats = getFanStats(fans);
 

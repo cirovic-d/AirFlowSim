@@ -106,13 +106,60 @@ h3 {
   justify-content: center;
   padding: 24px 0;
 }
-.case-outline { max-width: 100%; max-height: 100%; height: 100%; }
-.case-body {
-  fill: rgba(255, 255, 255, 0.02);
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 2;
+.stage-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.stage-hint { margin: 0 0 12px; text-align: center; font-size: 12px; color: var(--muted); }
+
+.btn {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  white-space: nowrap;
+  transition: border-color 0.15s, background 0.15s;
 }
-.stage-hint { fill: var(--muted); font-size: 13px; text-anchor: middle; dominant-baseline: middle; }
+.btn:hover { border-color: rgba(255, 255, 255, 0.18); background: #2a2b31; }
+
+/* ---------- Case drawing (SVG, units are millimetres) ---------- */
+.case-view { width: 100%; height: 100%; }
+.shell { pointer-events: none; }
+.case-body { fill: #18191d; stroke: rgba(255, 255, 255, 0.24); stroke-width: 2; }
+.front-panel { stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
+.board { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+.socket { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
+.pcie { fill: rgba(255, 255, 255, 0.08); }
+.rear-io, .slot-cover { fill: rgba(255, 255, 255, 0.1); }
+.shroud { fill: #1e1f24; stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+
+.empty-slot { cursor: pointer; }
+.empty-slot rect, .empty-slot circle {
+  fill: rgba(255, 255, 255, 0.015);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+  transition: stroke 0.15s, fill 0.15s;
+}
+.empty-slot .plus { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.6; stroke-linecap: round; transition: stroke 0.15s; }
+.empty-slot:hover rect, .empty-slot:hover circle { stroke: var(--text); fill: rgba(255, 255, 255, 0.05); }
+.empty-slot:hover .plus { stroke: var(--text); }
+
+.fan { cursor: pointer; }
+.fan.intake { color: var(--intake); }
+.fan.exhaust { color: var(--exhaust); }
+.fan-frame { fill: #232429; stroke: currentColor; stroke-width: 1.6; transition: fill 0.15s; }
+.fan:hover .fan-frame { fill: #2b2c32; }
+.fan-rotor { fill: currentColor; opacity: 0.35; }
+.fan-ring { fill: none; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.2; }
+.fan-blade { fill: currentColor; opacity: 0.4; }
+.fan-hub { fill: #232429; stroke: currentColor; stroke-width: 1.2; }
+.fan-label { fill: currentColor; font-size: 9px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+.fan-arrow { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+.remove { opacity: 0; transition: opacity 0.15s; }
+.fan:hover .remove { opacity: 1; }
+.remove circle { fill: #2e2f35; stroke: rgba(255, 255, 255, 0.25); stroke-width: 1; }
+.remove:hover circle { fill: #c8414b; stroke: transparent; }
+.remove path { stroke: var(--text); stroke-width: 1.6; stroke-linecap: round; }
 
 /* ---------- Bottom stats ---------- */
 .stats {
@@ -146,7 +193,8 @@ h3 {
   border-left: 1px solid var(--line);
   overflow-y: auto;
 }
-.panel > h2 { margin-bottom: 12px; }
+.panel h2 { margin-bottom: 12px; }
+.specs { margin-top: 28px; }
 .spec-list { margin: 0; }
 .spec-row {
   display: flex;
@@ -170,6 +218,41 @@ h3 {
 }
 .assumed { margin-left: 2px; cursor: help; }
 .sources li { padding: 4px 0; font-size: 12px; }
+
+.fan-rows { list-style: none; margin: 0; padding: 0; }
+.fan-rows li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line);
+}
+.dir-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 92px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 12px;
+  transition: border-color 0.15s;
+}
+.dir-pill.intake:hover { border-color: var(--intake); }
+.dir-pill.exhaust:hover { border-color: var(--exhaust); }
+.icon-btn {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1;
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
 
 /* ---------- Other pages ---------- */
 .page { flex: 1; padding: 26px 32px; overflow-y: auto; }

@@ -38,7 +38,7 @@ export default function App() {
           onCase={setCaseId}
         />
         <main className="content">
-          {screen === "simulator" && <SimulatorScreen caseProfile={findCase(caseId)} />}
+          {screen === "simulator" && <SimulatorScreen key={caseId} caseProfile={findCase(caseId)} />}
           {screen === "saved" && <SavedScreen />}
           {screen === "settings" && <SettingsScreen lang={lang} onLang={setLang} />}
           {screen === "about" && <AboutScreen />}

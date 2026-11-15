@@ -6,7 +6,7 @@ This is a visual simulation, not a CFD calculation, and it never controls real f
 
 ## Status
 
-Phase 1 of 11 – app structure and UI shell. See [docs/SPEC.md](docs/SPEC.md) and [docs/DECISIONS.md](docs/DECISIONS.md).
+Phases 1–4 of 11 done – app shell, case drawings, fan slots, factory fans, add/remove/toggle fans. See [docs/SPEC.md](docs/SPEC.md) and [docs/DECISIONS.md](docs/DECISIONS.md).
 
 ## Download
 

@@ -7,7 +7,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
   const t = useT();
 
   return (
-    <aside className="panel">
+    <section className="specs">
       <h2>{t("caseSpecs")}</h2>
 
       <dl className="spec-list">
@@ -22,6 +22,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
           <Row key={p} label={t(p)} value={`${c.fanMounts[p]!.max120}×`} />
         ))}
       </dl>
+      <p className="note">{t("layoutNote")}</p>
 
       <h3>{t("radiators")}</h3>
       <dl className="spec-list">
@@ -61,7 +62,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
           </li>
         ))}
       </ul>
-    </aside>
+    </section>
   );
 }
 

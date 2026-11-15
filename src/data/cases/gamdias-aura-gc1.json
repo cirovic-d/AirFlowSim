@@ -3,20 +3,50 @@
   "name": "GAMDIAS AURA GC1",
   "manufacturer": "GAMDIAS",
   "variantNote": "Original GC1 (not GC1 ELITE, which has 340 mm GPU clearance and 360 mm front radiator support)",
-  "dimensionsMm": { "depth": 352, "width": 200, "height": 442 },
-  "clearanceMm": { "gpuMaxLength": 260, "cpuCoolerMaxHeight": 160, "psuMaxLength": 150 },
+  "dimensionsMm": {
+    "depth": 352,
+    "width": 200,
+    "height": 442
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 260,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 150
+  },
+  "frontPanel": "mesh",
   "fanMounts": {
-    "front": { "max120": 3 },
-    "top":   { "max120": 2 },
-    "rear":  { "max120": 1 }
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
   },
   "radiatorMounts": {
-    "front": [120, 240],
-    "rear":  [120]
+    "front": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
   },
   "factoryFans": [
-    { "position": "front", "count": 3, "direction": "intake", "directionVerified": false },
-    { "position": "rear",  "count": 1, "direction": "exhaust", "directionVerified": false }
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
   ],
   "sources": [
     "https://www.gamdias.com/en/aura/component/case/AURA_GC1",
