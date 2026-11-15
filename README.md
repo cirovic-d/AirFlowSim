@@ -38,3 +38,4 @@ Case profiles live in `src/data/cases/` as JSON files with sources. Add a new ca
 
 - Antec C3 ARGB
 - GAMDIAS AURA GC1, GC5, GC6, GC7
+- NZXT H7 Flow (2024)

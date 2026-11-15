@@ -1,4 +1,5 @@
 import { useT } from "../lib/i18n";
+import { AIR_AMOUNT_MIN } from "../lib/settings";
 
 interface Props {
   playing: boolean;
@@ -6,9 +7,11 @@ interface Props {
   onRestart: () => void;
   fanSpeed: number;
   onFanSpeed: (speed: number) => void;
+  airAmount: number;
+  onAirAmount: (amount: number) => void;
 }
 
-export function AnimationBar({ playing, onPlaying, onRestart, fanSpeed, onFanSpeed }: Props) {
+export function AnimationBar({ playing, onPlaying, onRestart, fanSpeed, onFanSpeed, airAmount, onAirAmount }: Props) {
   const t = useT();
 
   return (
@@ -26,20 +29,41 @@ export function AnimationBar({ playing, onPlaying, onRestart, fanSpeed, onFanSpe
         {t("restart")}
       </button>
 
-      <label className="speed" title={t("fanSpeedNote")}>
-        <span className="muted">{t("fanSpeed")}</span>
-        <input
-          type="range"
-          min="0.2"
-          max="1"
-          step="0.05"
-          value={fanSpeed}
-          onChange={(e) => onFanSpeed(e.target.valueAsNumber)}
-        />
-        <span className="speed-value">{Math.round(fanSpeed * 100)}%</span>
-      </label>
+      <Slider
+        label={t("fanSpeed")}
+        title={t("fanSpeedNote")}
+        min={0.2}
+        value={fanSpeed}
+        onChange={onFanSpeed}
+      />
+      <Slider
+        label={t("airAmount")}
+        title={t("airAmountHint")}
+        min={AIR_AMOUNT_MIN}
+        value={airAmount}
+        onChange={onAirAmount}
+      />
 
       <span className="anim-hint">{t("interactionHint")}</span>
     </div>
+  );
+}
+
+interface SliderProps {
+  label: string;
+  title: string;
+  min: number;
+  value: number;
+  onChange: (value: number) => void;
+}
+
+/** Labelled 0–100 % slider. */
+function Slider({ label, title, min, value, onChange }: SliderProps) {
+  return (
+    <label className="speed" title={title}>
+      <span className="muted">{label}</span>
+      <input type="range" min={min} max="1" step="0.05" value={value} onChange={(e) => onChange(e.target.valueAsNumber)} />
+      <span className="speed-value">{Math.round(value * 100)}%</span>
+    </label>
   );
 }

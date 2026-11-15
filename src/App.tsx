@@ -50,8 +50,13 @@ export default function App() {
       .finally(() => setLoaded(true));
   }, []);
 
+  // Save shortly after the last change, so dragging a slider doesn't write the file dozens of times.
   useEffect(() => {
-    if (loaded) saveStore(JSON.stringify({ version: 1, configs, settings }, null, 2)).catch(() => {});
+    if (!loaded) return;
+    const timer = setTimeout(() => {
+      saveStore(JSON.stringify({ version: 1, configs, settings }, null, 2)).catch(() => {});
+    }, 300);
+    return () => clearTimeout(timer);
   }, [configs, settings, loaded]);
 
   // Check for updates once, after the saved settings are known.
@@ -119,6 +124,7 @@ export default function App() {
               active={screen === "simulator"}
               onSave={saveConfig}
               settings={settings}
+              onAirAmount={(airAmount) => updateSettings({ airAmount })}
             />
           </div>
           {screen === "saved" && (

@@ -112,12 +112,12 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
 
   // Fans: known slot, valid direction, one fan per slot. Radiator fans are rebuilt below.
   const seen = new Set<string>();
-  const radiatorDirections: FanDirection[] = [];
+  const radiatorDirections = new Map<string, FanDirection>(); // slotId → direction
   const fans: InstalledFan[] = [];
   for (const f of Array.isArray(r.fans) ? r.fans : []) {
     if (!f || !slotIds.has(f.slotId) || seen.has(f.slotId) || !DIRECTIONS.includes(f.direction)) continue;
     seen.add(f.slotId);
-    if (f.radiator) radiatorDirections.push(f.direction);
+    if (f.radiator) radiatorDirections.set(f.slotId, f.direction);
     else fans.push({ slotId: f.slotId, direction: f.direction });
   }
 
@@ -130,11 +130,9 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
   if (c.type === "aio" && getAioPositions(caseProfile).includes(c.position as MountPosition)) {
     const position = c.position as MountPosition;
     cooler = { type: "aio", position };
-    finalFans = mountAio(fans, slots, position).map((f) => {
-      if (!f.radiator) return f;
-      const i = slots.filter((s) => s.position === position).findIndex((s) => s.id === f.slotId);
-      return { ...f, direction: radiatorDirections[i] ?? f.direction };
-    });
+    finalFans = mountAio(fans, slots, position).map((f) =>
+      f.radiator ? { ...f, direction: radiatorDirections.get(f.slotId) ?? f.direction } : f,
+    );
   }
 
   // GPU

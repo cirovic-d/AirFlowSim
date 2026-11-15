@@ -1,5 +1,6 @@
 import type { CaseProfile, MountPosition } from "../types";
 import { useT } from "../lib/i18n";
+import { externalLinkProps } from "../lib/updates";
 
 const POSITIONS: MountPosition[] = ["front", "top", "side", "bottom", "rear"];
 
@@ -57,7 +58,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
       <ul className="sources">
         {c.sources.map((url) => (
           <li key={url}>
-            <a href={url} target="_blank" rel="noreferrer">
+            <a {...externalLinkProps(url)}>
               {new URL(url).hostname.replace("www.", "")}
             </a>
           </li>

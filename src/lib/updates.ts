@@ -10,6 +10,17 @@ export interface AvailableUpdate {
   install: (onProgress: (fraction: number | null) => void) => Promise<void>;
 }
 
+/** Link that opens in the default browser (see openExternal). */
+export function externalLinkProps(url: string) {
+  return {
+    href: url,
+    onClick: (e: { preventDefault: () => void }) => {
+      e.preventDefault();
+      openExternal(url).catch(() => {});
+    },
+  };
+}
+
 /** Null when the app is up to date, or when running outside the desktop app. */
 export async function checkForUpdate(): Promise<AvailableUpdate | null> {
   if (!isTauri()) return null;
@@ -34,13 +45,21 @@ export async function checkForUpdate(): Promise<AvailableUpdate | null> {
   };
 }
 
-export async function openReleasePage() {
+/**
+ * Opens a web page in the user's default browser. In the desktop app a plain
+ * link would try to load the page inside the app window instead.
+ */
+export async function openExternal(url: string) {
   if (!isTauri()) {
-    window.open(RELEASES_URL, "_blank");
+    window.open(url, "_blank", "noopener");
     return;
   }
   const { openUrl } = await import("@tauri-apps/plugin-opener");
-  await openUrl(RELEASES_URL);
+  await openUrl(url);
+}
+
+export function openReleasePage() {
+  return openExternal(RELEASES_URL);
 }
 
 export function canCheckForUpdates() {

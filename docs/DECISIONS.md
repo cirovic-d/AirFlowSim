@@ -30,9 +30,13 @@ Odluke donete uz specifikaciju (docs/SPEC.md).
 - **Konfiguracija** čuva: kućište, ventilatore (mesto, smer, radijator), GPU, CPU hladnjak, brzinu ventilatora i boje protoka. JSON export ima zaglavlje `{"app": "PC Airflow Simulator", "format": 1}`; import proverava svako polje i odbacuje nepoznato.
 - **Simulator ostaje učitan** kad se pređe na drugi ekran (stanje se ne gubi), a animacija se tada pauzira.
 - **Uticaj komponenti na vazduh:** GPU ventilatori usisavaju vazduh odozdo (svaki iz svoje zone), vazduh prolazi kroz karticu i izlazi gore zagrejan. Tower/Wraith zagrevaju vazduh koji prođe kroz hladnjak. Vazduh koji ulazi kroz AIO radijator je već topliji. Boja čestice = toplota (plava hladno → narandžasta toplo).
-- **Settings:** jezik, animacije interfejsa, boje usisa/izduva, brzina animacije (0.5–2×), gustina čestica (160/320/520), provera ažuriranja pri pokretanju, prikaz foldera sa podacima, reset (konfiguracije ostaju). Sve se čuva u `data.json` zajedno sa konfiguracijama.
+- **Settings:** jezik, animacije interfejsa, boje usisa/izduva, brzina animacije (0.5–2×), količina vazduha (slider 10–100 %, i ispod crteža), provera ažuriranja pri pokretanju, prikaz foldera sa podacima, reset (konfiguracije ostaju). Sve se čuva u `data.json` zajedno sa konfiguracijama.
 - **Tema:** samo tamna (grafitna) – svetla tema nije planirana za v1.
 - **Otvaranje konfiguracije primenjuje njene boje** protoka, jer su deo konfiguracije.
 - **Automatski update:** Tauri updater, izvor je GitHub Releases (`latest.json`). Provera pri pokretanju (može se isključiti) i dugme "Check now" u Settings. Ništa se ne instalira bez klika na "Install now"; obaveštenje upozorava da instalacija zatvara aplikaciju. Portable verzija ne instalira update – nudi link ka stranici izdanja.
 - **Potpisivanje update-a:** javni ključ je u `tauri.conf.json`, privatni u GitHub secretu `TAURI_SIGNING_PRIVATE_KEY`. Obični buildovi ne potpisuju; release build (nova verzija) potpisuje.
 - **Izdavanje verzije:** podigni verziju u `package.json`, `src-tauri/tauri.conf.json` i `src-tauri/Cargo.toml` i pushuj na `main`. Ako za tu verziju još ne postoji GitHub Release, CI pravi potpisan build, tag `vX.Y.Z`, release sa installerom, portable exe-om i `latest.json`.
+- **NZXT H7:** dodat aktuelni H7 Flow (2024). Nema PSU shroud (napajanje je iza nosača ploče), 3 mesta dole ispod grafičke, AIO 360 napred ili gore. Visina 544 mm je sa nogicama.
+- **Količina vazduha:** kontinualni slider (0.1–1 → 120–660 čestica) umesto Low/Medium/High; staro podešavanje se automatski prevodi.
+- **Protok kroz GPU (v0.2):** vazduh ispod kartice ide ka nasumično izabranom ventilatoru kartice (svi ventilatori dobijaju vazduh), prolazi kroz hladnjak i izlazi duž cele gornje ivice. Ispred kraja kartice vazduh se deli – donji deo ide ispod kartice, gornji preko.
+- **Čestice (v0.2):** interpolacija polja (glatke putanje), blago talasanje umesto nasumičnog drhtanja, mek sjaj oko traga.

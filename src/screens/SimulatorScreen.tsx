@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
+import { shortName } from "../data/cases";
 import { DEFAULT_GPU, getAioPositions, getGpuFit, mountAio, removeAio } from "../lib/components";
 import type { Setup } from "../lib/configs";
-import { PARTICLES, type Settings } from "../lib/settings";
+import { particlesFor, type Settings } from "../lib/settings";
 import { SaveDialog } from "../components/SaveDialog";
 import { useT, type TKey } from "../lib/i18n";
 import { AirflowCanvas } from "../components/AirflowCanvas";
@@ -31,11 +32,12 @@ interface Props {
   active: boolean;
   onSave: (setup: Setup, name: string) => void;
   settings: Settings;
+  onAirAmount: (airAmount: number) => void;
 }
 
 // App.tsx gives this screen a new key when the case changes or a configuration
 // is loaded, so it starts fresh from `initial` or the factory setup.
-export function SimulatorScreen({ caseProfile, initial, active, onSave, settings }: Props) {
+export function SimulatorScreen({ caseProfile, initial, active, onSave, settings, onAirAmount }: Props) {
   const t = useT();
   const slots = useMemo(() => getSlots(caseProfile), [caseProfile]);
   const [fans, setFans] = useState<InstalledFan[]>(() => initial?.fans ?? getFactoryFans(caseProfile, slots));
@@ -75,6 +77,17 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
 
   // ---------- CPU cooler ----------
 
+  /**
+   * After the radiator leaves some slots, put back the factory fans that
+   * belong there (e.g. the front fans when the radiator moves to the top).
+   */
+  function refillFactory(next: InstalledFan[], before: InstalledFan[]) {
+    const taken = new Set(next.map((f) => f.slotId));
+    const vacated = new Set(before.filter((f) => f.radiator && !taken.has(f.slotId)).map((f) => f.slotId));
+    const restored = getFactoryFans(caseProfile, slots).filter((f) => vacated.has(f.slotId));
+    return [...next, ...restored];
+  }
+
   function setCoolerType(type: CpuCooler["type"]) {
     if (type === cooler.type) return;
     if (type === "aio") {
@@ -84,13 +97,13 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
       setFans((prev) => mountAio(prev, slots, position));
       return;
     }
-    setFans(removeAio);
+    setFans((prev) => refillFactory(removeAio(prev), prev));
     setCooler(type === "tower" ? { type: "tower", direction: "rear" } : { type: "wraith" });
   }
 
   function setAioPosition(position: MountPosition) {
     setCooler({ type: "aio", position });
-    setFans((prev) => mountAio(prev, slots, position));
+    setFans((prev) => refillFactory(mountAio(prev, slots, position), prev));
   }
 
   function setRadiatorDirection(direction: FanDirection) {
@@ -143,7 +156,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
                 restartKey={restartKey}
                 colors={{ intake: settings.intakeColor, exhaust: settings.exhaustColor }}
                 animationSpeed={settings.animationSpeed}
-                maxParticles={PARTICLES[settings.density]}
+                maxParticles={particlesFor(settings.airAmount)}
               />
             </div>
           </div>
@@ -153,6 +166,8 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             onRestart={() => setRestartKey((k) => k + 1)}
             fanSpeed={fanSpeed}
             onFanSpeed={setFanSpeed}
+            airAmount={settings.airAmount}
+            onAirAmount={onAirAmount}
           />
         </section>
         <StatsBar fans={fans} gpuFit={getGpuFit(caseProfile, gpu)} />
@@ -187,7 +202,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
 
       {saving && (
         <SaveDialog
-          defaultName={`${caseProfile.name.replace("GAMDIAS ", "")} – ${new Date().toLocaleDateString()}`}
+          defaultName={`${shortName(caseProfile)} – ${new Date().toLocaleDateString()}`}
           onCancel={() => setSaving(false)}
           onSave={(name) => {
             onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed }, name);

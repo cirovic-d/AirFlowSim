@@ -1,6 +1,7 @@
 import type { CaseProfile, Screen } from "../types";
 import { useT, type TKey } from "../lib/i18n";
 import { Icon, type IconName } from "./Icon";
+import { shortName } from "../data/cases";
 
 const NAV: { screen: Screen; label: TKey; icon: IconName }[] = [
   { screen: "simulator", label: "navSimulator", icon: "flow" },
@@ -49,7 +50,7 @@ export function Sidebar({ screen, onScreen, cases, caseId, onCase }: Props) {
               className={"case-item" + (c.id === caseId ? " active" : "")}
               onClick={() => onCase(c.id)}
             >
-              <span className="case-name">{c.name.replace("GAMDIAS ", "")}</span>
+              <span className="case-name">{shortName(c)}</span>
               <span className="case-maker">{c.manufacturer}</span>
             </button>
           ))}

@@ -1,6 +1,10 @@
 use std::fs;
 use std::path::PathBuf;
+use std::sync::Mutex;
 use tauri::Manager;
+
+/// Makes saves run one at a time (they share the same temporary file).
+static SAVE_LOCK: Mutex<()> = Mutex::new(());
 
 fn exe_dir() -> Result<PathBuf, String> {
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
@@ -42,6 +46,7 @@ fn load_store(app: tauri::AppHandle) -> Result<String, String> {
 /// Saves the data. Writes a temporary file first, so a crash can't leave a half-written file.
 #[tauri::command]
 fn save_store(app: tauri::AppHandle, content: String) -> Result<(), String> {
+    let _guard = SAVE_LOCK.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
     let dir = data_dir(&app)?;
     let tmp = dir.join("data.json.tmp");
     fs::write(&tmp, content).map_err(|e| e.to_string())?;

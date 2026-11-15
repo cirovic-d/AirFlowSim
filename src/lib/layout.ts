@@ -36,8 +36,10 @@ export interface Shroud {
 /**
  * PSU shroud. It stops short of the front when the case has front fans.
  * Some cases (Antec C3) have an inclined top that is lower toward the front.
+ * Returns null for cases without a shroud (NZXT H7 Flow 2024).
  */
-export function getShroud(c: CaseProfile): Shroud {
+export function getShroud(c: CaseProfile): Shroud | null {
+  if (c.shroud?.none) return null;
   const { depth, height } = c.dimensionsMm;
   const w = c.fanMounts.front ? depth - 40 : depth;
   const rearTop = height - SHROUD_HEIGHT;

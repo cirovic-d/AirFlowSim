@@ -43,7 +43,7 @@ export async function exportTextFile(fileName: string, content: string): Promise
   a.href = url;
   a.download = fileName;
   a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000); // give the browser time to start the download
   return true;
 }
 

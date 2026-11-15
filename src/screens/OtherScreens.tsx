@@ -1,4 +1,5 @@
 import { useT } from "../lib/i18n";
+import { externalLinkProps } from "../lib/updates";
 
 const REPO_URL = "https://github.com/cirovic-d/AirFlowSim";
 
@@ -20,7 +21,7 @@ export function AboutScreen() {
             <div className="spec-row">
               <dt>{t("repository")}</dt>
               <dd>
-                <a href={REPO_URL} target="_blank" rel="noreferrer">
+                <a {...externalLinkProps(REPO_URL)}>
                   cirovic-d/AirFlowSim
                 </a>
               </dd>

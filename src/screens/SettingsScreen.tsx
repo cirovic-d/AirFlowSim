@@ -1,8 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { DEFAULT_SETTINGS, type Density, type Settings } from "../lib/settings";
+import { AIR_AMOUNT_MIN, DEFAULT_SETTINGS, type Settings } from "../lib/settings";
 import { getDataLocation } from "../lib/storage";
 import { useT } from "../lib/i18n";
-import { Segmented } from "../components/Segmented";
 
 interface Props {
   settings: Settings;
@@ -77,17 +76,17 @@ export function SettingsScreen({ settings, onChange, onReset, onCheckNow }: Prop
             <span className="speed-value">{settings.animationSpeed.toFixed(1)}×</span>
           </div>
         </Row>
-        <Row title={t("density")} hint={t("densityHint")}>
-          <div className="seg-fixed">
-            <Segmented<Density>
-              value={settings.density}
-              onChange={(density) => onChange({ density })}
-              options={[
-                { value: "low", label: t("low") },
-                { value: "medium", label: t("medium") },
-                { value: "high", label: t("high") },
-              ]}
+        <Row title={t("airAmount")} hint={t("airAmountHint")}>
+          <div className="range-row">
+            <input
+              type="range"
+              min={AIR_AMOUNT_MIN}
+              max="1"
+              step="0.05"
+              value={settings.airAmount}
+              onChange={(e) => onChange({ airAmount: e.target.valueAsNumber })}
             />
+            <span className="speed-value">{Math.round(settings.airAmount * 100)}%</span>
           </div>
         </Row>
       </div>
@@ -127,7 +126,7 @@ export function SettingsScreen({ settings, onChange, onReset, onCheckNow }: Prop
           ) : (
             <button
               className="btn"
-              disabled={JSON.stringify(settings) === JSON.stringify(DEFAULT_SETTINGS)}
+              disabled={(Object.keys(DEFAULT_SETTINGS) as (keyof Settings)[]).every((k) => settings[k] === DEFAULT_SETTINGS[k])}
               onClick={() => setConfirmReset(true)}
             >
               {t("reset")}

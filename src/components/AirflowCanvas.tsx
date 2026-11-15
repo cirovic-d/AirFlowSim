@@ -19,7 +19,8 @@ interface Props {
  */
 export function AirflowCanvas({ scene, playing, fanSpeed, restartKey, colors, animationSpeed, maxParticles }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const engineRef = useRef(new AirflowEngine());
+  const engineRef = useRef<AirflowEngine>(null!);
+  if (!engineRef.current) engineRef.current = new AirflowEngine(); // created once, not on every render
 
   // Rebuild the air directions whenever the configuration changes.
   useEffect(() => {

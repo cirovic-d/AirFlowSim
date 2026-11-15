@@ -103,11 +103,13 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
       ))}
 
       {/* PSU shroud (flat or inclined), with a perforated part above a bottom fan */}
-      <path
-        className="shroud"
-        d={`M${shroud.x} ${shroud.rearTop}L${shroud.x + shroud.w} ${shroud.frontTop}V${shroud.bottom}H${shroud.x}Z`}
-      />
-      {shroud.vent && (
+      {shroud && (
+        <path
+          className="shroud"
+          d={`M${shroud.x} ${shroud.rearTop}L${shroud.x + shroud.w} ${shroud.frontTop}V${shroud.bottom}H${shroud.x}Z`}
+        />
+      )}
+      {shroud?.vent && (
         <path
           className="shroud-vent"
           d={`M${shroud.vent.from} ${shroudTopAt(shroud, shroud.vent.from)}L${shroud.vent.to} ${shroudTopAt(shroud, shroud.vent.to)}V${shroud.bottom}H${shroud.vent.from}Z`}
@@ -122,7 +124,7 @@ function isFaceOn(slot: Slot) {
 }
 
 /** Rectangle of a fan seen edge-on, or the square frame of a face-on fan. */
-export function fanBox(slot: Slot) {
+function fanBox(slot: Slot) {
   if (isFaceOn(slot)) return { x: slot.cx - FAN / 2, y: slot.cy - FAN / 2, w: FAN, h: FAN };
   const vertical = slot.position === "front" || slot.position === "rear";
   const w = vertical ? FAN_THICK : FAN;

@@ -1,14 +1,13 @@
 import type { Lang } from "./i18n";
 
-export type Density = "low" | "medium" | "high";
-
 export interface Settings {
   lang: Lang;
   intakeColor: string;
   exhaustColor: string;
   /** Multiplies the animation time step: 0.5 = half speed, 2 = double. */
   animationSpeed: number;
-  density: Density;
+  /** How much air is drawn, 0.1–1. Maps to the number of particles. */
+  airAmount: number;
   /** Small UI transitions (hover fades etc.). Off = everything changes instantly. */
   uiAnimations: boolean;
   checkUpdates: boolean;
@@ -19,13 +18,20 @@ export const DEFAULT_SETTINGS: Settings = {
   intakeColor: "#3ad0f0",
   exhaustColor: "#ff8a3d",
   animationSpeed: 1,
-  density: "medium",
+  airAmount: 0.45,
   uiAnimations: true,
   checkUpdates: true,
 };
 
-/** Particle count for each density level. */
-export const PARTICLES: Record<Density, number> = { low: 160, medium: 320, high: 520 };
+export const AIR_AMOUNT_MIN = 0.1;
+
+/** Number of particles for an air amount: 0.1 → 120, 0.45 → 330, 1 → 660. */
+export function particlesFor(airAmount: number) {
+  return Math.round(60 + airAmount * 600);
+}
+
+/** Older versions stored a density level instead of a number. */
+const LEGACY_DENSITY: Record<string, number> = { low: 0.2, medium: 0.45, high: 0.75 };
 
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -39,7 +45,12 @@ export function sanitizeSettings(raw: unknown): Settings {
     exhaustColor: typeof r.exhaustColor === "string" && HEX.test(r.exhaustColor) ? r.exhaustColor : d.exhaustColor,
     animationSpeed:
       typeof r.animationSpeed === "number" ? Math.min(2, Math.max(0.5, r.animationSpeed)) : d.animationSpeed,
-    density: r.density === "low" || r.density === "medium" || r.density === "high" ? r.density : d.density,
+    airAmount:
+      typeof r.airAmount === "number" && Number.isFinite(r.airAmount)
+        ? Math.min(1, Math.max(AIR_AMOUNT_MIN, r.airAmount))
+        : typeof r.density === "string" && r.density in LEGACY_DENSITY
+          ? LEGACY_DENSITY[r.density]
+          : d.airAmount,
     uiAnimations: typeof r.uiAnimations === "boolean" ? r.uiAnimations : d.uiAnimations,
     checkUpdates: typeof r.checkUpdates === "boolean" ? r.checkUpdates : d.checkUpdates,
   };
