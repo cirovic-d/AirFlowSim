@@ -1,12 +1,12 @@
 name: Build Windows
 
 # Builds on every push to main (download from the run's Artifacts).
-# Pushing a tag like v0.2.0 also publishes a GitHub Release with a signed
-# installer and latest.json, which installed apps use to update themselves.
+# When the version in src-tauri/tauri.conf.json has no GitHub Release yet,
+# the build is signed and published as release vX.Y.Z, with latest.json,
+# which installed apps use to update themselves.
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
@@ -31,12 +31,26 @@ jobs:
 
       - run: npm ci
 
+      - name: Is this a new version?
+        id: release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
+          gh release view "v$version" --repo "${{ github.repository }}" *> $null
+          $isNew = ($LASTEXITCODE -ne 0) -and ("${{ github.ref }}" -eq "refs/heads/main")
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "new=$($isNew.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $version, new release: $isNew"
+          exit 0
+
       - name: Build
-        if: "!startsWith(github.ref, 'refs/tags/v')"
+        if: steps.release.outputs.new != 'true'
         run: npx tauri build
 
       - name: Build release (signed for the updater)
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.release.outputs.new == 'true'
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
@@ -53,11 +67,10 @@ jobs:
           Get-ChildItem out
 
       - name: Write latest.json for the updater
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.release.outputs.new == 'true'
         shell: pwsh
         run: |
-          $version = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
-          if ("v$version" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} does not match app version $version" }
+          $version = "${{ steps.release.outputs.version }}"
           $sig = Get-Content (Get-ChildItem src-tauri/target/release/bundle/nsis/*-setup.exe.sig | Select-Object -First 1).FullName -Raw
           $url = "https://github.com/${{ github.repository }}/releases/download/v$version/PC-Airflow-Simulator_${version}_x64-setup.exe"
           $json = @{
@@ -75,9 +88,12 @@ jobs:
           path: out/*.exe
 
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.release.outputs.new == 'true'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.release.outputs.version }}
+          name: v${{ steps.release.outputs.version }}
+          target_commitish: ${{ github.sha }}
           files: |
             out/*.exe
             out/latest.json
