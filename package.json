@@ -1,7 +1,7 @@
 {
   "name": "airflowsim",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,12 +15,14 @@
     "@tauri-apps/plugin-opener": "^2.7.3",
     "@tauri-apps/plugin-updater": "^2.14.1",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "three": "^0.181.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.12.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.181.0",
     "@vitejs/plugin-react": "^6.3.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.8"

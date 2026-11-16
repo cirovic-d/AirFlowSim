@@ -46,3 +46,30 @@ export function Arrow({ x1, y1, x2, y2, className = "fan-arrow" }: { x1: number;
     />
   );
 }
+
+/**
+ * A fan seen edge-on (from the side): frame, hub and slanted blades.
+ * Drawn horizontally (120 × 25 mm) and turned for front/rear fans.
+ */
+export function EdgeFanShape({ cx, cy, vertical, len = 120, thick = 25 }: { cx: number; cy: number; vertical: boolean; len?: number; thick?: number }) {
+  const x = cx - len / 2;
+  const y = cy - thick / 2;
+  const hub = len * 0.14;
+  const blades = [0, 1, 2].flatMap((i) => {
+    const d = hub + 6 + i * ((len / 2 - hub - 14) / 2);
+    return [-1, 1].map((side) => ({ x1: cx + side * d, x2: cx + side * (d + 9) }));
+  });
+
+  return (
+    <g transform={vertical ? `rotate(90 ${cx} ${cy})` : undefined}>
+      <rect className="fan-frame" x={x} y={y} width={len} height={thick} rx="4" />
+      {/* corner pads */}
+      <rect className="fan-pad" x={x + 2} y={y + 2} width="9" height={thick - 4} rx="2" />
+      <rect className="fan-pad" x={x + len - 11} y={y + 2} width="9" height={thick - 4} rx="2" />
+      {blades.map((b, i) => (
+        <path key={i} className="fan-blade-edge" d={`M${b.x1} ${y + 5}L${b.x2} ${y + thick - 5}`} />
+      ))}
+      <rect className="fan-hub-edge" x={cx - hub} y={y + 4} width={hub * 2} height={thick - 8} rx="3" />
+    </g>
+  );
+}

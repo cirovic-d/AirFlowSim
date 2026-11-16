@@ -13,6 +13,7 @@
     "cpuCoolerMaxHeight": 165,
     "psuMaxLength": 200
   },
+  "frontPanel": "glass",
   "shroud": {
     "none": true,
     "note": "Dual-chamber layout: the PSU sits behind the motherboard and the bottom fans feed the graphics card. GPU length drops to 410 mm with a 56 mm thick front-right radiator."

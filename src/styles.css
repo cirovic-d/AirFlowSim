@@ -123,26 +123,39 @@ h3 {
 /* ---------- Case drawing (SVG, units are millimetres) ---------- */
 .case-view { width: 100%; height: 100%; }
 .shell { pointer-events: none; }
-.case-body { fill: #18191d; stroke: rgba(255, 255, 255, 0.24); stroke-width: 2; }
-.front-panel { stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
-.board { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
-.socket { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
-.pcie { fill: rgba(255, 255, 255, 0.08); }
-.rear-io, .slot-cover { fill: rgba(255, 255, 255, 0.1); }
-.shroud { fill: #1e1f24; stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; stroke-linejoin: round; }
-.shroud-vent { fill: url(#mesh); stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; stroke-dasharray: 3 3; }
+.case-body { fill: var(--case-inner); stroke: rgba(var(--ink), 0.24); stroke-width: 2; }
+.foot { fill: var(--case-shroud); stroke: rgba(var(--ink), 0.18); stroke-width: 1; }
+.front-panel { stroke: rgba(var(--ink), 0.12); stroke-width: 1; }
+.mesh-dot { fill: rgba(var(--ink), 0.2); }
+.fin-path { stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; }
+.rear-io, .slot-cover { fill: rgba(var(--ink), 0.12); }
+.shroud { fill: var(--case-shroud); stroke: rgba(var(--ink), 0.1); stroke-width: 1; stroke-linejoin: round; }
+.shroud-vent { fill: url(#mesh); stroke: rgba(var(--ink), 0.14); stroke-width: 1; stroke-dasharray: 3 3; }
+.sheen { pointer-events: none; }
+
+/* Motherboard (generic ATX layout, no logos) */
+.pcb { stroke: rgba(255, 255, 255, 0.1); stroke-width: 1; }
+.mount-hole { fill: #c9ccd3; fill-opacity: 0.35; stroke: rgba(0, 0, 0, 0.4); stroke-width: 0.8; }
+.metal { fill: #3a3d45; stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; }
+.metal-line, .fin-lines { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 1; }
+.socket-frame { fill: #2c2e34; stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; }
+.cpu-ihs { fill: #9a9ea7; stroke: rgba(0, 0, 0, 0.3); stroke-width: 1; }
+.ram { stroke: rgba(255, 255, 255, 0.2); stroke-width: 0.8; }
+.connector { fill: #1d1e22; stroke: rgba(255, 255, 255, 0.18); stroke-width: 1; }
+.pcie-main { fill: #565a63; stroke: rgba(255, 255, 255, 0.2); stroke-width: 0.8; }
+.battery { fill: #b9bcc4; stroke: rgba(0, 0, 0, 0.3); stroke-width: 1; }
 
 .empty-slot { cursor: pointer; }
 .empty-slot rect, .empty-slot circle {
-  fill: rgba(255, 255, 255, 0.015);
-  stroke: rgba(255, 255, 255, 0.2);
+  fill: rgba(var(--ink), 0.015);
+  stroke: rgba(var(--ink), 0.25);
   stroke-width: 1.2;
   stroke-dasharray: 4 4;
   transition: stroke 0.15s, fill 0.15s;
 }
-.empty-slot .plus { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.6; stroke-linecap: round; transition: stroke 0.15s; }
-.empty-slot:hover rect, .empty-slot:hover circle { stroke: var(--text); fill: rgba(255, 255, 255, 0.05); }
-.empty-slot:hover .plus { stroke: var(--text); }
+.empty-slot .plus { stroke: rgba(var(--ink), 0.35); stroke-width: 1.6; stroke-linecap: round; transition: stroke 0.15s; }
+.empty-slot:hover rect, .empty-slot:hover circle { stroke: rgba(var(--ink), 0.8); fill: rgba(var(--ink), 0.05); }
+.empty-slot:hover .plus { stroke: rgba(var(--ink), 0.8); }
 
 .fan { cursor: pointer; }
 .fan.intake { color: var(--intake); }
@@ -150,6 +163,9 @@ h3 {
 .fan-frame { fill: #232429; stroke: currentColor; stroke-width: 1.6; transition: fill 0.15s; }
 .fan:hover .fan-frame { fill: #2b2c32; }
 .fan-rotor { fill: currentColor; opacity: 0.35; }
+.fan-pad { fill: currentColor; opacity: 0.18; }
+.fan-blade-edge { stroke: currentColor; stroke-opacity: 0.55; stroke-width: 2.2; stroke-linecap: round; }
+.fan-hub-edge { fill: #2e3036; stroke: currentColor; stroke-opacity: 0.6; stroke-width: 1; }
 .fan-ring { fill: none; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.2; }
 .fan-blade { fill: currentColor; opacity: 0.4; }
 .fan-hub { fill: #232429; stroke: currentColor; stroke-width: 1.2; }
@@ -362,12 +378,18 @@ h3 {
 .icon-btn-spacer { width: 26px; }
 
 /* ---------- GPU and CPU cooler drawing ---------- */
-.gpu-body { fill: #2a2c33; stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.4; }
-.gpu-stripe { fill: rgba(255, 255, 255, 0.12); }
-.gpu-bracket { fill: rgba(255, 255, 255, 0.3); }
-.gpu-fan { fill: rgba(255, 255, 255, 0.45); }
+.gpu-body { fill: #1b1c20; }
+.gpu-outline { fill: none; stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.2; }
+.gpu-pcb { fill: #121315; }
+.gpu-shroud { stroke: rgba(0, 0, 0, 0.35); stroke-width: 1; }
+.gpu-accent { fill: none; stroke-width: 2; stroke-linecap: round; }
+.gpu-accent.thin { stroke-width: 1; }
+.gpu-connector { fill: #1d1e22; stroke: rgba(255, 255, 255, 0.25); stroke-width: 1; }
+.gpu-bracket { fill: #a9adb6; fill-opacity: 0.5; }
+.gpu-fan { fill: #121315; stroke: rgba(255, 255, 255, 0.25); stroke-width: 0.8; }
+.gpu-fan-hub { fill: #3a3c43; }
 .gpu-arrow { fill: none; stroke: var(--intake); stroke-opacity: 0.55; stroke-width: 2; stroke-linecap: round; }
-.gpu.incompatible .gpu-body { stroke: #ef6b73; stroke-width: 2; }
+.gpu.incompatible .gpu-outline { stroke: #ef6b73; stroke-width: 2; }
 .gpu-limit path { stroke: #ef6b73; stroke-width: 1.4; stroke-dasharray: 5 4; }
 .gpu-limit text { fill: #ef6b73; font-size: 10px; text-anchor: end; }
 
@@ -375,6 +397,11 @@ h3 {
 .cpu-cooler.static { cursor: default; }
 .heatsink { fill: #26282e; stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.2; }
 .fins { fill: url(#fins); }
+.fins-h { fill: url(#fins-h); }
+.heatpipe { fill: #c4c7ce; stroke: rgba(0, 0, 0, 0.3); stroke-width: 0.8; }
+.cooler-cap { fill: #34363d; stroke: rgba(255, 255, 255, 0.25); stroke-width: 1; }
+.pump-ring { fill: none; stroke: rgba(255, 255, 255, 0.18); stroke-width: 1; }
+.rad-tank { fill: #2a2b30; stroke: rgba(255, 255, 255, 0.25); stroke-width: 1; }
 .cpu-cooler:hover .fan-frame { fill: #2b2c32; }
 .pump { fill: #2a2c33; stroke: rgba(255, 255, 255, 0.35); stroke-width: 1.4; }
 .pump-cap { fill: none; stroke: var(--accent); stroke-opacity: 0.6; stroke-width: 1.4; }
@@ -640,3 +667,25 @@ h3 {
 .editor-row .segmented { flex: 1; }
 .rpm input:focus { outline: none; }
 .rpm input:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- Look tab ---------- */
+.color-row { margin-top: 14px; }
+.look-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 30px; font-size: 12px; }
+.look-row + .look-row { margin-top: 8px; }
+.look-seg { width: 110px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.swatch { width: 20px; height: 20px; padding: 0; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.18); }
+.swatch:hover { transform: scale(1.1); }
+.swatch.active { outline: 2px solid var(--accent); outline-offset: 1px; }
+.looks .color-hex { width: auto; }
+
+/* ---------- 2D / 3D view ---------- */
+.stage-canvas { position: relative; }
+.view-toggle { position: absolute; top: 10px; left: 0; width: 110px; z-index: 2; }
+.view-wrap.hidden { display: none; }
+.view-msg { font-size: 13px; }
+.view3d { position: relative; width: 100%; height: 100%; }
+.view3d canvas { display: block; width: 100%; height: 100%; cursor: grab; outline: none; }
+.view3d canvas:active { cursor: grabbing; }
+.view3d-controls { position: absolute; top: 10px; right: 0; display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.view3d-hint { min-height: 30px; font-size: 12px; }

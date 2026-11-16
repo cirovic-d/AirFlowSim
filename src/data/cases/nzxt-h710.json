@@ -3,22 +3,61 @@
   "name": "NZXT H710",
   "manufacturer": "NZXT",
   "variantNote": "H710 / H710i (2019). Solid front panel; air enters through the side vents of the front. Ships with 3x 120 mm front fans and a 140 mm rear fan (drawn in a 120 mm slot).",
-  "dimensionsMm": { "depth": 494, "width": 230, "height": 516 },
-  "clearanceMm": { "gpuMaxLength": 413, "cpuCoolerMaxHeight": 185 },
+  "dimensionsMm": {
+    "depth": 494,
+    "width": 230,
+    "height": 516
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 413,
+    "cpuCoolerMaxHeight": 185
+  },
+  "topPanel": "solid",
   "fanMounts": {
-    "front": { "max120": 3 },
-    "top": { "max120": 3 },
-    "rear": { "max120": 1 }
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    }
   },
   "radiatorMounts": {
-    "front": [120, 140, 240, 280, 360],
-    "top": [120, 140, 240, 280, 360],
-    "rear": [120, 140]
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120,
+      140
+    ]
   },
   "radiatorNotes": "Front radiator up to 60 mm thick (with fans), top up to 30 mm.",
   "factoryFans": [
-    { "position": "front", "count": 3, "direction": "intake", "directionVerified": false },
-    { "position": "rear", "count": 1, "direction": "exhaust", "directionVerified": false }
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
   ],
   "sources": [
     "https://nzxt.com/product/h710?variant=0",

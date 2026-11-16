@@ -13,6 +13,8 @@
     "cpuCoolerMaxHeight": 167,
     "psuMaxLength": 220
   },
+  "frontPanel": "glass",
+  "topPanel": "glass",
   "shroud": {
     "none": true,
     "note": "Dual-chamber layout: the PSU is behind the motherboard, the bottom fans blow at the graphics card."

@@ -22,6 +22,8 @@ export interface CaseProfile {
   clearanceMm: { gpuMaxLength: number; cpuCoolerMaxHeight: number; /** Omitted when not published. */ psuMaxLength?: number };
   /** Omitted when the front panel material is not confirmed. */
   frontPanel?: "mesh" | "glass";
+  /** Only when it differs from the default (vented where top fans fit, otherwise solid). */
+  topPanel?: "mesh" | "glass" | "solid";
   /**
    * Optional details of the PSU shroud. Default: flat box along the bottom.
    * `none`: no shroud at all (e.g. the PSU sits behind the motherboard tray).

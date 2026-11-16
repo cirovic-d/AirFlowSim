@@ -160,6 +160,21 @@ const en = {
   solid: "Solid",
   customCaseNote: "Custom case: the values are yours, not checked against a manufacturer.",
   confirmDeleteCase: "Delete case and its configurations",
+  tabLooks: "Look",
+  caseColor: "Case color",
+  boardColor: "Motherboard color",
+  gpuColor: "Graphics card color",
+  memory: "Memory (RAM)",
+  ramSticks: "Sticks",
+  ramColor: "Heat spreader color",
+  ramRgb: "RGB lighting",
+  pickColor: "Pick any color",
+  looksNote: "Visual only: colors don't change the airflow. Parts are drawn as a typical layout, without brand logos.",
+  autoRotate: "Auto-rotate",
+  resetView: "Reset view",
+  view3dHint: "Drag to rotate · scroll to zoom · no airflow in 3D",
+  view3dLoading: "Loading 3D view…",
+  view3dError: "The 3D view couldn't start on this computer (WebGL is not available).",
 };
 
 type Dict = typeof en;
@@ -322,6 +337,21 @@ const sr: Dict = {
   solid: "Puna",
   customCaseNote: "Svoje kućište: vrednosti si uneo ti, nisu proverene kod proizvođača.",
   confirmDeleteCase: "Obriši kućište i njegove konfiguracije",
+  tabLooks: "Izgled",
+  caseColor: "Boja kućišta",
+  boardColor: "Boja matične ploče",
+  gpuColor: "Boja grafičke",
+  memory: "Memorija (RAM)",
+  ramSticks: "Modula",
+  ramColor: "Boja hladnjaka RAM-a",
+  ramRgb: "RGB osvetljenje",
+  pickColor: "Izaberi bilo koju boju",
+  looksNote: "Samo izgled: boje ne menjaju protok vazduha. Delovi su nacrtani kao tipičan raspored, bez logoa proizvođača.",
+  autoRotate: "Automatsko okretanje",
+  resetView: "Vrati pogled",
+  view3dHint: "Prevuci da okreneš · točkić za zum · u 3D nema protoka vazduha",
+  view3dLoading: "Učitavam 3D prikaz…",
+  view3dError: "3D prikaz ne može da se pokrene na ovom računaru (WebGL nije dostupan).",
 };
 
 export type TKey = keyof Dict;

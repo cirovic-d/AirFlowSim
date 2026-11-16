@@ -7,6 +7,7 @@ import { DEFAULT_GPU, getAioPositions, mountAio } from "./components";
 import { clampRpm } from "./pressure";
 import { getSlots } from "./layout";
 import { sanitizeSettings, type Settings } from "./settings";
+import { sanitizeLooks, type Looks } from "./looks";
 
 /** Everything needed to rebuild one simulator setup. */
 export interface Setup {
@@ -15,6 +16,8 @@ export interface Setup {
   gpu: GpuConfig;
   cooler: CpuCooler;
   fanSpeed: number;
+  /** Colors of the parts. Files from before v0.6 have none: defaults are used. */
+  looks: Looks;
 }
 
 export interface AirflowColors {
@@ -164,5 +167,5 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
 
   const fanSpeed = typeof r.fanSpeed === "number" ? Math.min(1, Math.max(0.2, r.fanSpeed)) : 0.7;
 
-  return { caseId: caseProfile.id, fans: finalFans, gpu, cooler, fanSpeed };
+  return { caseId: caseProfile.id, fans: finalFans, gpu, cooler, fanSpeed, looks: sanitizeLooks(r.looks) };
 }

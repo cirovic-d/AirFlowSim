@@ -60,6 +60,12 @@ You can also describe your own case in the app (**+ Custom case** under the case
 
 `src/data/gpus.json` holds 30 cards (AMD RX 5000–9000, NVIDIA RTX 3000–5000) with length, fan count and thickness, each with sources. Pick one in the GPU tab, or set the size by hand.
 
+## Look and 3D view
+
+The **Look** tab sets the colors of the case, graphics card, motherboard and memory (any color), the number of RAM sticks (2 or 4) and RGB on the memory. It is visual only and saved with each configuration. Parts are drawn as a typical layout, without brand logos.
+
+The **2D / 3D** switch above the drawing opens a rotatable 3D model (drag to rotate, scroll to zoom, optional auto-rotate). It's a general model built from the case's dimensions, fan slots and panel materials (glass, mesh or solid), with the parts as simple shapes. The airflow animation is shown only in 2D.
+
 ## Fan speed (RPM)
 
 Every fan has a simulated speed (500–2000 RPM). It changes how strongly the fan moves air in the animation and its weight in the pressure estimate. It is visual only: the app never reads or controls real fans.

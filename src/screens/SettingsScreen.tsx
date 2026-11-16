@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { AIR_AMOUNT_MIN, DEFAULT_SETTINGS, type Settings } from "../lib/settings";
 import { getDataLocation } from "../lib/storage";
 import { useT } from "../lib/i18n";
+import { ColorPicker, Toggle } from "../components/Controls";
 
 interface Props {
   settings: Settings;
@@ -147,23 +148,5 @@ function Row({ title, hint, children }: { title: string; hint?: string; children
       </div>
       {children}
     </div>
-  );
-}
-
-function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button role="switch" aria-checked={value} className={"toggle" + (value ? " on" : "")} onClick={() => onChange(!value)}>
-      <span />
-    </button>
-  );
-}
-
-function ColorPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <label className="color-picker">
-      <input type="color" value={value} onChange={(e) => onChange(e.target.value)} />
-      <span className="color-swatch" style={{ background: value }} />
-      <span className="color-hex">{value.toUpperCase()}</span>
-    </label>
   );
 }

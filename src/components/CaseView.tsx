@@ -1,7 +1,10 @@
+import type { CSSProperties } from "react";
 import type { CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, Slot } from "../types";
-import { BOARD, FAN, FAN_THICK, INWARD, PCIE_Y, SOCKET, VIEW_PAD as PAD, getShroud, shroudTopAt } from "../lib/layout";
+import { FAN, FAN_THICK, INWARD, VIEW_PAD as PAD, getShroud, shroudTopAt } from "../lib/layout";
+import { isLight, shade, type Looks } from "../lib/looks";
 import { useT } from "../lib/i18n";
-import { Arrow, FaceFanShape } from "./FanShapes";
+import { Arrow, EdgeFanShape, FaceFanShape } from "./FanShapes";
+import { BoardView } from "./BoardView";
 import { CoolerView, RadiatorView } from "./CoolerView";
 import { GpuView } from "./GpuView";
 
@@ -11,6 +14,7 @@ interface Props {
   fans: InstalledFan[];
   gpu: GpuConfig;
   cooler: CpuCooler;
+  looks: Looks;
   onAdd: (slot: Slot) => void;
   onToggle: (slotId: string) => void;
   onRemove: (slotId: string) => void;
@@ -19,7 +23,7 @@ interface Props {
 
 /** Side view of the case through the glass panel, drawn to scale in millimetres. */
 export function CaseView(props: Props) {
-  const { caseProfile, slots, fans, gpu, cooler } = props;
+  const { caseProfile, slots, fans, gpu, cooler, looks } = props;
   const { depth, height } = caseProfile.dimensionsMm;
   const fanBySlot = new Map(fans.map((f) => [f.slotId, f]));
   const radSlots = slots.filter((s) => fanBySlot.get(s.id)?.radiator);
@@ -42,48 +46,77 @@ export function CaseView(props: Props) {
     );
   }
 
+  // Lines and dots on the case follow its color: light on dark cases, dark on light ones.
+  const light = isLight(looks.caseColor);
+  const style = {
+    "--ink": light ? "0, 0, 0" : "255, 255, 255",
+    "--case": looks.caseColor,
+    "--case-inner": light ? shade(looks.caseColor, -0.1) : looks.caseColor,
+    "--case-shroud": shade(looks.caseColor, light ? -0.18 : 0.05),
+  } as CSSProperties;
+
   return (
     <svg
       className="case-view"
+      style={style}
       viewBox={`${-PAD} ${-PAD} ${depth + PAD * 2} ${height + PAD * 2}`}
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
         <pattern id="mesh" width="6" height="6" patternUnits="userSpaceOnUse">
-          <circle cx="3" cy="3" r="1.1" fill="rgba(255,255,255,0.16)" />
+          <circle className="mesh-dot" cx="3" cy="3" r="1.1" />
         </pattern>
         <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="rgba(255,255,255,0.10)" />
           <stop offset="1" stopColor="rgba(255,255,255,0.02)" />
         </linearGradient>
         <pattern id="fins" width="4" height="4" patternUnits="userSpaceOnUse">
-          <path d="M2 0v4" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+          <path className="fin-path" d="M2 0v4" />
         </pattern>
         <pattern id="fins-h" width="4" height="4" patternUnits="userSpaceOnUse">
-          <path d="M0 2h4" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+          <path className="fin-path" d="M0 2h4" />
         </pattern>
+        <linearGradient id="ram-rgb" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ff4d6d" />
+          <stop offset="0.25" stopColor="#ffb84d" />
+          <stop offset="0.5" stopColor="#5dff9b" />
+          <stop offset="0.75" stopColor="#4dc3ff" />
+          <stop offset="1" stopColor="#b44dff" />
+        </linearGradient>
+        <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity="0.05" />
+          <stop offset="0.45" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0.55" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0.03" />
+        </linearGradient>
       </defs>
 
-      <CaseShell caseProfile={caseProfile} />
+      <CaseShell caseProfile={caseProfile} looks={looks} />
       {/* Side-panel fans sit behind the graphics card, so they are drawn first. */}
       {sideRad && <RadiatorView slots={radSlots} />}
       {sideSlots.map(renderSlot)}
-      <GpuView caseProfile={caseProfile} gpu={gpu} />
+      <GpuView caseProfile={caseProfile} gpu={gpu} color={looks.gpuColor} />
       {cooler.type === "aio" && !sideRad && <RadiatorView slots={radSlots} />}
       <CoolerView cooler={cooler} radSlots={radSlots} onToggleTower={props.onToggleTower} />
       {otherSlots.map(renderSlot)}
+      {/* Faint reflection on the side glass */}
+      <rect className="sheen" x="0" y="0" width={depth} height={height} rx="8" fill="url(#sheen)" />
     </svg>
   );
 }
 
-function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
+function CaseShell({ caseProfile, looks }: { caseProfile: CaseProfile; looks: Looks }) {
   const { depth, height } = caseProfile.dimensionsMm;
   // Rear of the case is on the left (x = 0), front on the right (x = depth).
-  const boardX = BOARD.rearGap;
   const shroud = getShroud(caseProfile);
+  const top = caseProfile.topPanel ?? (caseProfile.fanMounts.top ? "mesh" : "solid");
 
   return (
     <g className="shell">
+      {/* Feet */}
+      {[24, depth - 64].map((x) => (
+        <rect key={x} className="foot" x={x} y={height - 2} width="40" height="10" rx="3" />
+      ))}
       <rect className="case-body" x="0" y="0" width={depth} height={height} rx="8" />
 
       {caseProfile.frontPanel && (
@@ -97,11 +130,11 @@ function CaseShell({ caseProfile }: { caseProfile: CaseProfile }) {
           className="front-panel"
         />
       )}
+      {top !== "solid" && (
+        <rect x="30" y="0" width={depth - 60} height="6" rx="3" fill={top === "mesh" ? "url(#mesh)" : "url(#glass)"} className="front-panel" />
+      )}
 
-      {/* Motherboard with CPU socket and PCIe slot */}
-      <rect className="board" x={boardX} y={BOARD.topGap} width={BOARD.width} height={BOARD.height} rx="3" />
-      <rect className="socket" x={SOCKET.x} y={SOCKET.y} width={SOCKET.size} height={SOCKET.size} rx="3" />
-      <rect className="pcie" x={boardX + 20} y={PCIE_Y} width={BOARD.width - 40} height="5" rx="2" />
+      <BoardView looks={looks} />
 
       {/* Rear I/O (below the rear fan) and expansion slot covers */}
       <rect className="rear-io" x="0" y="168" width="6" height="40" />
@@ -213,15 +246,7 @@ function EdgeFan({ slot, direction }: { slot: Slot; direction: FanDirection }) {
 
   return (
     <>
-      <rect className="fan-frame" x={b.x} y={b.y} width={b.w} height={b.h} rx="4" />
-      <rect
-        className="fan-rotor"
-        x={b.x + (horizontal ? 10 : 6)}
-        y={b.y + (horizontal ? 6 : 10)}
-        width={horizontal ? b.w - 20 : b.w - 12}
-        height={horizontal ? b.h - 12 : b.h - 20}
-        rx="3"
-      />
+      <EdgeFanShape cx={slot.cx} cy={slot.cy} vertical={!horizontal} thick={FAN_THICK} />
       <Arrow x1={slot.cx + dx * start} y1={slot.cy + dy * start} x2={slot.cx + dx * end} y2={slot.cy + dy * end} />
     </>
   );

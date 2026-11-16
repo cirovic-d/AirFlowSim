@@ -1,7 +1,7 @@
 import type { CpuCooler, Slot } from "../types";
 import { FAN, FAN_THICK, INWARD, SOCKET } from "../lib/layout";
 import { useT } from "../lib/i18n";
-import { Arrow, FaceFanShape } from "./FanShapes";
+import { Arrow, EdgeFanShape, FaceFanShape } from "./FanShapes";
 
 const RAD_THICK = 27;
 const CX = SOCKET.x + SOCKET.size / 2;
@@ -28,10 +28,14 @@ function Tower({ direction, onToggle }: { direction: "rear" | "front"; onToggle:
   return (
     <g className="cpu-cooler" onClick={onToggle} role="button" aria-label={label}>
       <title>{label}</title>
+      {/* Heat pipe ends sticking out of the top of the fin stack */}
+      {[-17, -6, 6, 17].map((d) => (
+        <rect key={d} className="heatpipe" x={CX + d - 2.5} y={CY - 81} width="5" height="8" rx="2.5" />
+      ))}
       <rect className="heatsink" x={CX - 25} y={CY - 75} width="50" height="150" rx="3" />
-      <rect className="fins" x={CX - 25} y={CY - 75} width="50" height="150" rx="3" />
-      <rect className="fan-frame" x={fanX} y={CY - FAN / 2} width={FAN_THICK} height={FAN} rx="4" />
-      <rect className="fan-rotor" x={fanX + 6} y={CY - FAN / 2 + 10} width={FAN_THICK - 12} height={FAN - 20} rx="3" />
+      <rect className="fins-h" x={CX - 25} y={CY - 75} width="50" height="150" rx="3" />
+      <rect className="cooler-cap" x={CX - 26} y={CY - 77} width="52" height="6" rx="2" />
+      <EdgeFanShape cx={fanX + FAN_THICK / 2} cy={CY} vertical thick={FAN_THICK} />
       {direction === "rear" ? (
         <Arrow x1={CX - 32} y1={CY} x2={CX - 60} y2={CY} />
       ) : (
@@ -76,6 +80,7 @@ function Pump({ radSlots }: { radSlots: Slot[] }) {
         />
       ))}
       <rect className="pump" x={CX - 26} y={CY - 26} width="52" height="52" rx="10" />
+      <circle className="pump-ring" cx={CX} cy={CY} r="20" />
       <circle className="pump-cap" cx={CX} cy={CY} r="14" />
     </g>
   );
@@ -91,6 +96,8 @@ export function RadiatorView({ slots }: { slots: Slot[] }) {
     return (
       <g className="radiator">
         <rect x={slots[0].cx - FAN / 2 - 6} y={top} width={FAN + 12} height={FAN * slots.length + 12} rx="3" fill="url(#fins-h)" />
+        <rect className="rad-tank" x={slots[0].cx - FAN / 2 - 6} y={top} width={FAN + 12} height="12" rx="3" />
+        <rect className="rad-tank" x={slots[0].cx - FAN / 2 - 6} y={top + FAN * slots.length} width={FAN + 12} height="12" rx="3" />
       </g>
     );
   }
@@ -110,6 +117,9 @@ export function RadiatorView({ slots }: { slots: Slot[] }) {
   return (
     <g className="radiator">
       <rect x={x} y={y} width={w} height={h} rx="3" fill={vertical ? "url(#fins-h)" : "url(#fins)"} />
+      {/* End tanks */}
+      <rect className="rad-tank" x={x} y={y} width={vertical ? w : 12} height={vertical ? 12 : h} rx="3" />
+      <rect className="rad-tank" x={vertical ? x : x + w - 12} y={vertical ? y + h - 12 : y} width={vertical ? w : 12} height={vertical ? 12 : h} rx="3" />
     </g>
   );
 }

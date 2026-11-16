@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import type { AioSize, CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { shortName } from "../data/cases";
@@ -16,12 +16,19 @@ import { FanList } from "../components/FanList";
 import { GpuPanel } from "../components/GpuPanel";
 import { SpecsPanel } from "../components/SpecsPanel";
 import { StatsBar } from "../components/StatsBar";
+import { LooksPanel } from "../components/LooksPanel";
+import { Segmented } from "../components/Segmented";
+import { DEFAULT_LOOKS, type Looks } from "../lib/looks";
 
-type Tab = "fans" | "cpu" | "gpu" | "case";
+// Three.js is large, so the 3D view loads only when it's first opened.
+const Case3D = lazy(() => import("../components/Case3D"));
+
+type Tab = "fans" | "cpu" | "gpu" | "looks" | "case";
 const TABS: { tab: Tab; label: TKey }[] = [
   { tab: "fans", label: "tabFans" },
   { tab: "cpu", label: "tabCpu" },
   { tab: "gpu", label: "tabGpu" },
+  { tab: "looks", label: "tabLooks" },
   { tab: "case", label: "tabCase" },
 ];
 
@@ -44,7 +51,9 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   const [fans, setFans] = useState<InstalledFan[]>(() => initial?.fans ?? getFactoryFans(caseProfile, slots));
   const [cooler, setCooler] = useState<CpuCooler>(() => initial?.cooler ?? { type: "tower", direction: "rear" });
   const [gpu, setGpu] = useState<GpuConfig>(() => initial?.gpu ?? DEFAULT_GPU);
+  const [looks, setLooks] = useState<Looks>(() => initial?.looks ?? DEFAULT_LOOKS);
   const [tab, setTab] = useState<Tab>("fans");
+  const [view, setView] = useState<"2d" | "3d">("2d");
   const [playing, setPlaying] = useState(true);
   const [fanSpeed, setFanSpeed] = useState(() => initial?.fanSpeed ?? 0.7);
   const [saving, setSaving] = useState(false);
@@ -137,6 +146,10 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   }
 
   const { depth, width, height } = caseProfile.dimensionsMm;
+  const colors = useMemo(
+    () => ({ intake: settings.intakeColor, exhaust: settings.exhaustColor }),
+    [settings.intakeColor, settings.exhaustColor],
+  );
 
   return (
     <div className="simulator">
@@ -159,13 +172,29 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             </div>
           </header>
           <div className="stage-canvas">
-            <div className="view-wrap">
+            <div className="view-toggle">
+              <Segmented
+                value={view}
+                onChange={setView}
+                options={[
+                  { value: "2d", label: "2D" },
+                  { value: "3d", label: "3D" },
+                ]}
+              />
+            </div>
+            {view === "3d" && (
+              <Suspense fallback={<p className="view-msg muted">{t("view3dLoading")}</p>}>
+                <Case3D caseProfile={caseProfile} slots={slots} fans={fans} gpu={gpu} cooler={cooler} looks={looks} colors={colors} active={active} />
+              </Suspense>
+            )}
+            <div className={"view-wrap" + (view === "3d" ? " hidden" : "")}>
               <CaseView
                 caseProfile={caseProfile}
                 slots={slots}
                 fans={fans}
                 gpu={gpu}
                 cooler={cooler}
+                looks={looks}
                 onAdd={addFan}
                 onToggle={toggleFan}
                 onRemove={removeFan}
@@ -173,24 +202,28 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
               />
               <AirflowCanvas
                 scene={scene}
-                playing={playing && active}
+                playing={playing && active && view === "2d"}
                 fanSpeed={fanSpeed}
                 restartKey={restartKey}
-                colors={{ intake: settings.intakeColor, exhaust: settings.exhaustColor }}
+                colors={colors}
                 animationSpeed={settings.animationSpeed}
                 maxParticles={particlesFor(settings.airAmount)}
               />
             </div>
           </div>
-          <AnimationBar
-            playing={playing}
-            onPlaying={setPlaying}
-            onRestart={() => setRestartKey((k) => k + 1)}
-            fanSpeed={fanSpeed}
-            onFanSpeed={setFanSpeed}
-            airAmount={settings.airAmount}
-            onAirAmount={onAirAmount}
-          />
+          {view === "2d" ? (
+            <AnimationBar
+              playing={playing}
+              onPlaying={setPlaying}
+              onRestart={() => setRestartKey((k) => k + 1)}
+              fanSpeed={fanSpeed}
+              onFanSpeed={setFanSpeed}
+              airAmount={settings.airAmount}
+              onAirAmount={onAirAmount}
+            />
+          ) : (
+            <p className="anim-bar view3d-hint muted">{t("view3dHint")}</p>
+          )}
         </section>
         <StatsBar fans={fans} gpuFit={getGpuFit(caseProfile, gpu)} />
       </div>
@@ -229,6 +262,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
           />
         )}
         {tab === "gpu" && <GpuPanel caseProfile={caseProfile} gpu={gpu} cooler={cooler} onChange={setGpu} />}
+        {tab === "looks" && <LooksPanel looks={looks} onChange={setLooks} />}
         {tab === "case" && <SpecsPanel caseProfile={caseProfile} />}
       </aside>
 
@@ -237,7 +271,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
           defaultName={`${shortName(caseProfile)} – ${new Date().toLocaleDateString()}`}
           onCancel={() => setSaving(false)}
           onSave={(name) => {
-            onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed }, name);
+            onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed, looks }, name);
             setSaving(false);
           }}
         />
