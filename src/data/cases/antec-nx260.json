@@ -1,0 +1,58 @@
+{
+  "id": "antec-nx260",
+  "name": "Antec NX260",
+  "manufacturer": "Antec",
+  "dimensionsMm": {
+    "depth": 379,
+    "width": 215,
+    "height": 448
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 310,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 185
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans can be mounted on the PSU shroud."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://antec.com/product/case/nx260",
+    "https://manuals.plus/asin/B099K4H2KB"
+  ]
+}

@@ -36,9 +36,23 @@ npm run tauri build  # installer
 
 Case profiles live in `src/data/cases/` as JSON files with sources. Add a new case by adding a new JSON file.
 
-- Antec C3 ARGB
+- Antec C3 ARGB, NX260, NX410
+- be quiet! Pure Base 500DX
+- Cooler Master MasterBox Q300L, MasterBox TD500 Mesh
+- Corsair 3000D Airflow, 4000D Airflow, 5000D Airflow
+- DeepCool CC560, CH370, Matrexx 55 Mesh
+- Fractal Design Meshify 2, North, Pop Air, Torrent
 - GAMDIAS AURA GC1, GC5, GC6, GC7
-- NZXT H7 Flow (2024), S340 Elite
+- GameMax Forge MB
+- Lian Li Lancool 207, Lancool 216, O11 Dynamic EVO, O11 Vision
+- Montech Air 100 ARGB, Air 903 Base, Air 903 Max, X3 Mesh
+- MSI MAG Forge 100R, MAG Forge M100R
+- NZXT H5 Flow (2024), H6 Flow, H7 Flow (2024), H9 Flow (2025), S340 Elite
+- Phanteks Eclipse G360A, XT Pro Ultra
+- Thermaltake Versa H18
+- Zalman i3 Neo, S2
+
+140/160/180 mm fans are drawn in 120 mm slots (the slot count is kept). Micro-ATX cases still show an ATX board.
 
 You can also describe your own case in the app (**+ Custom case** under the case list): dimensions, fan and radiator mounts, GPU/CPU clearance. Custom cases are saved with your configurations.
 

@@ -1,0 +1,57 @@
+{
+  "id": "lian-li-o11-dynamic-evo",
+  "name": "Lian Li O11 Dynamic EVO",
+  "manufacturer": "Lian Li",
+  "variantNote": "Dual-chamber case without fans. The side bracket next to the motherboard is drawn as front fans; its fans can blow air in from the side panel.",
+  "dimensionsMm": {
+    "depth": 465,
+    "width": 285,
+    "height": 459
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 422,
+    "cpuCoolerMaxHeight": 167,
+    "psuMaxLength": 220
+  },
+  "shroud": {
+    "none": true,
+    "note": "Dual-chamber layout: the PSU is behind the motherboard, the bottom fans blow at the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240,
+      280,
+      360
+    ],
+    "bottom": [
+      240,
+      360
+    ]
+  },
+  "radiatorNotes": "The side (drawn as front) radiator thickness is limited; see the manual.",
+  "factoryFans": [],
+  "sources": [
+    "https://lian-li.com/product/o11-dynamic-evo/",
+    "https://www.vortez.net/news_story/lian_lis_popular_o11_dynamic_experiences_a_new_evolution.html",
+    "https://www.memoryexpress.com/Products/MX00120644"
+  ]
+}

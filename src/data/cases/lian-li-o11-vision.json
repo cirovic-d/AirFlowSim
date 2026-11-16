@@ -1,0 +1,52 @@
+{
+  "id": "lian-li-o11-vision",
+  "name": "Lian Li O11 Vision",
+  "manufacturer": "Lian Li",
+  "variantNote": "Dual-chamber case without fans, glass top (no top fans). The side bracket is drawn as front fans. Lian Li lists 1 or 2 rear 120 mm fans; only the upper one is drawn.",
+  "dimensionsMm": {
+    "depth": 480,
+    "width": 304,
+    "height": 464.5
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 455,
+    "cpuCoolerMaxHeight": 167,
+    "psuMaxLength": 220
+  },
+  "shroud": {
+    "none": true,
+    "note": "Dual-chamber layout: the PSU is behind the motherboard, the bottom fans blow at the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "bottom": [
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [],
+  "sources": [
+    "https://lian-li.com/product/o11-vision/",
+    "https://memoryexpress.com/Products/MX00128216",
+    "https://overclockers.co.uk/lp/lian-li-o11-vision"
+  ]
+}

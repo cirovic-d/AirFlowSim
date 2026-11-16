@@ -1,0 +1,55 @@
+{
+  "id": "cooler-master-q300l",
+  "name": "Cooler Master MasterBox Q300L",
+  "manufacturer": "Cooler Master",
+  "variantNote": "Micro-ATX case (the drawing shows a full ATX board). No PSU shroud.",
+  "dimensionsMm": {
+    "depth": 387,
+    "width": 230,
+    "height": 378
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 360,
+    "cpuCoolerMaxHeight": 157,
+    "psuMaxLength": 160
+  },
+  "shroud": {
+    "none": true,
+    "note": "No PSU shroud (the PSU is not drawn)."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 2
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://cdn.iceshop.nl/objects/mmo_40336002_1519975742_8531_2060.pdf",
+    "https://www.coolermaster.com/en-us/products/masterbox-q300l-white"
+  ]
+}

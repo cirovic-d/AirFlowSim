@@ -1,0 +1,58 @@
+{
+  "id": "nzxt-h6-flow",
+  "name": "NZXT H6 Flow",
+  "manufacturer": "NZXT",
+  "variantNote": "H6 Flow (2023). Dual-chamber case: the three angled front-right fans are drawn as front fans.",
+  "dimensionsMm": {
+    "depth": 415,
+    "width": 287,
+    "height": 435
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 365,
+    "cpuCoolerMaxHeight": 163,
+    "psuMaxLength": 200
+  },
+  "shroud": {
+    "none": true,
+    "note": "Dual-chamber layout: the PSU sits behind the motherboard, the bottom fans blow straight at the graphics card. The front-right fans are angled toward the GPU (drawn straight here)."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "top": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://nzxt.com/en-US/product/h6-flow",
+    "https://nzxt.com/en-DE/product/h6-flow",
+    "https://support.nzxt.com/hc/en-us/articles/40183529624347-H6-Flow-2023-Specs"
+  ]
+}

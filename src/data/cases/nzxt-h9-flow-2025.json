@@ -1,0 +1,79 @@
+{
+  "id": "nzxt-h9-flow-2025",
+  "name": "NZXT H9 Flow (2025)",
+  "manufacturer": "NZXT",
+  "variantNote": "2025 version (CM-H92FB-01). Dual-chamber case: the front-right fans are drawn as front fans. The H9 Flow (2023) differs (435 mm GPU, 120 mm fans included).",
+  "dimensionsMm": {
+    "depth": 481,
+    "width": 315,
+    "height": 506
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 459,
+    "cpuCoolerMaxHeight": 165,
+    "psuMaxLength": 200
+  },
+  "shroud": {
+    "none": true,
+    "note": "Dual-chamber layout: the PSU sits behind the motherboard and the bottom fans feed the graphics card. GPU length drops to 410 mm with a 56 mm thick front-right radiator."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360,
+      420
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280,
+      360,
+      420
+    ],
+    "bottom": [
+      120,
+      240,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://nzxt.com/en-BE/product/h9-flow",
+    "https://www.adorama.com/nzcmh92f.html",
+    "https://www.avadirect.com/H9-Flow-RGB-Tempered-Glass-No-PSU-E-ATX-Black-Mid-Tower-Case/Product/19294595"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": "montech-air-903-max",
+  "name": "Montech Air 903 Max",
+  "manufacturer": "Montech",
+  "variantNote": "Includes 4x 140 mm fans (3 front, 1 rear), drawn in 120 mm slots.",
+  "dimensionsMm": {
+    "depth": 478,
+    "width": 230,
+    "height": 493
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 400,
+    "cpuCoolerMaxHeight": 180,
+    "psuMaxLength": 240
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans can be mounted above the PSU shroud."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": true
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": true
+    }
+  ],
+  "sources": [
+    "https://www.montechpc.com/en/products_detail.php?nid=355",
+    "https://www.kitguru.net/components/cases/james-dawson/montech-air-903-base-and-max-review/",
+    "https://overclockers.co.uk/montech-air-903-max-midi-tower-tempered-glass-black-cas-mon-01229.html"
+  ]
+}

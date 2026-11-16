@@ -1,0 +1,71 @@
+{
+  "id": "nzxt-h5-flow-2024",
+  "name": "NZXT H5 Flow (2024)",
+  "manufacturer": "NZXT",
+  "variantNote": "2024 version (CC-H52FB-01). The 2022 H5 Flow is a different case (365 mm GPU, angled bottom fan).",
+  "dimensionsMm": {
+    "depth": 430,
+    "width": 225,
+    "height": 465
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 410,
+    "cpuCoolerMaxHeight": 170,
+    "psuMaxLength": 200
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Perforated PSU shroud with two 120 mm bottom fan mounts that feed the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280
+    ]
+  },
+  "radiatorNotes": "Top 280 mm only with low-profile memory.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 1,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://nzxt.com/product/h5-flow?sscid=31k7_19b7y3",
+    "https://nzxt.com/en-DE/product/h5-flow",
+    "https://support.nzxt.com/hc/en-us/articles/40225168535451-H5-Flow-2024-Specs",
+    "https://hwbusters.com/chassis/nzxt-h5-flow-rgb-2024-chassis-review/"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "fractal-meshify-2",
+  "name": "Fractal Design Meshify 2",
+  "manufacturer": "Fractal Design",
+  "variantNote": "Front and rear fans are 140 mm (drawn in 120 mm slots). GPU length is for the open layout with a front fan.",
+  "dimensionsMm": {
+    "depth": 542,
+    "width": 240,
+    "height": 474
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 445,
+    "cpuCoolerMaxHeight": 185,
+    "psuMaxLength": 250
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240,
+      280,
+      360,
+      420
+    ],
+    "rear": [
+      120
+    ],
+    "bottom": [
+      240,
+      280
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.fractal-design.com/?p=20478",
+    "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint"
+  ]
+}

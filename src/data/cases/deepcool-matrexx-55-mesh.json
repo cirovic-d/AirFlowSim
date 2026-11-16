@@ -1,0 +1,52 @@
+{
+  "id": "deepcool-matrexx-55-mesh",
+  "name": "DeepCool Matrexx 55 Mesh",
+  "manufacturer": "DeepCool",
+  "variantNote": "Base model without fans (DP-ATX-MATREXX55-MESH). The ADD-RGB 4F version has 3 front and 1 rear fans. DeepCool's pages list 370 or 380 mm GPU and 160 or 168 mm cooler; the lower values are used.",
+  "dimensionsMm": {
+    "depth": 435,
+    "width": 210,
+    "height": 478
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 370,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 170
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [],
+  "sources": [
+    "https://deepcool.com/products/Cases/Matrexx-55-Mesh-Mid-Tower-ATX-Case/2021/4655.shtml",
+    "https://global.deepcool.com/products/Cases/fulltowercases/2020/4655.shtml",
+    "https://ecommerce.datablitz.com.ph/products/deepcool-matrexx-55-mesh-mid-tower-case-dp-atx-matrexx55-mesh"
+  ]
+}

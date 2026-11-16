@@ -1,0 +1,59 @@
+{
+  "id": "fractal-pop-air",
+  "name": "Fractal Design Pop Air",
+  "manufacturer": "Fractal Design",
+  "variantNote": "Original Pop Air (not Pop 2 Air).",
+  "dimensionsMm": {
+    "depth": 473.5,
+    "width": 215,
+    "height": 454
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 405,
+    "cpuCoolerMaxHeight": 170,
+    "psuMaxLength": 170
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 2
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280
+    ],
+    "top": [
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://memoryexpress.com/Products/MX00121996",
+    "https://www.fractal-design.com/products/cases/pop/pop-air/",
+    "https://www.bhphotovideo.com/c/product/803473501-USE/fractal_design_fd_c_poa1a_01_pop_air_mid_tower_case.html"
+  ]
+}

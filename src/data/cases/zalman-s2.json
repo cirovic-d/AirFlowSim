@@ -1,0 +1,61 @@
+{
+  "id": "zalman-s2",
+  "name": "Zalman S2",
+  "manufacturer": "Zalman",
+  "variantNote": "S2 with 2 front and 1 rear fan, per Zalman's manual. Some older retail versions shipped with only the rear fan.",
+  "dimensionsMm": {
+    "depth": 412,
+    "width": 189,
+    "height": 451
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 330,
+    "cpuCoolerMaxHeight": 156,
+    "psuMaxLength": 180
+  },
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans can be mounted on top of the PSU shroud."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "radiatorNotes": "Zalman's manual lists only 120 mm radiators (front and rear).",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://manuals.plus/zalman/s2-atx-mid-tower-computer-case-manual.pdf",
+    "https://www.adorama.com/zas2tg.html"
+  ]
+}

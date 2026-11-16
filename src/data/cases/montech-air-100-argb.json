@@ -1,0 +1,70 @@
+{
+  "id": "montech-air-100-argb",
+  "name": "Montech Air 100 ARGB",
+  "manufacturer": "Montech",
+  "variantNote": "Micro-ATX case (the drawing shows a full ATX board).",
+  "dimensionsMm": {
+    "depth": 405,
+    "width": 210,
+    "height": 425
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 330,
+    "cpuCoolerMaxHeight": 161,
+    "psuMaxLength": 160
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans can be mounted inside, on the PSU shroud."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280
+    ],
+    "top": [
+      120,
+      140,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.montechpc.com/air-100-ARGB",
+    "https://www.montechpc.com/en/products_detail.php?nid=224",
+    "https://www.tomshardware.com/uk/reviews/montech-air-100-review"
+  ]
+}

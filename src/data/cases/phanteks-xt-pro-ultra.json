@@ -1,0 +1,66 @@
+{
+  "id": "phanteks-xt-pro-ultra",
+  "name": "Phanteks XT Pro Ultra",
+  "manufacturer": "Phanteks",
+  "variantNote": "Includes 4x 140 mm fans (3 front, 1 rear), drawn in 120 mm slots.",
+  "dimensionsMm": {
+    "depth": 450,
+    "width": 230,
+    "height": 500
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 415,
+    "cpuCoolerMaxHeight": 184,
+    "psuMaxLength": 270
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Three 120 mm fans can be mounted on the midplate (PSU cover) for direct GPU cooling."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240
+    ],
+    "top": [
+      240,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://phanteks.com/product/xt-pro-ultra/",
+    "https://phanteks.com/product/xt-pro-ultra-white/",
+    "https://www.pccasegear.com/products/65061/phanteks-xt-pro-ultra-d-rgb-tempered-glass-case-white"
+  ]
+}

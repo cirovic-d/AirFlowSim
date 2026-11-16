@@ -1,0 +1,73 @@
+{
+  "id": "corsair-5000d-airflow",
+  "name": "Corsair 5000D Airflow",
+  "manufacturer": "Corsair",
+  "variantNote": "Original 5000D Airflow (2021). The side mount is the motherboard-tray bracket next to the board; its fans face the glass. The side and front 360 mm radiator spots can't be used at the same time.",
+  "dimensionsMm": {
+    "depth": 520,
+    "width": 245,
+    "height": 520
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 420,
+    "cpuCoolerMaxHeight": 170
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "side": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120
+    ],
+    "side": [
+      120,
+      240,
+      360
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 1,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://bit-tech.net/reviews/tech/cases/corsair-5000d-airflow-review/1/",
+    "https://manuals.plus/asin/B08M49WW51.pdf",
+    "https://www.corsair.com/explorer/diy-builder/cases/5000d-core-airflow-case/"
+  ]
+}

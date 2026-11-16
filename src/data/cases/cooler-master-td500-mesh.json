@@ -1,0 +1,58 @@
+{
+  "id": "cooler-master-td500-mesh",
+  "name": "Cooler Master MasterBox TD500 Mesh",
+  "manufacturer": "Cooler Master",
+  "variantNote": "Original TD500 Mesh (MCB-D500D). The TD500 Mesh V2 is similar but not identical.",
+  "dimensionsMm": {
+    "depth": 493,
+    "width": 217,
+    "height": 469
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 410,
+    "cpuCoolerMaxHeight": 165,
+    "psuMaxLength": 180
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.overclockers.co.uk/coolermaster-masterbox-td500-mesh-mid-tower-e-atx-case-black-tempered-gla-ca-383-cm.html",
+    "https://www.MemoryExpress.com/Products/MX00112637",
+    "https://www.coolermaster.com/en-global/products/masterbox-td500-mesh/"
+  ]
+}

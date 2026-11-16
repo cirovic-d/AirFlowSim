@@ -1,0 +1,50 @@
+{
+  "id": "thermaltake-versa-h18",
+  "name": "Thermaltake Versa H18",
+  "manufacturer": "Thermaltake",
+  "variantNote": "Versa H18 (Tempered Glass Edition). Micro-ATX case (the drawing shows a full ATX board). GPU length is without a front fan; 325 mm with a 25 mm front fan.",
+  "dimensionsMm": {
+    "depth": 380,
+    "width": 205,
+    "height": 390
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 350,
+    "cpuCoolerMaxHeight": 155,
+    "psuMaxLength": 220
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 1
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.memoryexpress.com/Products/MX70508",
+    "https://www.performance-pcs.com/productpdf/download/file/id/21983/name/Thermaltake_Versa_H18_Tempered_Glass_Edition_Micro_Case_-_Black.pdf/",
+    "https://latam.thermaltake.com/versa-h18-tempered-glass-edition-micro-case.html"
+  ]
+}

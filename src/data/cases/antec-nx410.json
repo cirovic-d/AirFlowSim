@@ -1,0 +1,62 @@
+{
+  "id": "antec-nx410",
+  "name": "Antec NX410",
+  "manufacturer": "Antec",
+  "variantNote": "Front fans are 2x 140 mm (drawn in 120 mm slots).",
+  "dimensionsMm": {
+    "depth": 390,
+    "width": 210,
+    "height": 485
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 335,
+    "cpuCoolerMaxHeight": 168,
+    "psuMaxLength": 165
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240,
+      280
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "radiatorNotes": "GPU up to 335 mm without a front radiator.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.antec.com/product/case/nx410",
+    "https://www.avadirect.com/NX410-Tempered-Glass-No-PSU-ATX-Black-Mid-Tower-Case/Product/14909243"
+  ]
+}

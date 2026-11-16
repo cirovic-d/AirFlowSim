@@ -1,0 +1,62 @@
+{
+  "id": "deepcool-cc560",
+  "name": "DeepCool CC560",
+  "manufacturer": "DeepCool",
+  "variantNote": "Original CC560 (2021). The CC560 V2 adds two PSU-shroud fan mounts.",
+  "dimensionsMm": {
+    "depth": 416,
+    "width": 210,
+    "height": 477
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 370,
+    "cpuCoolerMaxHeight": 163,
+    "psuMaxLength": 170
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.deepcool.com/products/Cases/fulltowercases/CC560-Mid-Tower-ATX-PC-Case/2021/15216.shtml",
+    "https://deepcool.com/products/Cases/CC560WH-Mid-Tower-ATX-PC-Case-White/2021/15217.shtml"
+  ]
+}

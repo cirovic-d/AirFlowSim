@@ -1,0 +1,58 @@
+{
+  "id": "msi-mag-forge-m100r",
+  "name": "MSI MAG Forge M100R",
+  "manufacturer": "MSI",
+  "variantNote": "Micro-ATX case (the drawing shows a full ATX board). Max PSU length 300 mm is without the 3.5\" drive tray.",
+  "dimensionsMm": {
+    "depth": 388,
+    "width": 200,
+    "height": 423
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 300,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 300
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240
+    ],
+    "top": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://storage-asset.msi.com/datasheet/pcc/hk/MAG-FORGE-M100R.pdf",
+    "https://au.msi.com/PC-Case/MAG-FORGE-M100R/Specification"
+  ]
+}

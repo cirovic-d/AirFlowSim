@@ -1,0 +1,62 @@
+{
+  "id": "lian-li-lancool-207",
+  "name": "Lian Li Lancool 207",
+  "manufacturer": "Lian Li",
+  "variantNote": "The PSU sits at the front-bottom. Front fans are 2x 140 mm (drawn in 120 mm slots).",
+  "dimensionsMm": {
+    "depth": 455.6,
+    "width": 219,
+    "height": 456
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 375,
+    "cpuCoolerMaxHeight": 180,
+    "psuMaxLength": 160
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans above the PSU shroud blow straight at the graphics card (pre-installed)."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 2
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "top": [
+      240,
+      280,
+      360
+    ]
+  },
+  "radiatorNotes": "Radiators only in the top.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "bottom",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": true
+    }
+  ],
+  "sources": [
+    "https://lian-li.com/product/lancool-207/",
+    "https://www.kitguru.net/?p=672107",
+    "https://pccasegear.com/products/66683/lian-li-lancool-207-a-rgb-case-black"
+  ]
+}

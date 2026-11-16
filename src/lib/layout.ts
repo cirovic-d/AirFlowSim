@@ -97,10 +97,13 @@ export function getSlots(c: CaseProfile): Slot[] {
   }
 
   const half = FAN / 2;
-  addRow("front", [depth - EDGE, MARGIN + half], [0, FAN]); // top to bottom
-  addRow("side", [depth - MARGIN - half, MARGIN + half], [0, FAN]); // top to bottom
+  // Short cases (Versa H18) leave less room above the first fan of a vertical row.
+  const top = (p: MountPosition) =>
+    Math.min(MARGIN, Math.max(0, (height - (c.fanMounts[p]?.max120 ?? 0) * FAN) / 2)) + half;
+  addRow("front", [depth - EDGE, top("front")], [0, FAN]); // top to bottom
+  addRow("side", [depth - MARGIN - half, top("side")], [0, FAN]); // top to bottom
   addRow("top", [50 + half, EDGE], [FAN, 0]); // rear to front
-  addRow("rear", [EDGE, MARGIN + half], [0, FAN]);
+  addRow("rear", [EDGE, top("rear")], [0, FAN]);
   addRow("bottom", [depth - MARGIN - half, height - EDGE], [-FAN, 0]); // front to rear
 
   return slots;

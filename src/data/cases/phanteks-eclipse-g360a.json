@@ -1,0 +1,55 @@
+{
+  "id": "phanteks-eclipse-g360a",
+  "name": "Phanteks Eclipse G360A",
+  "manufacturer": "Phanteks",
+  "dimensionsMm": {
+    "depth": 455,
+    "width": 200,
+    "height": 465
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 400,
+    "cpuCoolerMaxHeight": 162,
+    "psuMaxLength": 220
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240,
+      360
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "radiatorNotes": "A 360 mm radiator can't go in the top and front at the same time.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": true
+    }
+  ],
+  "sources": [
+    "https://techpowerup.com/review/phanteks-eclipse-g360a",
+    "https://www.kitguru.net/components/cases/leo-waldock/phanteks-eclipse-g360a-review/",
+    "https://au.computerorbit.com/products/phanteks-eclipse-g360a-airflow-d-rgb-white-case"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "msi-mag-forge-100r",
+  "name": "MSI MAG Forge 100R",
+  "manufacturer": "MSI",
+  "dimensionsMm": {
+    "depth": 421,
+    "width": 210,
+    "height": 499
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 330,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 200
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240
+    ],
+    "top": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.msi.com/PC-case/MAG-FORGE-100R/Specification",
+    "https://ca.msi.com/PC-Case/MAG-FORGE-100R/Specification"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "be-quiet-pure-base-500dx",
+  "name": "be quiet! Pure Base 500DX",
+  "manufacturer": "be quiet!",
+  "variantNote": "Ships with three 140 mm fans: front, top and rear (drawn in 120 mm slots).",
+  "dimensionsMm": {
+    "depth": 450,
+    "width": 232,
+    "height": 463
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 369,
+    "cpuCoolerMaxHeight": 190,
+    "psuMaxLength": 225
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240
+    ]
+  },
+  "radiatorNotes": "Only 31 mm above the motherboard, so a 280 mm top radiator isn't recommended.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 1,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "top",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.tomshardware.com/uk/reviews/be-quiet-pure-base-500dx",
+    "https://www.memoryexpress.com/Products/MX00130432"
+  ]
+}

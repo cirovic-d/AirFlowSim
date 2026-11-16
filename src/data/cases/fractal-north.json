@@ -1,0 +1,55 @@
+{
+  "id": "fractal-north",
+  "name": "Fractal Design North",
+  "manufacturer": "Fractal Design",
+  "variantNote": "Standard North (not XL). Front fans are 2x 140 mm (drawn in 120 mm slots). CPU cooler limit is 145 mm with the Mesh version's side fan bracket.",
+  "dimensionsMm": {
+    "depth": 447,
+    "width": 215,
+    "height": 469
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 355,
+    "cpuCoolerMaxHeight": 170,
+    "psuMaxLength": 255
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "radiatorNotes": "GPU up to 300 mm with a 360 mm front radiator.",
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.fractal-design.com/products/cases/north/north/",
+    "https://ca.computerorbit.com/products/fractal-design-north-chalk-white-mesh-atx-case",
+    "https://www.microcenter.com/quickView/665643/fractal-design-north-mesh-atx-mid-tower-computer-case-white-oak?ob=1"
+  ]
+}

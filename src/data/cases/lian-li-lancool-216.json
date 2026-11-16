@@ -1,0 +1,68 @@
+{
+  "id": "lian-li-lancool-216",
+  "name": "Lian Li Lancool 216",
+  "manufacturer": "Lian Li",
+  "variantNote": "Ships with 2x 160 mm front fans (drawn in the first two of the three 120 mm front slots) and a 140 mm rear fan.",
+  "dimensionsMm": {
+    "depth": 480.9,
+    "width": 235,
+    "height": 491.7
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 392,
+    "cpuCoolerMaxHeight": 180.5,
+    "psuMaxLength": 220
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120/140 mm fans can be mounted on the PSU cover, below the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240,
+      280,
+      360
+    ],
+    "bottom": [
+      240
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://lian-li.com/product/lancool-216/",
+    "https://techpowerup.com/review/lian-li-lancool-216-rgb"
+  ]
+}

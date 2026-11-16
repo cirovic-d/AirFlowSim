@@ -1,0 +1,69 @@
+{
+  "id": "fractal-torrent",
+  "name": "Fractal Design Torrent",
+  "manufacturer": "Fractal Design",
+  "variantNote": "Standard Torrent: 2x 180 mm front fans (drawn in two of the three 120 mm front slots) and 3x 140 mm bottom fans.",
+  "dimensionsMm": {
+    "depth": 544,
+    "width": 242,
+    "height": 530
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 423,
+    "cpuCoolerMaxHeight": 188,
+    "psuMaxLength": 230
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "none": true,
+    "note": "The PSU sits at the top of the case (not drawn), so there are no top fans and the bottom fans blow straight at the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 3
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360,
+      420
+    ],
+    "rear": [
+      120,
+      140
+    ],
+    "bottom": [
+      240,
+      280,
+      360,
+      420
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 2,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "bottom",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.fractal-design.com/?p=26037",
+    "https://www.memoryexpress.com/Products/MX00118360",
+    "https://www.tomshardware.com/uk/reviews/fractal-design-torrent-review"
+  ]
+}

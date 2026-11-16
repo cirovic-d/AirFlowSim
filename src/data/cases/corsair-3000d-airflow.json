@@ -1,0 +1,68 @@
+{
+  "id": "corsair-3000d-airflow",
+  "name": "Corsair 3000D Airflow",
+  "manufacturer": "Corsair",
+  "variantNote": "3000D Airflow with 2x SP120 fans (the 3000D RGB Airflow has 3x AR120 in the front).",
+  "dimensionsMm": {
+    "depth": 462,
+    "width": 230,
+    "height": 466
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 360,
+    "cpuCoolerMaxHeight": 170,
+    "psuMaxLength": 220
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true,
+    "note": "Two 120 mm fans can be mounted on the PSU shroud, below the graphics card."
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      240,
+      280,
+      360
+    ],
+    "top": [
+      240,
+      280
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 1,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://www.corsair.com/br/en/explorer/diy-builder/cases/3000d-airflow-mid-tower-case/",
+    "https://www.corsair.com/ww/en/p/pc-cases/cc-9011251-ww/3000d-tempered-glass-mid-tower-black-cc-9011251-ww",
+    "https://www.ldlc.com/en/reviews/PB00562985.html"
+  ]
+}

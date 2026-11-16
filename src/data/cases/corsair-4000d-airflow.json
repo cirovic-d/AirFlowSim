@@ -1,0 +1,65 @@
+{
+  "id": "corsair-4000d-airflow",
+  "name": "Corsair 4000D Airflow",
+  "manufacturer": "Corsair",
+  "variantNote": "Original 4000D Airflow (CC-9011200/9011201). The newer FRAME 4000D is a different case.",
+  "dimensionsMm": {
+    "depth": 453,
+    "width": 230,
+    "height": 466
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 360,
+    "cpuCoolerMaxHeight": 170,
+    "psuMaxLength": 180
+  },
+  "frontPanel": "mesh",
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 1,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://techpowerup.com/review/corsair-4000d-airflow",
+    "https://www.kustompcs.co.uk/cases/pc-cases/corsair-4000d-rgb-airflow-gaming-case-black-with-tempered-glass-window-cc-9011240-ww/",
+    "https://www.wepc.com/reviews/corsair-icue-4000x-rgb-4000d-airflow-pc-case/"
+  ]
+}

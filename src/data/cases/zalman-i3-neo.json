@@ -1,0 +1,68 @@
+{
+  "id": "zalman-i3-neo",
+  "name": "Zalman i3 Neo",
+  "manufacturer": "Zalman",
+  "variantNote": "Original i3 Neo (not V2).",
+  "dimensionsMm": {
+    "depth": 422,
+    "width": 219,
+    "height": 484
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 355,
+    "cpuCoolerMaxHeight": 160,
+    "psuMaxLength": 210
+  },
+  "frontPanel": "mesh",
+  "shroud": {
+    "bottomFanVent": true
+  },
+  "fanMounts": {
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 2
+    },
+    "rear": {
+      "max120": 1
+    },
+    "bottom": {
+      "max120": 2
+    }
+  },
+  "radiatorMounts": {
+    "front": [
+      120,
+      240,
+      280,
+      360
+    ],
+    "top": [
+      120,
+      240
+    ],
+    "rear": [
+      120
+    ]
+  },
+  "factoryFans": [
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    },
+    {
+      "position": "rear",
+      "count": 1,
+      "direction": "exhaust",
+      "directionVerified": false
+    }
+  ],
+  "sources": [
+    "https://zalmanusa.com/products/i3-neo",
+    "https://smartfox.co.nz/collections/cases/products/zalman-i3-neo-black-atx-mid-tower-case",
+    "https://www.zalmanusa.com/products/i3-neo-white-tempered-glass"
+  ]
+}
