@@ -23,6 +23,24 @@ export function CaseView(props: Props) {
   const { depth, height } = caseProfile.dimensionsMm;
   const fanBySlot = new Map(fans.map((f) => [f.slotId, f]));
   const radSlots = slots.filter((s) => fanBySlot.get(s.id)?.radiator);
+  const sideRad = cooler.type === "aio" && radSlots[0]?.position === "side";
+  const sideSlots = slots.filter(isFaceOn);
+  const otherSlots = slots.filter((s) => !isFaceOn(s));
+
+  function renderSlot(slot: Slot) {
+    const fan = fanBySlot.get(slot.id);
+    return fan ? (
+      <FanView
+        key={slot.id}
+        slot={slot}
+        fan={fan}
+        onToggle={() => props.onToggle(slot.id)}
+        onRemove={() => props.onRemove(slot.id)}
+      />
+    ) : (
+      <EmptySlot key={slot.id} slot={slot} onAdd={() => props.onAdd(slot)} />
+    );
+  }
 
   return (
     <svg
@@ -47,24 +65,13 @@ export function CaseView(props: Props) {
       </defs>
 
       <CaseShell caseProfile={caseProfile} />
+      {/* Side-panel fans sit behind the graphics card, so they are drawn first. */}
+      {sideRad && <RadiatorView slots={radSlots} />}
+      {sideSlots.map(renderSlot)}
       <GpuView caseProfile={caseProfile} gpu={gpu} />
-      {cooler.type === "aio" && <RadiatorView slots={radSlots} />}
+      {cooler.type === "aio" && !sideRad && <RadiatorView slots={radSlots} />}
       <CoolerView cooler={cooler} radSlots={radSlots} onToggleTower={props.onToggleTower} />
-
-      {slots.map((slot) => {
-        const fan = fanBySlot.get(slot.id);
-        return fan ? (
-          <FanView
-            key={slot.id}
-            slot={slot}
-            fan={fan}
-            onToggle={() => props.onToggle(slot.id)}
-            onRemove={() => props.onRemove(slot.id)}
-          />
-        ) : (
-          <EmptySlot key={slot.id} slot={slot} onAdd={() => props.onAdd(slot)} />
-        );
-      })}
+      {otherSlots.map(renderSlot)}
     </svg>
   );
 }

@@ -47,7 +47,7 @@ Case profiles live in `src/data/cases/` as JSON files with sources. Add a new ca
 - Lian Li Lancool 207, Lancool 216, O11 Dynamic EVO, O11 Vision
 - Montech Air 100 ARGB, Air 903 Base, Air 903 Max, X3 Mesh
 - MSI MAG Forge 100R, MAG Forge M100R
-- NZXT H5 Flow (2024), H6 Flow, H7 Flow (2024), H9 Flow (2025), S340 Elite
+- NZXT H5 Flow (2024), H6 Flow, H7 Flow (2024), H9 Flow (2025), H710, S340 Elite
 - Phanteks Eclipse G360A, XT Pro Ultra
 - Thermaltake Versa H18
 - Zalman i3 Neo, S2
