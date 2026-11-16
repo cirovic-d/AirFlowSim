@@ -1,6 +1,6 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import type { Screen } from "./types";
-import { CASES, findCase } from "./data/cases";
+import type { CaseProfile, Screen } from "./types";
+import { CASES, allCases, findCase, setCustomCases } from "./data/cases";
 import { LangContext } from "./lib/i18n";
 import { newId, parseStore, type SavedConfig, type Setup } from "./lib/configs";
 import { DEFAULT_SETTINGS, type Settings } from "./lib/settings";
@@ -8,6 +8,7 @@ import { loadStore, saveStore } from "./lib/storage";
 import { canCheckForUpdates, checkForUpdate, type AvailableUpdate } from "./lib/updates";
 import { UpdateBanner } from "./components/UpdateBanner";
 import { Sidebar } from "./components/Sidebar";
+import { CaseEditor } from "./components/CaseEditor";
 import { SimulatorScreen } from "./screens/SimulatorScreen";
 import { SavedScreen } from "./screens/SavedScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
@@ -28,6 +29,7 @@ export default function App() {
 
   // Saved data. `loaded` stops us from overwriting the file before it was read.
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
+  const [customCases, setCustomCaseList] = useState<CaseProfile[]>([]);
   const [settings, setSettings] = useState<Settings>({ ...DEFAULT_SETTINGS, lang: legacyLang() });
   const [loaded, setLoaded] = useState(false);
 
@@ -36,6 +38,12 @@ export default function App() {
   const [initial, setInitial] = useState<Setup | null>(null);
   const [simKey, setSimKey] = useState(0);
 
+  // Custom case editor: null = closed, "new" = new case, otherwise the case being edited.
+  const [editor, setEditor] = useState<"new" | CaseProfile | null>(null);
+
+  // Lookups (findCase, saved configs) must see the user's custom cases.
+  setCustomCases(customCases);
+
   const [update, setUpdate] = useState<AvailableUpdate | null>(null);
   const [startupCheckDone, setStartupCheckDone] = useState(false);
 
@@ -43,6 +51,7 @@ export default function App() {
     loadStore()
       .then((text) => {
         const data = parseStore(text);
+        setCustomCaseList(data.customCases);
         setConfigs(data.configs);
         if (data.settings) setSettings(data.settings);
       })
@@ -54,10 +63,10 @@ export default function App() {
   useEffect(() => {
     if (!loaded) return;
     const timer = setTimeout(() => {
-      saveStore(JSON.stringify({ version: 1, configs, settings }, null, 2)).catch(() => {});
+      saveStore(JSON.stringify({ version: 1, customCases, configs, settings }, null, 2)).catch(() => {});
     }, 300);
     return () => clearTimeout(timer);
-  }, [configs, settings, loaded]);
+  }, [customCases, configs, settings, loaded]);
 
   // Check for updates once, after the saved settings are known.
   useEffect(() => {
@@ -87,6 +96,26 @@ export default function App() {
     setSimKey((k) => k + 1);
   }
 
+  function saveCustomCase(c: CaseProfile) {
+    const exists = customCases.some((x) => x.id === c.id);
+    const next = exists ? customCases.map((x) => (x.id === c.id ? c : x)) : [...customCases, c];
+    setCustomCases(next); // before the simulator remounts with it
+    setCustomCaseList(next);
+    setEditor(null);
+    // Show the new or changed case. Its fan slots may have changed, so start fresh.
+    selectCase(c.id);
+  }
+
+  function deleteCustomCase(id: string) {
+    const next = customCases.filter((c) => c.id !== id);
+    setCustomCases(next);
+    setCustomCaseList(next);
+    // Saved configurations for that case can't be opened anymore.
+    setConfigs((prev) => prev.filter((c) => c.caseId !== id));
+    setEditor(null);
+    if (caseId === id) selectCase(CASES[0].id);
+  }
+
   function saveConfig(setup: Setup, name: string) {
     const config: SavedConfig = {
       ...setup,
@@ -113,7 +142,15 @@ export default function App() {
   return (
     <LangContext.Provider value={settings.lang}>
       <div className={"app" + (settings.uiAnimations ? "" : " no-anim")} style={style}>
-        <Sidebar screen={screen} onScreen={setScreen} cases={CASES} caseId={caseId} onCase={selectCase} />
+        <Sidebar
+          screen={screen}
+          onScreen={setScreen}
+          cases={allCases()}
+          caseId={caseId}
+          onCase={selectCase}
+          onNewCase={() => setEditor("new")}
+          onEditCase={(id) => setEditor(findCase(id))}
+        />
         <main className="content">
           {/* The simulator stays mounted (hidden) so switching screens keeps your setup. */}
           <div className={"screen-slot" + (screen === "simulator" ? "" : " hidden")}>
@@ -145,6 +182,14 @@ export default function App() {
           )}
           {screen === "about" && <AboutScreen />}
         </main>
+        {editor && (
+          <CaseEditor
+            editing={editor === "new" ? null : editor}
+            onSave={saveCustomCase}
+            onDelete={deleteCustomCase}
+            onCancel={() => setEditor(null)}
+          />
+        )}
         {update && <UpdateBanner key={update.version} update={update} onLater={() => setUpdate(null)} />}
       </div>
     </LangContext.Provider>

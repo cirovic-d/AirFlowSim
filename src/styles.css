@@ -501,3 +501,142 @@ h3 {
 .update-banner .modal-actions { margin-top: 14px; }
 .progress { height: 6px; margin-top: 12px; border-radius: 999px; background: var(--bg); overflow: hidden; }
 .progress span { display: block; height: 100%; background: var(--accent); transition: width 0.2s; }
+
+/* ---------- Simulated fan speed (RPM) ---------- */
+.rpm {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 78px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.rpm.rpm-all {
+  grid-template-columns: auto 1fr 78px;
+  margin: 4px 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.rpm-label { color: var(--muted); }
+.rpm input { width: 100%; accent-color: var(--accent); }
+.rpm-value { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- Search boxes ---------- */
+.search {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.search:focus { outline: none; border-color: var(--accent); }
+.search::placeholder { color: var(--muted); }
+
+/* ---------- GPU database ---------- */
+.gpu-picked {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 12px;
+}
+.gpu-picked-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.gpu-results {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.gpu-results .note { padding: 8px 10px; margin: 0; }
+.gpu-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.gpu-results li:last-child .gpu-result { border-bottom: 0; }
+.gpu-result:hover { background: var(--surface-2); }
+.gpu-result.active { background: var(--surface-2); box-shadow: inset 2px 0 0 var(--accent); }
+.gpu-result-name { display: flex; align-items: center; gap: 8px; }
+.gpu-result-len { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gpu-result-len.too-long { color: #ef6b73; }
+.vendor { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.vendor.amd { background: #ed1c24; }
+.vendor.nvidia { background: #76b900; }
+
+/* ---------- Case list: search and custom cases ---------- */
+.case-search { margin-bottom: 6px; }
+.case-empty { padding: 4px 10px; margin: 0; }
+.case-row { position: relative; }
+.case-row .case-item { padding-right: 10px; }
+.case-name { overflow: hidden; text-overflow: ellipsis; }
+.case-row:has(.case-edit) .case-item { padding-right: 34px; }
+.case-edit {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+}
+.case-edit:hover { background: var(--bg); color: var(--text); }
+.case-new {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+}
+.case-new:hover { border-color: var(--accent); color: var(--text); }
+
+/* ---------- Custom case editor ---------- */
+.modal.wide { width: 680px; max-height: calc(100vh - 40px); overflow-y: auto; }
+.modal h2 { margin-top: 0; }
+.editor-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 12px; }
+.editor-grid .field { margin-top: 10px; }
+.editor-grid .wide { grid-column: 1 / -1; }
+.mount-table { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 12px; }
+.mount-table th { text-align: left; font-weight: 500; color: var(--muted); padding: 4px 0; }
+.mount-table td { padding: 4px 0; border-top: 1px solid var(--line); }
+.mount-table td:first-child { width: 90px; }
+.mount-table .segmented.full button { padding: 4px 2px; }
+.mount-table td + td { padding-left: 10px; }
+.editor-row { display: flex; gap: 16px; align-items: center; margin-top: 14px; font-size: 12px; }
+.editor-row label { display: inline-flex; gap: 6px; align-items: center; }
+.modal-actions .spacer { flex: 1; }
+.editor-row label, .editor-row > .muted { white-space: nowrap; }
+.editor-row .segmented { flex: 1; }
+.rpm input:focus { outline: none; }
+.rpm input:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }

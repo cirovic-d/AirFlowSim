@@ -51,6 +51,8 @@ export interface InstalledFan {
   direction: FanDirection;
   /** True for the fans that belong to the AIO radiator (2 for 240 mm, 3 for 360 mm). */
   radiator?: boolean;
+  /** Simulated speed. Visual only: the app never controls real fans. Missing = DEFAULT_RPM. */
+  rpm?: number;
 }
 
 export type GpuSize = "small" | "medium" | "large" | "custom";
@@ -60,6 +62,20 @@ export interface GpuConfig {
   size: GpuSize;
   /** Used only when size is "custom". */
   customLength: number;
+  /** A card from the GPU database. When set, its length, fans and thickness are used instead. */
+  modelId?: string;
+}
+
+/** One graphics card in the database (src/data/gpus.json). */
+export interface GpuModel {
+  id: string;
+  brand: string;
+  model: string;
+  vendor: "AMD" | "NVIDIA";
+  lengthMm: number;
+  fans: number;
+  thicknessMm: number;
+  sources: string[];
 }
 
 export type TowerDirection = "rear" | "front";

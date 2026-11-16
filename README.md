@@ -39,3 +39,13 @@ Case profiles live in `src/data/cases/` as JSON files with sources. Add a new ca
 - Antec C3 ARGB
 - GAMDIAS AURA GC1, GC5, GC6, GC7
 - NZXT H7 Flow (2024), S340 Elite
+
+You can also describe your own case in the app (**+ Custom case** under the case list): dimensions, fan and radiator mounts, GPU/CPU clearance. Custom cases are saved with your configurations.
+
+## Graphics card database
+
+`src/data/gpus.json` holds 30 cards (AMD RX 5000–9000, NVIDIA RTX 3000–5000) with length, fan count and thickness, each with sources. Pick one in the GPU tab, or set the size by hand.
+
+## Fan speed (RPM)
+
+Every fan has a simulated speed (500–2000 RPM). It changes how strongly the fan moves air in the animation and its weight in the pressure estimate. It is visual only: the app never reads or controls real fans.

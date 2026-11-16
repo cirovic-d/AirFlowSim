@@ -1,5 +1,6 @@
 import type { CaseProfile, MountPosition } from "../types";
 import { useT } from "../lib/i18n";
+import { isCustomCase } from "../data/cases";
 import { externalLinkProps } from "../lib/updates";
 
 const POSITIONS: MountPosition[] = ["front", "top", "side", "bottom", "rear"];
@@ -10,6 +11,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
   return (
     <section className="specs">
       <h2>{t("caseSpecs")}</h2>
+      {isCustomCase(c) && <p className="note">{t("customCaseNote")}</p>}
 
       <dl className="spec-list">
         <Row label={t("gpuMax")} value={`${c.clearanceMm.gpuMaxLength} mm`} />
@@ -27,6 +29,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
       {c.shroud?.note && <p className="note">{c.shroud.note}</p>}
 
       <h3>{t("radiators")}</h3>
+      {Object.keys(c.radiatorMounts).length === 0 && <p className="note">{t("none")}</p>}
       <dl className="spec-list">
         {POSITIONS.filter((p) => c.radiatorMounts[p]).map((p) => (
           <Row key={p} label={t(p)} value={c.radiatorMounts[p]!.join(" / ") + " mm"} wrap />
@@ -35,6 +38,7 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
       {c.radiatorNotes && <p className="note">{c.radiatorNotes}</p>}
 
       <h3>{t("factoryFans")}</h3>
+      {c.factoryFans.length === 0 && <p className="note">{t("none")}</p>}
       <ul className="fan-list">
         {c.factoryFans.map((f) => (
           <li key={f.position}>
@@ -54,16 +58,20 @@ export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
         ))}
       </ul>
 
-      <h3>{t("sources")}</h3>
-      <ul className="sources">
-        {c.sources.map((url) => (
-          <li key={url}>
-            <a {...externalLinkProps(url)}>
-              {new URL(url).hostname.replace("www.", "")}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {c.sources.length > 0 && (
+        <>
+          <h3>{t("sources")}</h3>
+          <ul className="sources">
+            {c.sources.map((url) => (
+              <li key={url}>
+                <a {...externalLinkProps(url)}>
+                  {new URL(url).hostname.replace("www.", "")}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </section>
   );
 }

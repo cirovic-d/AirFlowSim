@@ -1,6 +1,10 @@
 import type { AioSize, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition } from "../types";
-import { CASES } from "../data/cases";
+import type { CaseProfile } from "../types";
+import { allCases, setCustomCases } from "../data/cases";
+import { sanitizeCustomCase } from "./customCase";
+import { findGpu } from "../data/gpus";
 import { DEFAULT_GPU, getAioPositions, mountAio } from "./components";
+import { clampRpm } from "./pressure";
 import { getSlots } from "./layout";
 import { sanitizeSettings, type Settings } from "./settings";
 
@@ -27,6 +31,8 @@ export interface SavedConfig extends Setup {
 
 export interface StoreData {
   version: 1;
+  /** Cases made in the "Custom case" editor. */
+  customCases: CaseProfile[];
   configs: SavedConfig[];
   /** Null when the file has no settings yet (first start). */
   settings: Settings | null;
@@ -44,11 +50,16 @@ export function newId() {
 export function parseStore(text: string): StoreData {
   try {
     const raw = JSON.parse(text);
+    // Custom cases first: configurations made for them are checked against them.
+    const customCases = (Array.isArray(raw?.customCases) ? raw.customCases.map(sanitizeCustomCase) : []).filter(
+      (c: CaseProfile | null): c is CaseProfile => c !== null,
+    );
+    setCustomCases(customCases);
     const configs = Array.isArray(raw?.configs) ? raw.configs.map(sanitizeConfig).filter(Boolean) : [];
     const settings = raw?.settings ? sanitizeSettings(raw.settings) : null;
-    return { version: 1, configs: configs as SavedConfig[], settings };
+    return { version: 1, customCases, configs: configs as SavedConfig[], settings };
   } catch {
-    return { version: 1, configs: [], settings: null };
+    return { version: 1, customCases: [], configs: [], settings: null };
   }
 }
 
@@ -105,20 +116,23 @@ function sanitizeConfig(raw: unknown): SavedConfig | null {
 }
 
 function sanitizeSetup(r: Record<string, unknown>): Setup | null {
-  const caseProfile = CASES.find((c) => c.id === r.caseId);
+  const caseProfile = allCases().find((c) => c.id === r.caseId);
   if (!caseProfile) return null;
   const slots = getSlots(caseProfile);
   const slotIds = new Set(slots.map((s) => s.id));
 
   // Fans: known slot, valid direction, one fan per slot. Radiator fans are rebuilt below.
   const seen = new Set<string>();
-  const radiatorDirections = new Map<string, FanDirection>(); // slotId → direction
+  const radiatorFans = new Map<string, InstalledFan>(); // slotId → saved radiator fan
   const fans: InstalledFan[] = [];
   for (const f of Array.isArray(r.fans) ? r.fans : []) {
     if (!f || !slotIds.has(f.slotId) || seen.has(f.slotId) || !DIRECTIONS.includes(f.direction)) continue;
     seen.add(f.slotId);
-    if (f.radiator) radiatorDirections.set(f.slotId, f.direction);
-    else fans.push({ slotId: f.slotId, direction: f.direction });
+    // Files from before v0.4 have no RPM: those fans use the default speed.
+    const fan: InstalledFan = { slotId: f.slotId, direction: f.direction };
+    if (typeof f.rpm === "number" && Number.isFinite(f.rpm)) fan.rpm = clampRpm(f.rpm);
+    if (f.radiator) radiatorFans.set(f.slotId, fan);
+    else fans.push(fan);
   }
 
   // CPU cooler. An AIO is kept only where this case supports that radiator size.
@@ -132,9 +146,10 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
   if (c.type === "aio" && getAioPositions(caseProfile, size).includes(c.position as MountPosition)) {
     const position = c.position as MountPosition;
     cooler = { type: "aio", size, position };
-    finalFans = mountAio(fans, slots, position, size).map((f) =>
-      f.radiator ? { ...f, direction: radiatorDirections.get(f.slotId) ?? f.direction } : f,
-    );
+    finalFans = mountAio(fans, slots, position, size).map((f) => {
+      const saved = radiatorFans.get(f.slotId);
+      return f.radiator && saved ? { ...f, direction: saved.direction, ...(saved.rpm ? { rpm: saved.rpm } : {}) } : f;
+    });
   }
 
   // GPU
@@ -144,6 +159,8 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
     size: g.size === "small" || g.size === "medium" || g.size === "large" || g.size === "custom" ? g.size : DEFAULT_GPU.size,
     customLength: typeof g.customLength === "number" ? g.customLength : DEFAULT_GPU.customLength,
   };
+  // A card from the database is kept only if this version knows it.
+  if (typeof g.modelId === "string" && findGpu(g.modelId)) gpu.modelId = g.modelId;
 
   const fanSpeed = typeof r.fanSpeed === "number" ? Math.min(1, Math.max(0.2, r.fanSpeed)) : 0.7;
 

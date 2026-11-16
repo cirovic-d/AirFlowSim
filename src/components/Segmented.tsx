@@ -18,6 +18,7 @@ export function Segmented<T extends string>({
     <div className="segmented full">
       {options.map((o) => (
         <button
+          type="button"
           key={o.value}
           className={o.value === value ? "active" : ""}
           disabled={o.disabled}

@@ -1,6 +1,7 @@
 import type { CaseProfile, CpuCooler, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
-import { getGpuLength } from "./components";
-import { FAN, GPU_THICK, GPU_X, INWARD, PCIE_Y, SOCKET, getShroud, inShroud, shroudTopAt, type Rect, type Shroud } from "./layout";
+import { getGpuFans, getGpuLength, getGpuThickness } from "./components";
+import { fanStrength } from "./pressure";
+import { FAN, GPU_X, INWARD, PCIE_Y, SOCKET, getShroud, inShroud, shroudTopAt, type Rect, type Shroud } from "./layout";
 
 // A lightweight visual airflow model, NOT a fluid simulation.
 // 1. A coarse grid stores an air direction for every cell. It is built once
@@ -52,6 +53,8 @@ interface Emitter {
   outside: boolean;
   /** Air coming in through an AIO radiator is already warm. */
   heat: number;
+  /** Share of new particles, from the fan's simulated speed. */
+  weight: number;
 }
 
 interface Opening {
@@ -106,14 +109,15 @@ export class AirflowEngine {
     this.shroud = getShroud(caseProfile);
     this.obstacles = [];
     const gpuLength = getGpuLength(scene.gpu);
-    const gpuRect = gpuLength ? { x: GPU_X, y: PCIE_Y + 6, w: gpuLength, h: GPU_THICK } : null;
+    const gpuRect = gpuLength ? { x: GPU_X, y: PCIE_Y + 6, w: gpuLength, h: getGpuThickness(scene.gpu) } : null;
     if (gpuRect) this.obstacles.push(gpuRect);
     this.gpuRect = gpuRect;
     this.gpuFanXs = [];
     if (gpuRect) {
-      this.gpuSegment = gpuRect.w / scene.gpu.fans;
+      const gpuFans = getGpuFans(scene.gpu);
+      this.gpuSegment = gpuRect.w / gpuFans;
       this.gpuFanHalf = Math.min(46, this.gpuSegment / 2 - 5);
-      for (let i = 0; i < scene.gpu.fans; i++) this.gpuFanXs.push(gpuRect.x + this.gpuSegment * (i + 0.5));
+      for (let i = 0; i < gpuFans; i++) this.gpuFanXs.push(gpuRect.x + this.gpuSegment * (i + 0.5));
     }
 
     // Area around the CPU cooler where passing air picks up heat.
@@ -149,6 +153,7 @@ export class AirflowEngine {
           face,
           outside: !face,
           heat: fan.radiator ? 0.45 : 0,
+          weight: fanStrength(fan),
         });
       }
     }
@@ -156,7 +161,7 @@ export class AirflowEngine {
     // No intake fans: air leaks in through gaps, here the rear slot covers.
     if (this.emitters.length === 0 && placed.length > 0) {
       for (const y of [250, 300]) {
-        this.emitters.push({ x: 8, y, dx: 1, dy: 0, face: false, outside: false, heat: 0 });
+        this.emitters.push({ x: 8, y, dx: 1, dy: 0, face: false, outside: false, heat: 0, weight: 1 });
       }
     }
 
@@ -361,7 +366,7 @@ export class AirflowEngine {
         break;
       }
 
-      const e = this.emitters[Math.floor(Math.random() * this.emitters.length)];
+      const e = this.pickEmitter();
       let x = e.x;
       let y = e.y;
       if (e.face) {
@@ -392,6 +397,17 @@ export class AirflowEngine {
         gpuExit: null,
       });
     }
+  }
+
+  /** Faster intake fans bring in more air, so they are picked more often. */
+  private pickEmitter(): Emitter {
+    const total = this.emitters.reduce((sum, e) => sum + e.weight, 0);
+    let r = Math.random() * total;
+    for (const e of this.emitters) {
+      r -= e.weight;
+      if (r <= 0) return e;
+    }
+    return this.emitters[this.emitters.length - 1];
   }
 
   // ---------- Geometry helpers ----------
@@ -461,7 +477,8 @@ export class AirflowEngine {
           const rx = x - slot.cx;
           const ry = y - slot.cy;
           const r2 = rx * rx + ry * ry + 40 * 40;
-          const sign = fan.direction === "intake" ? 1 : -1;
+          // Fan speed (RPM) scales how hard this fan pushes or pulls.
+          const sign = (fan.direction === "intake" ? 1 : -1) * fanStrength(fan);
           const [dx, dy] = INWARD[slot.position];
 
           if (slot.position === "side") {
@@ -475,7 +492,7 @@ export class AirflowEngine {
           const along = rx * dx + ry * dy;
           const lateral = Math.abs(rx * dy - ry * dx);
           if (along > -10) {
-            const reach = fan.direction === "intake" ? 230 : 170;
+            const reach = (fan.direction === "intake" ? 230 : 170) * (0.6 + 0.4 * fanStrength(fan));
             const jet = Math.exp(-along / reach) * Math.exp(-((lateral / 75) ** 2));
             vx += sign * dx * jet;
             vy += sign * dy * jet;
@@ -537,7 +554,7 @@ export class AirflowEngine {
 
         // Keep the direction, but limit the strength so nothing stalls or shoots off.
         const mag = Math.hypot(vx, vy);
-        const target = clamp(mag, 0.22, 1.3);
+        const target = clamp(mag, 0.22, 1.5);
         const i = (r * this.cols + c) * 2;
         if (mag > 1e-6) {
           this.field[i] = (vx / mag) * target;

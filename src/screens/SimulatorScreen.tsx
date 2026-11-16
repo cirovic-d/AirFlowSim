@@ -4,6 +4,7 @@ import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { shortName } from "../data/cases";
 import { DEFAULT_GPU, getAioPositions, getAioSizes, getGpuFit, mountAio, removeAio } from "../lib/components";
 import type { Setup } from "../lib/configs";
+import { clampRpm } from "../lib/pressure";
 import { particlesFor, type Settings } from "../lib/settings";
 import { SaveDialog } from "../components/SaveDialog";
 import { useT, type TKey } from "../lib/i18n";
@@ -64,6 +65,14 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
         f.slotId === slotId ? { ...f, direction: f.direction === "intake" ? "exhaust" : "intake" } : f,
       ),
     );
+  }
+
+  function setFanRpm(slotId: string, rpm: number) {
+    setFans((prev) => prev.map((f) => (f.slotId === slotId ? { ...f, rpm: clampRpm(rpm) } : f)));
+  }
+
+  function setAllRpm(rpm: number) {
+    setFans((prev) => prev.map((f) => ({ ...f, rpm: clampRpm(rpm) })));
   }
 
   function removeFan(slotId: string) {
@@ -195,7 +204,16 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
           ))}
         </div>
 
-        {tab === "fans" && <FanList slots={slots} fans={fans} onToggle={toggleFan} onRemove={removeFan} />}
+        {tab === "fans" && (
+          <FanList
+            slots={slots}
+            fans={fans}
+            onToggle={toggleFan}
+            onRemove={removeFan}
+            onRpm={setFanRpm}
+            onAllRpm={setAllRpm}
+          />
+        )}
         {tab === "cpu" && (
           <CpuPanel
             caseProfile={caseProfile}
