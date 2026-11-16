@@ -2,7 +2,7 @@ import { lazy, Suspense, useMemo, useState } from "react";
 import type { AioSize, CaseProfile, CpuCooler, FanDirection, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { defaultDirection, getFactoryFans, getSlots } from "../lib/layout";
 import { shortName } from "../data/cases";
-import { DEFAULT_GPU, getAioPositions, getAioSizes, getGpuFit, mountAio, removeAio } from "../lib/components";
+import { DEFAULT_GPU, getAioPositions, getAioSizes, mountAio, removeAio } from "../lib/components";
 import type { Setup } from "../lib/configs";
 import { clampRpm } from "../lib/pressure";
 import { particlesFor, type Settings } from "../lib/settings";
@@ -19,6 +19,9 @@ import { StatsBar } from "../components/StatsBar";
 import { LooksPanel } from "../components/LooksPanel";
 import { Segmented } from "../components/Segmented";
 import { DEFAULT_LOOKS, type Looks } from "../lib/looks";
+import { DEFAULT_BUILD, pcieY, type Build } from "../lib/build";
+import { buildChecks } from "../lib/compat";
+import { estimateThermals } from "../lib/thermal";
 
 // Three.js is large, so the 3D view loads only when it's first opened.
 const Case3D = lazy(() => import("../components/Case3D"));
@@ -28,7 +31,7 @@ const TABS: { tab: Tab; label: TKey }[] = [
   { tab: "fans", label: "tabFans" },
   { tab: "cpu", label: "tabCpu" },
   { tab: "gpu", label: "tabGpu" },
-  { tab: "looks", label: "tabLooks" },
+  { tab: "looks", label: "tabBuild" },
   { tab: "case", label: "tabCase" },
 ];
 
@@ -52,6 +55,8 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   const [cooler, setCooler] = useState<CpuCooler>(() => initial?.cooler ?? { type: "tower", direction: "rear" });
   const [gpu, setGpu] = useState<GpuConfig>(() => initial?.gpu ?? DEFAULT_GPU);
   const [looks, setLooks] = useState<Looks>(() => initial?.looks ?? DEFAULT_LOOKS);
+  const [build, setBuild] = useState<Build>(() => initial?.build ?? DEFAULT_BUILD);
+  const patchBuild = (patch: Partial<Build>) => setBuild((prev) => ({ ...prev, ...patch }));
   const [tab, setTab] = useState<Tab>("fans");
   const [view, setView] = useState<"2d" | "3d">("2d");
   const [playing, setPlaying] = useState(true);
@@ -60,7 +65,16 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
   const [restartKey, setRestartKey] = useState(0);
 
   // One object per configuration, so the airflow is rebuilt only when it changes.
-  const scene = useMemo(() => ({ caseProfile, slots, fans, gpu, cooler }), [caseProfile, slots, fans, gpu, cooler]);
+  const boardPcie = pcieY(build.board);
+  const scene = useMemo(
+    () => ({ caseProfile, slots, fans, gpu, cooler, pcieY: boardPcie }),
+    [caseProfile, slots, fans, gpu, cooler, boardPcie],
+  );
+  const checks = useMemo(() => buildChecks(caseProfile, gpu, cooler, build), [caseProfile, gpu, cooler, build]);
+  const thermal = useMemo(
+    () => estimateThermals(caseProfile, slots, fans, gpu, cooler, build),
+    [caseProfile, slots, fans, gpu, cooler, build],
+  );
 
   // ---------- Case fans ----------
 
@@ -184,7 +198,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             </div>
             {view === "3d" && (
               <Suspense fallback={<p className="view-msg muted">{t("view3dLoading")}</p>}>
-                <Case3D caseProfile={caseProfile} slots={slots} fans={fans} gpu={gpu} cooler={cooler} looks={looks} colors={colors} active={active} />
+                <Case3D caseProfile={caseProfile} slots={slots} fans={fans} gpu={gpu} cooler={cooler} looks={looks} build={build} colors={colors} active={active} />
               </Suspense>
             )}
             <div className={"view-wrap" + (view === "3d" ? " hidden" : "")}>
@@ -195,6 +209,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
                 gpu={gpu}
                 cooler={cooler}
                 looks={looks}
+                build={build}
                 onAdd={addFan}
                 onToggle={toggleFan}
                 onRemove={removeFan}
@@ -225,7 +240,13 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             <p className="anim-bar view3d-hint muted">{t("view3dHint")}</p>
           )}
         </section>
-        <StatsBar fans={fans} gpuFit={getGpuFit(caseProfile, gpu)} />
+        <StatsBar
+          fans={fans}
+          checks={checks}
+          thermal={thermal}
+          ambient={build.ambient}
+          onAmbient={(ambient) => patchBuild({ ambient })}
+        />
       </div>
 
       <aside className="panel">
@@ -259,11 +280,24 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
             onRadiatorDirection={setRadiatorDirection}
             onTowerDirection={(direction) => setCooler({ type: "tower", direction })}
             onToggleFan={toggleFan}
+            build={build}
+            onBuild={patchBuild}
           />
         )}
-        {tab === "gpu" && <GpuPanel caseProfile={caseProfile} gpu={gpu} cooler={cooler} onChange={setGpu} />}
-        {tab === "looks" && <LooksPanel looks={looks} onChange={setLooks} />}
-        {tab === "case" && <SpecsPanel caseProfile={caseProfile} />}
+        {tab === "gpu" && (
+          <GpuPanel
+            caseProfile={caseProfile}
+            gpu={gpu}
+            cooler={cooler}
+            onChange={setGpu}
+            load={build.gpuLoad}
+            onLoad={(gpuLoad) => patchBuild({ gpuLoad })}
+          />
+        )}
+        {tab === "looks" && (
+          <LooksPanel caseProfile={caseProfile} looks={looks} onChange={setLooks} build={build} onBuild={patchBuild} />
+        )}
+        {tab === "case" && <SpecsPanel caseProfile={caseProfile} checks={checks} />}
       </aside>
 
       {saving && (
@@ -271,7 +305,7 @@ export function SimulatorScreen({ caseProfile, initial, active, onSave, settings
           defaultName={`${shortName(caseProfile)} – ${new Date().toLocaleDateString()}`}
           onCancel={() => setSaving(false)}
           onSave={(name) => {
-            onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed, looks }, name);
+            onSave({ caseId: caseProfile.id, fans, gpu, cooler, fanSpeed, looks, build }, name);
             setSaving(false);
           }}
         />

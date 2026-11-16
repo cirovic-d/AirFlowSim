@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 150
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -50,6 +57,7 @@
   ],
   "sources": [
     "https://www.gamdias.com/en/aura/component/case/AURA_GC1",
-    "https://www.pqs.com.bd/gamdias-aura-gc1-argb-mid-tower-atx-gaming-case"
+    "https://www.pqs.com.bd/gamdias-aura-gc1-argb-mid-tower-atx-gaming-case",
+    "https://elitehubs.com/products/gamdias-aura-gc1-mesh-argb-atx-mid-tower-cabinet-black"
   ]
 }

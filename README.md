@@ -52,19 +52,31 @@ Case profiles live in `src/data/cases/` as JSON files with sources. Add a new ca
 - Thermaltake Versa H18
 - Zalman i3 Neo, S2
 
-140/160/180 mm fans are drawn in 120 mm slots (the slot count is kept). Micro-ATX cases still show an ATX board.
+140/160/180 mm fans are drawn in 120 mm slots (the slot count is kept).
 
 You can also describe your own case in the app (**+ Custom case** under the case list): dimensions, fan and radiator mounts, GPU/CPU clearance. Custom cases are saved with your configurations.
 
 ## Graphics card database
 
-`src/data/gpus.json` holds 30 cards (AMD RX 5000–9000, NVIDIA RTX 3000–5000) with length, fan count and thickness, each with sources. Pick one in the GPU tab, or set the size by hand.
+`src/data/gpus.json` holds 32 cards (AMD RX 5000–9000, NVIDIA RTX 3000–5000, incl. PowerColor Red Dragon RX 6800 and RTX 3070 Ti Founders Edition) with length, fan count, thickness and reference power, each with sources. Pick one in the GPU tab, or set the size by hand.
+
+## Processors
+
+`src/data/cpus.json` holds a small AMD list: Ryzen 5 3600, 3600X, 5600X, 7500F, 7600X and Ryzen 7 5700X, 5800X, 5800X3D, 7800X3D, 9800X3D (TDP and max temperature, with sources). Max power under full load is taken as TDP × 1.35 (AMD's PPT rule).
+
+## Build tab and build check
+
+The **Build** tab picks the motherboard size (Mini-ITX, Mini-DTX, Flex-ATX, Micro-ATX, ATX, E-ATX, SSI-CEB, SSI-EEB, XL-ATX) and the power supply (wattage, length). Each case lists the board sizes its maker supports; the board is drawn to its real size in 2D and 3D. The **Case** tab shows a build check: graphics card length, board size, tower cooler height (entered in the CPU tab), power supply length (when the maker publishes a limit) and wattage (recommended = (GPU + CPU max power + 100 W) × 1.25, rounded up to 50 W).
+
+## Airflow score and temperatures
+
+Pick a CPU and a graphics card from the list, set the load (0–100 %) of each and the room temperature. The bottom bar shows an airflow score (0–100) and approximate temperatures of the air in the case, the GPU and the CPU, each with a ± range. It's a simple heat balance (heat of the parts vs. air moved by the fans, reduced by mesh/glass/radiators), not a fluid simulation; the formulas are in `docs/DECISIONS.md`.
 
 ## Look and 3D view
 
-The **Look** tab sets the colors of the case, graphics card, motherboard and memory (any color), the number of RAM sticks (2 or 4) and RGB on the memory. It is visual only and saved with each configuration. Parts are drawn as a typical layout, without brand logos.
+The **Build** tab also sets the colors of the case, graphics card, motherboard and memory (any color), the number of RAM sticks (2 or 4) and RGB on the memory. It is visual only and saved with each configuration. Parts are drawn as a typical layout, without brand logos.
 
-The **2D / 3D** switch above the drawing opens a rotatable 3D model (drag to rotate, scroll to zoom, optional auto-rotate). It's a general model built from the case's dimensions, fan slots and panel materials (glass, mesh or solid), with the parts as simple shapes. The airflow animation is shown only in 2D.
+The **2D / 3D** switch above the drawing opens a rotatable 3D model (drag to rotate, scroll to zoom, optional auto-rotate). It's a general model built from the case's dimensions, fan slots and panel materials (glass, mesh or solid), with detailed parts: board with VRM fins, memory, the graphics card's fin stack and fans, tower fins and heat pipes, AIO pump and radiator, the power supply and cables. The airflow animation is shown only in 2D.
 
 ## Fan speed (RPM)
 

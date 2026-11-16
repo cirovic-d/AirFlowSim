@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import type { CaseProfile, CpuCooler, GpuConfig, InstalledFan, MountPosition, Slot } from "../types";
 import { getGpuFans, getGpuLength, getGpuThickness } from "./components";
-import { BOARD, FAN, FAN_THICK, GPU_X, INWARD, PCIE_Y, SOCKET, getShroud } from "./layout";
+import { BOARD, FAN, FAN_THICK, GPU_X, INWARD, SOCKET, getShroud } from "./layout";
+import { PSU_WIDTH, boardLayout, psuPlacement, type Build } from "./build";
 import { getPanels, isLight, shade, type Looks, type PanelKind } from "./looks";
 
 // The 3D view uses the same millimetre layout as the side view:
@@ -16,6 +17,7 @@ export interface Scene3DInput {
   gpu: GpuConfig;
   cooler: CpuCooler;
   looks: Looks;
+  build: Build;
   colors: { intake: string; exhaust: string };
 }
 
@@ -39,6 +41,20 @@ export function buildCaseModel(input: Scene3DInput): THREE.Group {
   function box(x: number, y: number, z: number, w: number, h: number, d: number, mat: THREE.Material) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
     mesh.position.set(x + w / 2, y + h / 2, z + d / 2);
+    group.add(mesh);
+    return mesh;
+  }
+
+  /** Cylinder starting at (x, y, z) and running `len` mm along an axis. */
+  function cylinder(x: number, y: number, z: number, r: number, len: number, axis: "x" | "y" | "z", mat: THREE.Material) {
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 24), mat);
+    if (axis === "z") {
+      mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(x, y, z + len / 2);
+    } else if (axis === "x") {
+      mesh.rotation.z = Math.PI / 2;
+      mesh.position.set(x + len / 2, y, z);
+    } else mesh.position.set(x, y + len / 2, z);
     group.add(mesh);
     return mesh;
   }
@@ -67,46 +83,81 @@ export function buildCaseModel(input: Scene3DInput): THREE.Group {
   for (let i = 0; i < 7; i++) box(-1, 215 + i * 16, BOARD_Z, 1.5, 11, 120, m.metal);
 
   // ---------- Motherboard ----------
+  const b = boardLayout(input.build.board, looks.ramCount);
   const bx = BOARD.rearGap;
   const by = BOARD.topGap;
-  box(bx, by, BOARD_Z - 2, BOARD.width, BOARD.height, 2, m.board);
-  box(bx + 2, by + 4, BOARD_Z, 38, 108, 30, m.metal); // I/O cover
-  box(bx + 56, by + 8, BOARD_Z, 104, 28, 24, m.metal); // VRM heatsinks
-  box(bx + 50, by + 46, BOARD_Z, 28, 74, 24, m.metal);
-  box(SOCKET.x - 4, SOCKET.y - 4, BOARD_Z, SOCKET.size + 8, SOCKET.size + 8, 4, m.dark);
-  box(bx + 46, PCIE_Y + 26, BOARD_Z, 110, 13, 8, m.metal); // M.2 heatsink
-  box(bx + BOARD.width - 64, by + BOARD.height - 72, BOARD_Z, 50, 46, 10, m.metal); // chipset
-  box(bx + BOARD.width - 12, by + 92, BOARD_Z, 9, 56, 14, m.dark); // 24-pin
-  box(bx + 20, PCIE_Y - 1, BOARD_Z, BOARD.width - 40, 7, 10, m.metal);
+  const bz = BOARD_Z;
+  box(bx, by, bz - 2, b.w, b.h, 2, m.board);
+  // Standoffs behind the board
+  for (const [hx, hy] of [[7, 7], [b.w - 7, 7], [7, b.h - 7], [b.w - 7, b.h - 7]]) cylinder(bx + hx, by + hy, bz - 8, 3, 6, "z", m.metal);
+  // Rear I/O cover with ports showing through the rear panel
+  box(bx + 2, by + 4, bz, 38, b.ioHeight, 30, m.metal);
+  for (let i = 0; i < 5; i++) box(-0.5, 172 + i * 7, bz + 6, 1, 4, 16, m.dark);
+  // VRM heatsinks with fins
+  box(bx + 56, by + 8, bz, b.vrmWidth, 28, 8, m.metal);
+  for (let x = 0; x < b.vrmWidth - 2; x += 5) box(bx + 57 + x, by + 8, bz + 8, 2.5, 28, 16, m.metal);
+  box(bx + 50, by + 46, bz, 28, 74, 8, m.metal);
+  for (let y = 0; y < 72; y += 5) box(bx + 50, by + 47 + y, bz + 8, 28, 2.5, 16, m.metal);
+  // CPU socket and the processor's heat spreader
+  box(SOCKET.x - 4, SOCKET.y - 4, bz, SOCKET.size + 8, SOCKET.size + 8, 3, m.dark);
+  box(SOCKET.x + 4, SOCKET.y + 4, bz + 3, SOCKET.size - 8, SOCKET.size - 8, 2, m.aluminium);
+  // 8-pin CPU power at the top edge, 24-pin at the front edge
+  box(bx + 12, by + 2, bz, 20, 8, 12, m.dark);
+  const atxY = by + Math.min(92, b.h - 70);
+  box(bx + b.w - 12, atxY, bz, 9, 56, 14, m.dark);
+  // PCIe slots, M.2 heatsink, chipset, battery
+  box(bx + 20, b.pcieY - 1, bz, Math.min(b.w, 244) - 40, 7, 10, m.metal);
+  for (const y of b.extraPcie) box(bx + 20, y, bz, Math.min(b.w, 244) - 90, 4, 8, m.slot);
+  if (b.full) {
+    box(bx + 46, b.pcieY + 26, bz, 110, 13, 6, m.metal);
+    box(bx + Math.min(b.w, 244) - 64, by + b.h - 72, bz, 50, 46, 10, m.metal);
+    cylinder(bx + 150, by + b.h - 40, bz + 1, 8, 2, "z", m.aluminium);
+  }
 
-  // Memory
-  const dimms = [180, 189, 198, 207];
-  const filled = looks.ramCount === 4 ? [0, 1, 2, 3] : [1, 3];
-  for (const i of filled) {
-    box(dimms[i] - 3.5, by + 7, BOARD_Z, 7, 139, 32, m.ram);
-    if (looks.ramRgb) box(dimms[i] - 2.5, by + 9, BOARD_Z + 32, 5, 135, 4, m.rgb);
+  // Memory: slots, sticks with heat spreaders and a top bar
+  for (const x of b.dimmX) box(bx + x - 2.5, by + 10, bz, 5, b.dimmLen, 7, m.slot);
+  for (const i of b.filled) {
+    const x = bx + b.dimmX[i];
+    box(x - 3, by + 7, bz + 3, 6, b.dimmLen + 6, 30, m.ram);
+    box(x - 3.5, by + 7, bz + 33, 7, b.dimmLen + 6, 3, looks.ramRgb ? m.rgb : m.ramTop);
   }
 
   // ---------- Graphics card ----------
   const length = getGpuLength(input.gpu);
+  const gpuY = b.pcieY + 6;
+  let gpuPower: THREE.Vector3 | null = null;
   if (length !== null) {
     const thick = getGpuThickness(input.gpu);
-    const y = PCIE_Y + 6;
-    box(GPU_X, y, BOARD_Z, length, 3, CARD_W, m.gpuPlate); // backplate
-    box(GPU_X, y + 3, BOARD_Z + 2, length - 4, thick * 0.45, CARD_W - 4, m.fins); // heatsink
-    box(GPU_X, y + thick * 0.45, BOARD_Z, length, thick * 0.55, CARD_W, m.gpu); // shroud
-    box(GPU_X + length * 0.62, y - 7, BOARD_Z + CARD_W - 30, 20, 7, 14, m.dark); // power connector
-    box(-1, y - 6, BOARD_Z, 4, thick + 12, CARD_W, m.metal); // bracket
+    const y = gpuY;
+    const finH = thick * 0.45;
+    box(GPU_X, y, bz, length, 3, CARD_W, m.gpuPlate); // backplate
+    box(GPU_X, y + 3, bz + 2, length - 4, 2, CARD_W - 4, m.pcb); // circuit board
+    // Heatsink: thin vertical fins along the card
+    for (let x = 6; x < length - 6; x += 4) box(GPU_X + x, y + 5, bz + 4, 1, finH - 2, CARD_W - 8, m.fins);
+    box(GPU_X, y + 5 + finH, bz, length, thick - 5 - finH, CARD_W, m.gpu); // shroud
+    box(GPU_X + length * 0.62, y - 7, bz + CARD_W - 30, 20, 7, 14, m.dark); // power connector
+    gpuPower = new THREE.Vector3(GPU_X + length * 0.62 + 10, y - 7, bz + CARD_W - 23);
+    box(-1, y - 6, bz, 4, thick + 12, CARD_W, m.metal); // bracket
+    for (let i = 0; i < 4; i++) box(-1.5, y + 2 + i * ((thick - 4) / 4), bz + 10, 1, (thick - 4) / 4 - 3, CARD_W - 20, m.dark);
+    // Fans on the underside, facing the bottom of the case
     const fans = getGpuFans(input.gpu);
     const segment = length / fans;
     const r = Math.min(46, segment / 2 - 6);
     for (let i = 0; i < fans; i++) {
-      const fan = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 3, 40), m.gpuFan);
-      fan.position.set(GPU_X + segment * (i + 0.5), y + thick + 1, BOARD_Z + CARD_W / 2);
+      const fan = new THREE.Group();
+      fan.add(new THREE.Mesh(new THREE.TorusGeometry(r, 1.6, 6, 40), m.dark));
+      for (let k = 0; k < 9; k++) {
+        const blade = new THREE.Mesh(m.bladeShape, m.gpuFan);
+        blade.scale.setScalar(r / 52);
+        blade.rotation.z = (k * Math.PI * 2) / 9;
+        fan.add(blade);
+      }
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.3, r * 0.3, 3, 24), m.metal);
+      hub.rotation.x = Math.PI / 2;
+      fan.add(hub);
+      fan.rotation.x = Math.PI / 2;
+      fan.position.set(GPU_X + segment * (i + 0.5), y + thick + 0.5, bz + CARD_W / 2);
       group.add(fan);
-      const hub = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.3, r * 0.3, 4, 24), m.metal);
-      hub.position.copy(fan.position);
-      group.add(hub);
     }
   }
 
@@ -114,24 +165,66 @@ export function buildCaseModel(input: Scene3DInput): THREE.Group {
   const cx = SOCKET.x + SOCKET.size / 2;
   const cy = SOCKET.y + SOCKET.size / 2;
   const cooler = input.cooler;
+  const base = bz + 5;
   if (cooler.type === "tower") {
-    const h = Math.min(155, c.clearanceMm.cpuCoolerMaxHeight - 10);
-    box(cx - 25, cy - 75, BOARD_Z + 6, 50, 150, h, m.aluminium);
-    box(cx - 26, cy - 78, BOARD_Z + 6, 52, 5, h, m.dark); // top cover
-    addFan(group, m, cx + 25 + FAN_THICK / 2, cy, BOARD_Z + 6 + h / 2, "x", null);
+    const h = Math.max(60, Math.min(input.build.towerHeight, width - bz - 10));
+    box(cx - 20, cy - 20, base, 40, 40, 8, m.copper); // base plate
+    // Heat pipes rise from the base through the fins
+    for (const dy of [-21, -7, 7, 21]) for (const dx of [-12, 12]) cylinder(cx + dx, cy + dy, base + 8, 3, h - 14, "z", m.copper);
+    // Fin stack, one plate every 2.5 mm
+    for (let z = base + 34; z < base + h - 4; z += 2.5) box(cx - 25, cy - 62, z, 50, 124, 0.6, m.aluminium);
+    box(cx - 26, cy - 63, base + h - 4, 52, 126, 4, m.dark); // top cover
+    // The fan sits on the side the air comes from (it pushes toward the chosen direction).
+    const side = cooler.direction === "rear" ? 1 : -1;
+    addFan(group, m, cx + side * (25 + FAN_THICK / 2), cy, Math.max(base + 62, base + 34 + (h - 38) / 2), "x", null);
   } else if (cooler.type === "wraith") {
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(46, 46, 50, 48), m.dark);
-    base.rotation.x = Math.PI / 2;
-    base.position.set(cx, cy, BOARD_Z + 6 + 25);
-    group.add(base);
+    cylinder(cx, cy, base, 40, 10, "z", m.copper); // core
+    for (let k = 0; k < 24; k++) {
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(36, 1.2, 34), m.aluminium);
+      fin.position.set(cx, cy, base + 10 + 17);
+      fin.rotation.z = (k * Math.PI) / 24;
+      group.add(fin);
+    }
+    cylinder(cx, cy, base + 44, 47, 14, "z", m.dark); // fan shroud
+    const fan = new THREE.Group();
+    for (let k = 0; k < 7; k++) {
+      const blade = new THREE.Mesh(m.bladeShape, m.bladesPlain);
+      blade.scale.setScalar(0.75);
+      blade.rotation.z = (k * Math.PI * 2) / 7;
+      fan.add(blade);
+    }
+    fan.position.set(cx, cy, base + 59);
+    group.add(fan);
   } else {
-    const pump = new THREE.Mesh(new THREE.CylinderGeometry(26, 26, 36, 48), m.dark);
-    pump.rotation.x = Math.PI / 2;
-    pump.position.set(cx, cy, BOARD_Z + 6 + 18);
-    group.add(pump);
+    cylinder(cx, cy, base, 30, 6, "z", m.copper);
+    cylinder(cx, cy, base + 6, 27, 30, "z", m.dark); // pump
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(24, 1.4, 8, 48), looks.ramRgb ? m.rgb : m.metal);
+    ring.position.set(cx, cy, base + 36);
+    group.add(ring);
     const radSlots = input.slots.filter((s) => input.fans.some((f) => f.slotId === s.id && f.radiator));
     addRadiator(group, m, radSlots, fanZ, cx, cy);
   }
+
+  // ---------- Power supply and cables ----------
+  const psu = psuPlacement(c, input.build.psuLength);
+  const atx = new THREE.Vector3(bx + b.w - 7, atxY + 28, bz + 14);
+  if (psu) {
+    const pz = Math.max(T + 4, Math.min(width - PSU_WIDTH - T - 4, bz - 8));
+    box(psu.x, psu.y, pz, psu.w, psu.h, PSU_WIDTH, m.psu);
+    // Fan grille on the underside and modular sockets facing the inside
+    const grille = new THREE.Mesh(new THREE.TorusGeometry(56, 1.5, 6, 48), m.metal);
+    grille.rotation.x = Math.PI / 2;
+    grille.position.set(psu.x + psu.w / 2, psu.y + psu.h + 0.5, pz + PSU_WIDTH / 2);
+    group.add(grille);
+    const sx = c.psuPosition === "front" ? psu.x - 1 : psu.x + psu.w;
+    box(sx, psu.y + 12, pz + 20, 1.5, psu.h - 24, PSU_WIDTH - 40, m.dark);
+  }
+  // Cables are routed behind the motherboard tray and come out through grommets
+  // next to the board, as in most builds.
+  const grommetX = Math.min(depth - 30, bx + b.w + 16);
+  cable(group, m, new THREE.Vector3(grommetX, atx.y, 4), atx, 7);
+  cable(group, m, new THREE.Vector3(bx + 22, by - 14, 4), new THREE.Vector3(bx + 22, by + 6, bz + 12), 3.5); // CPU power
+  if (gpuPower) cable(group, m, new THREE.Vector3(grommetX, Math.max(gpuY - 40, atx.y + 50), 4), gpuPower, 4);
 
   // ---------- PSU shroud ----------
   const shroud = getShroud(c);
@@ -211,6 +304,14 @@ function addFan(group: THREE.Group, m: Mats, x: number, y: number, z: number, ax
   group.add(fan);
 }
 
+/** A sleeved cable that bends out toward the glass between two points. */
+function cable(group: THREE.Group, m: Mats, from: THREE.Vector3, to: THREE.Vector3, r: number) {
+  const mid = from.clone().lerp(to, 0.5);
+  mid.z = Math.max(from.z, to.z) + 30;
+  const curve = new THREE.QuadraticBezierCurve3(from, mid, to);
+  group.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 32, r, 10), m.cable));
+}
+
 function addRadiator(group: THREE.Group, m: Mats, slots: Slot[], fanZ: number, cx: number, cy: number) {
   if (slots.length === 0) return;
   const p: MountPosition = slots[0].position;
@@ -238,6 +339,17 @@ function addRadiator(group: THREE.Group, m: Mats, slots: Slot[], fanZ: number, c
   const rad = new THREE.Mesh(new THREE.BoxGeometry(...size), m.fins);
   rad.position.set(...center);
   group.add(rad);
+  // End tanks at both ends of the long side
+  const along = size.indexOf(len);
+  for (const sign of [-1, 1]) {
+    const tankSize: [number, number, number] = [...size];
+    tankSize[along] = 14;
+    const tank = new THREE.Mesh(new THREE.BoxGeometry(tankSize[0] + 1, tankSize[1] + 1, tankSize[2] + 1), m.dark);
+    const pos: [number, number, number] = [...center];
+    pos[along] += sign * (len / 2 - 7);
+    tank.position.set(...pos);
+    group.add(tank);
+  }
 
   // Two tubes from the pump to the radiator.
   for (const d of [-8, 8]) {
@@ -322,6 +434,12 @@ function materials(looks: Looks) {
     gpuPlate: std(shade(looks.gpuColor, 0.12), 0.4, 0.5),
     gpuFan: std("#16171a", 0.7, 0.1),
     fins: std("#8d919a", 0.45, 0.6),
+    copper: std("#b87346", 0.35, 0.8),
+    pcb: std("#1d3324", 0.8, 0.1),
+    slot: std(shade(looks.boardColor, -0.35), 0.7, 0.1),
+    ramTop: std(shade(looks.ramColor, 0.12), 0.4, 0.5),
+    psu: std("#1b1c20", 0.6, 0.3),
+    cable: std("#121316", 0.9, 0),
     tube: std("#1c1d21", 0.8, 0),
     fanFrame: std("#24252a", 0.6, 0.2),
     bladeShape: bladeGeometry(),

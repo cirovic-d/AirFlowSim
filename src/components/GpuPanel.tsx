@@ -5,15 +5,18 @@ import { findGpu, gpuName, searchGpus } from "../data/gpus";
 import { useT } from "../lib/i18n";
 import { externalLinkProps } from "../lib/updates";
 import { Segmented } from "./Segmented";
+import { LoadSlider } from "./Controls";
 
 interface Props {
   caseProfile: CaseProfile;
   gpu: GpuConfig;
   cooler: CpuCooler;
   onChange: (gpu: GpuConfig) => void;
+  load: number;
+  onLoad: (load: number) => void;
 }
 
-export function GpuPanel({ caseProfile, gpu, cooler, onChange }: Props) {
+export function GpuPanel({ caseProfile, gpu, cooler, onChange, load, onLoad }: Props) {
   const t = useT();
   const [query, setQuery] = useState("");
   const model = findGpu(gpu.modelId);
@@ -120,6 +123,18 @@ export function GpuPanel({ caseProfile, gpu, cooler, onChange }: Props) {
             </label>
           )}
         </>
+      )}
+
+      <LoadSlider label={t("gpuLoad")} value={load} onChange={onLoad} />
+      {model ? (
+        <p className="note">
+          {t("gpuPowerNote")
+            .replace("{w}", String(model.powerW))
+            .replace("{now}", String(Math.round((model.powerW * load) / 100)))}{" "}
+          <a {...externalLinkProps(model.powerSource)}>{new URL(model.powerSource).hostname.replace("www.", "")}</a>
+        </p>
+      ) : (
+        <p className="note">{t("gpuPowerUnknown")}</p>
       )}
 
       <div className={"fit-badge " + fit}>

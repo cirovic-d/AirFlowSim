@@ -1,0 +1,12 @@
+[
+  { "id": "ryzen-5-3600", "name": "Ryzen 5 3600", "socket": "AM4", "tdpW": 65, "tjmaxC": 95, "sources": ["https://tech.co.za/product/amd-ryzen-5-3600-skt-am4-processor/", "https://computechstore.in/product/amd-ryzen-5-3600-processor"] },
+  { "id": "ryzen-5-3600x", "name": "Ryzen 5 3600X", "socket": "AM4", "tdpW": 95, "tjmaxC": 95, "sources": ["https://www.thefpsreview.com/cpu/amd-ryzen-5-3600x/", "https://govindhtech.blogspot.com/2023/07/amd-ryzen-5-3600x.html"] },
+  { "id": "ryzen-5-5600x", "name": "Ryzen 5 5600X", "socket": "AM4", "tdpW": 65, "tjmaxC": 95, "sources": ["https://technical.city/en/cpu/Ryzen-5-5600X"] },
+  { "id": "ryzen-7-5700x", "name": "Ryzen 7 5700X", "socket": "AM4", "tdpW": 65, "tjmaxC": 90, "sources": ["https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-5000-series/amd-ryzen-7-5700x.html", "https://www.bhphotovideo.com/c/product/1695216-REG/amd_100_100000926wof_ryzen_7_5700x_3_4.html"] },
+  { "id": "ryzen-7-5800x", "name": "Ryzen 7 5800X", "socket": "AM4", "tdpW": 105, "tjmaxC": 90, "sources": ["https://www.amd.com/en/products/processors/desktops/ryzen/5000-series/amd-ryzen-7-5800x.html"] },
+  { "id": "ryzen-7-5800x3d", "name": "Ryzen 7 5800X3D", "socket": "AM4", "tdpW": 105, "tjmaxC": 90, "sources": ["https://amd.com/en/products/processors/desktops/ryzen/5000-series/amd-ryzen-7-5800x3d.html"] },
+  { "id": "ryzen-5-7500f", "name": "Ryzen 5 7500F", "socket": "AM5", "tdpW": 65, "tjmaxC": 95, "sources": ["https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7500f.html", "https://www.amd.com/content/dam/amd/en/documents/partner-hub/ryzen/amd-ryzen-7000-series-desktop-processors-quick-reference-guide.pdf"] },
+  { "id": "ryzen-5-7600x", "name": "Ryzen 5 7600X", "socket": "AM5", "tdpW": 105, "tjmaxC": 95, "sources": ["https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600x.html", "https://www.cdw.com/product/-/8161950"] },
+  { "id": "ryzen-7-7800x3d", "name": "Ryzen 7 7800X3D", "socket": "AM5", "tdpW": 120, "tjmaxC": 89, "sources": ["https://www.alktech.co/articles/review-amd-ryzen-7-9800x3d-am5-processor", "https://www.pbtech.com/product/CPUAMD07800X3D/imglib/pb-bot-blue-orange.png?pg=4"] },
+  { "id": "ryzen-7-9800x3d", "name": "Ryzen 7 9800X3D", "socket": "AM5", "tdpW": 120, "tjmaxC": 95, "sources": ["https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9800x3d.html"] }
+]

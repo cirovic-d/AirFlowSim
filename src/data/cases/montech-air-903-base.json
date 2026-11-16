@@ -13,6 +13,16 @@
     "cpuCoolerMaxHeight": 180,
     "psuMaxLength": 240
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX",
+      "SSI-EEB",
+      "SSI-CEB"
+    ]
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true,
@@ -66,6 +76,7 @@
   "sources": [
     "https://overclockers.co.uk/montech-air-903-base-midi-tower-tempered-glass-black-cas-mon-01227.html",
     "https://www.kitguru.net/?p=619605",
-    "https://montechpc.com/en/products_detail.php?nid=357"
+    "https://montechpc.com/en/products_detail.php?nid=357",
+    "https://www.kitguru.net/components/cases/james-dawson/montech-air-903-base-and-max-review/"
   ]
 }

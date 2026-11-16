@@ -13,6 +13,15 @@
     "cpuCoolerMaxHeight": 184,
     "psuMaxLength": 270
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 280
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true,
@@ -61,6 +70,7 @@
   "sources": [
     "https://phanteks.com/product/xt-pro-ultra/",
     "https://phanteks.com/product/xt-pro-ultra-white/",
-    "https://www.pccasegear.com/products/65061/phanteks-xt-pro-ultra-d-rgb-tempered-glass-case-white"
+    "https://www.pccasegear.com/products/65061/phanteks-xt-pro-ultra-d-rgb-tempered-glass-case-white",
+    "https://phanteks.com/XT-Pro.html"
   ]
 }

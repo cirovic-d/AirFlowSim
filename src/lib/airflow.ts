@@ -19,6 +19,8 @@ export interface FlowScene {
   fans: InstalledFan[];
   gpu: GpuConfig;
   cooler: CpuCooler;
+  /** Top of the PCIe slot the card sits in (depends on the board size). Default: ATX. */
+  pcieY?: number;
 }
 
 interface Particle {
@@ -109,7 +111,7 @@ export class AirflowEngine {
     this.shroud = getShroud(caseProfile);
     this.obstacles = [];
     const gpuLength = getGpuLength(scene.gpu);
-    const gpuRect = gpuLength ? { x: GPU_X, y: PCIE_Y + 6, w: gpuLength, h: getGpuThickness(scene.gpu) } : null;
+    const gpuRect = gpuLength ? { x: GPU_X, y: (scene.pcieY ?? PCIE_Y) + 6, w: gpuLength, h: getGpuThickness(scene.gpu) } : null;
     if (gpuRect) this.obstacles.push(gpuRect);
     this.gpuRect = gpuRect;
     this.gpuFanXs = [];

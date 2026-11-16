@@ -13,6 +13,12 @@
     "cpuCoolerMaxHeight": 165,
     "psuMaxLength": 160
   },
+  "motherboards": {
+    "formats": [
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true,
@@ -59,6 +65,7 @@
   ],
   "sources": [
     "https://deepcool.com/products/Cases/CH370-Micro-ATX-Case/2022/15949.shtml",
-    "https://uk.deepcool.com/products/Cases/CH370-Micro-ATX-Case/2022/15956.shtml"
+    "https://uk.deepcool.com/products/Cases/CH370-Micro-ATX-Case/2022/15956.shtml",
+    "https://deepcool.com/products/Cases/fulltowercases/CH370-Micro-ATX-Case/2022/15949.shtml"
   ]
 }

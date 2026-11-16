@@ -25,7 +25,7 @@ export default function Case3D(props: Props) {
   const view = useRef<View | null>(null);
   const [failed, setFailed] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
-  const { caseProfile, slots, fans, gpu, cooler, looks, colors, active } = props;
+  const { caseProfile, slots, fans, gpu, cooler, looks, build, colors, active } = props;
   const size = Math.max(caseProfile.dimensionsMm.depth, caseProfile.dimensionsMm.height, caseProfile.dimensionsMm.width);
 
   function resetCamera(v: View) {
@@ -55,6 +55,8 @@ export default function Case3D(props: Props) {
     const fill = new THREE.DirectionalLight("#bcd4ff", 0.8);
     fill.position.set(-800, 200, -400);
     scene.add(fill);
+    // Soft light inside the case, so the parts behind solid panels stay visible.
+    scene.add(new THREE.PointLight("#fff4e8", 1.2, 0, 0));
 
     const camera = new THREE.PerspectiveCamera(32, 1, 10, 10000);
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -99,9 +101,9 @@ export default function Case3D(props: Props) {
       v.scene.remove(v.model);
       disposeModel(v.model);
     }
-    v.model = buildCaseModel({ caseProfile, slots, fans, gpu, cooler, looks, colors });
+    v.model = buildCaseModel({ caseProfile, slots, fans, gpu, cooler, looks, build, colors });
     v.scene.add(v.model);
-  }, [caseProfile, slots, fans, gpu, cooler, looks, colors]);
+  }, [caseProfile, slots, fans, gpu, cooler, looks, build, colors]);
 
   useEffect(() => {
     if (view.current) view.current.controls.autoRotate = autoRotate;

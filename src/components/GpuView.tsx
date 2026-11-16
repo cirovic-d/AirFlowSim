@@ -1,6 +1,6 @@
 import type { CaseProfile, GpuConfig } from "../types";
 import { getGpuFans, getGpuFit, getGpuLength, getGpuThickness } from "../lib/components";
-import { GPU_X as BRACKET_X, PCIE_Y } from "../lib/layout";
+import { GPU_X as BRACKET_X } from "../lib/layout";
 import { shade } from "../lib/looks";
 import { Arrow } from "./FanShapes";
 
@@ -8,13 +8,14 @@ import { Arrow } from "./FanShapes";
  * Graphics card seen from the side: backplate on top, heatsink fins in the
  * middle, the colored shroud with its fans on the underside. No logos.
  */
-export function GpuView({ caseProfile, gpu, color }: { caseProfile: CaseProfile; gpu: GpuConfig; color: string }) {
+export function GpuView(props: { caseProfile: CaseProfile; gpu: GpuConfig; color: string; slotY: number }) {
+  const { caseProfile, gpu, color, slotY } = props;
   const length = getGpuLength(gpu);
   if (length === null) return null;
 
   const fit = getGpuFit(caseProfile, gpu);
   const max = caseProfile.clearanceMm.gpuMaxLength;
-  const y = PCIE_Y + 6;
+  const y = slotY + 6;
   const fans = getGpuFans(gpu);
   const thick = getGpuThickness(gpu);
   const segment = length / fans;

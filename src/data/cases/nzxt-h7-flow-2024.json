@@ -3,31 +3,79 @@
   "name": "NZXT H7 Flow (2024)",
   "manufacturer": "NZXT",
   "variantNote": "2024 version (model CM-H72FB-01 / CM-H72FW-01). The older H7 (2022) and H7 Flow (2022/2023) have a PSU shroud and no bottom fan support.",
-  "dimensionsMm": { "depth": 468, "width": 244, "height": 544 },
-  "clearanceMm": { "gpuMaxLength": 410, "cpuCoolerMaxHeight": 185, "psuMaxLength": 200 },
+  "dimensionsMm": {
+    "depth": 468,
+    "width": 244,
+    "height": 544
+  },
+  "clearanceMm": {
+    "gpuMaxLength": 410,
+    "cpuCoolerMaxHeight": 185,
+    "psuMaxLength": 200
+  },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 277
+  },
+  "psuPosition": "behind",
   "frontPanel": "mesh",
   "shroud": {
     "none": true,
     "note": "The PSU is mounted behind the motherboard tray, so there is no PSU shroud and the three bottom fans blow straight at the graphics card. Height includes the feet."
   },
   "fanMounts": {
-    "front": { "max120": 3 },
-    "top": { "max120": 3 },
-    "bottom": { "max120": 3 },
-    "rear": { "max120": 1 }
+    "front": {
+      "max120": 3
+    },
+    "top": {
+      "max120": 3
+    },
+    "bottom": {
+      "max120": 3
+    },
+    "rear": {
+      "max120": 1
+    }
   },
   "radiatorMounts": {
-    "front": [120, 140, 240, 280, 360, 420],
-    "top": [120, 140, 240, 280, 360],
-    "rear": [120, 140]
+    "front": [
+      120,
+      140,
+      240,
+      280,
+      360,
+      420
+    ],
+    "top": [
+      120,
+      140,
+      240,
+      280,
+      360
+    ],
+    "rear": [
+      120,
+      140
+    ]
   },
   "factoryFans": [
-    { "position": "front", "count": 3, "direction": "intake", "directionVerified": false }
+    {
+      "position": "front",
+      "count": 3,
+      "direction": "intake",
+      "directionVerified": false
+    }
   ],
   "sources": [
     "https://nzxt.com/en-NZ/product/h7-flow",
     "https://support.nzxt.com/hc/en-us/articles/40379376386203",
     "https://support.nzxt.com/hc/en-us/articles/26300744374683-NZXT-H7-Series-FAQ",
-    "https://www.tomshardware.com/pc-components/pc-cases/nzxt-h7-flow-2024-review"
+    "https://www.tomshardware.com/pc-components/pc-cases/nzxt-h7-flow-2024-review",
+    "https://nzxt.com/products/h7-flow"
   ]
 }

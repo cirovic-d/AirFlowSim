@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 160
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true,

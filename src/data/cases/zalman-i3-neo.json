@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 210
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true
@@ -63,6 +70,7 @@
   "sources": [
     "https://zalmanusa.com/products/i3-neo",
     "https://smartfox.co.nz/collections/cases/products/zalman-i3-neo-black-atx-mid-tower-case",
-    "https://www.zalmanusa.com/products/i3-neo-white-tempered-glass"
+    "https://www.zalmanusa.com/products/i3-neo-white-tempered-glass",
+    "https://manuals.plus/zalman/i3-neo-atx-mid-tower-computer-case-manual"
   ]
 }

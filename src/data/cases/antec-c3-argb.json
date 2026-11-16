@@ -12,6 +12,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 195
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "glass",
   "shroud": {
     "inclined": true,
@@ -66,6 +73,7 @@
   "sources": [
     "https://antec.com/product/case/c3",
     "https://www.antec.com/documents/product/case-2401012_Antec_C3%20ARGB_Manual-OL.pdf",
-    "https://www.evetech.co.za/antec-c3-rgb-constellation-gaming-case/best-deal/21077"
+    "https://www.evetech.co.za/antec-c3-rgb-constellation-gaming-case/best-deal/21077",
+    "https://www.antec.com/product/case/c3"
   ]
 }

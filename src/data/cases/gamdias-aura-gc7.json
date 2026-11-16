@@ -12,6 +12,13 @@
     "cpuCoolerMaxHeight": 155,
     "psuMaxLength": 160
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -46,6 +53,7 @@
   "sources": [
     "https://www.gamdias.com/en/aura/component/case/AURA_GC7",
     "https://www.tehnomedia.rs/proizvod/gamdias-aura-gc7",
-    "https://jubocomputer.com/?p=36920"
+    "https://jubocomputer.com/?p=36920",
+    "https://elitehubs.com/products/gamdias-aura-gc7-atx-mid-tower-argb-cabinet-black"
   ]
 }

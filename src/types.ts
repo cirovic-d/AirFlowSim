@@ -22,6 +22,10 @@ export interface CaseProfile {
   clearanceMm: { gpuMaxLength: number; cpuCoolerMaxHeight: number; /** Omitted when not published. */ psuMaxLength?: number };
   /** Omitted when the front panel material is not confirmed. */
   frontPanel?: "mesh" | "glass";
+  /** Motherboard formats the manufacturer lists; E-ATX can have a width limit. Missing for custom cases. */
+  motherboards?: { formats: string[]; eatxMaxWidth?: number };
+  /** Where the PSU sits when it isn't the usual bottom-rear spot (not drawn when behind the board or on top). */
+  psuPosition?: "behind" | "top" | "front";
   /** Only when it differs from the default (vented where top fans fit, otherwise solid). */
   topPanel?: "mesh" | "glass" | "solid";
   /**
@@ -77,6 +81,19 @@ export interface GpuModel {
   lengthMm: number;
   fans: number;
   thicknessMm: number;
+  /** Reference board power of the GPU chip (AMD TBP / NVIDIA TGP), W. Factory-overclocked cards can draw more. */
+  powerW: number;
+  powerSource: string;
+  sources: string[];
+}
+
+/** A processor from src/data/cpus.json. */
+export interface CpuModel {
+  id: string;
+  name: string;
+  socket: string;
+  tdpW: number;
+  tjmaxC: number;
   sources: string[];
 }
 

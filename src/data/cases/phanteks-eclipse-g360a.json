@@ -12,6 +12,15 @@
     "cpuCoolerMaxHeight": 162,
     "psuMaxLength": 220
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 280
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {

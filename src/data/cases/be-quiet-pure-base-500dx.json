@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 190,
     "psuMaxLength": 225
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -60,6 +67,7 @@
   ],
   "sources": [
     "https://www.tomshardware.com/uk/reviews/be-quiet-pure-base-500dx",
-    "https://www.memoryexpress.com/Products/MX00130432"
+    "https://www.memoryexpress.com/Products/MX00130432",
+    "https://www.bequiet.com/en/case/1854"
   ]
 }

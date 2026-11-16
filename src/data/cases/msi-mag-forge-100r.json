@@ -12,6 +12,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 200
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "fanMounts": {
     "front": {
       "max120": 3
@@ -53,6 +60,7 @@
   ],
   "sources": [
     "https://www.msi.com/PC-case/MAG-FORGE-100R/Specification",
-    "https://ca.msi.com/PC-Case/MAG-FORGE-100R/Specification"
+    "https://ca.msi.com/PC-Case/MAG-FORGE-100R/Specification",
+    "https://www.msi.com/PC-Case/MAG-FORGE-100M%22%22"
   ]
 }

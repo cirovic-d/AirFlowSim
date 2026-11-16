@@ -13,6 +13,15 @@
     "cpuCoolerMaxHeight": 185,
     "psuMaxLength": 250
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 285
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true
@@ -67,6 +76,7 @@
   ],
   "sources": [
     "https://www.fractal-design.com/?p=20478",
-    "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint"
+    "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint",
+    "https://www.fractal-design.com/products/cases/meshify/meshify-2/Black/"
   ]
 }

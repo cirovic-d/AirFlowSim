@@ -2,6 +2,10 @@ import type { AioSize, CaseProfile, CpuCooler, FanDirection, InstalledFan, Mount
 import { AIO_SIZES, getAioPositions, getAioSizes } from "../lib/components";
 import { useT } from "../lib/i18n";
 import { Segmented } from "./Segmented";
+import { LoadSlider, NumberField } from "./Controls";
+import { CPUS, cpuMaxPower, findCpu } from "../data/cpus";
+import { LIMITS, type Build } from "../lib/build";
+import { externalLinkProps } from "../lib/updates";
 
 interface Props {
   caseProfile: CaseProfile;
@@ -14,6 +18,8 @@ interface Props {
   onRadiatorDirection: (direction: FanDirection) => void;
   onTowerDirection: (direction: "rear" | "front") => void;
   onToggleFan: (slotId: string) => void;
+  build: Build;
+  onBuild: (patch: Partial<Build>) => void;
 }
 
 export function CpuPanel(props: Props) {
@@ -23,9 +29,35 @@ export function CpuPanel(props: Props) {
   const radFans = props.fans.filter((f) => f.radiator);
   const slotById = new Map(props.slots.map((s) => [s.id, s]));
 
+  const cpu = findCpu(props.build.cpuId);
+
   return (
     <section>
-      <h2>{t("cpuCooling")}</h2>
+      <h2>{t("processor")}</h2>
+      <select
+        className="select"
+        value={props.build.cpuId ?? ""}
+        onChange={(e) => props.onBuild({ cpuId: e.target.value || undefined })}
+      >
+        <option value="">{t("noCpu")}</option>
+        {CPUS.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name} ({c.socket})
+          </option>
+        ))}
+      </select>
+      {cpu && (
+        <p className="note">
+          {t("cpuSpecs")
+            .replace("{tdp}", String(cpu.tdpW))
+            .replace("{ppt}", String(cpuMaxPower(cpu)))
+            .replace("{tj}", String(cpu.tjmaxC))}{" "}
+          <a {...externalLinkProps(cpu.sources[0])}>{new URL(cpu.sources[0]).hostname.replace("www.", "")}</a>
+        </p>
+      )}
+      <LoadSlider label={t("cpuLoad")} value={props.build.cpuLoad} onChange={(cpuLoad) => props.onBuild({ cpuLoad })} />
+
+      <h2 className="section-gap">{t("cpuCooling")}</h2>
       <Segmented
         value={cooler.type}
         onChange={props.onCoolerType}
@@ -98,6 +130,17 @@ export function CpuPanel(props: Props) {
             ]}
           />
           <p className="note">{t("towerText")}</p>
+          <div className="look-row">
+            <span className="muted">{t("coolerHeight")}</span>
+            <NumberField
+              value={props.build.towerHeight}
+              min={LIMITS.towerHeight[0]}
+              max={LIMITS.towerHeight[1]}
+              unit="mm"
+              onChange={(towerHeight) => props.onBuild({ towerHeight })}
+            />
+          </div>
+          <p className="note">{t("coolerHeightNote").replace("{max}", String(props.caseProfile.clearanceMm.cpuCoolerMaxHeight))}</p>
         </>
       )}
 

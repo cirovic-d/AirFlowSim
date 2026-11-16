@@ -7,6 +7,8 @@ import { Arrow, EdgeFanShape, FaceFanShape } from "./FanShapes";
 import { BoardView } from "./BoardView";
 import { CoolerView, RadiatorView } from "./CoolerView";
 import { GpuView } from "./GpuView";
+import { PsuView } from "./PsuView";
+import { pcieY, type Build } from "../lib/build";
 
 interface Props {
   caseProfile: CaseProfile;
@@ -15,6 +17,7 @@ interface Props {
   gpu: GpuConfig;
   cooler: CpuCooler;
   looks: Looks;
+  build: Build;
   onAdd: (slot: Slot) => void;
   onToggle: (slotId: string) => void;
   onRemove: (slotId: string) => void;
@@ -23,7 +26,7 @@ interface Props {
 
 /** Side view of the case through the glass panel, drawn to scale in millimetres. */
 export function CaseView(props: Props) {
-  const { caseProfile, slots, fans, gpu, cooler, looks } = props;
+  const { caseProfile, slots, fans, gpu, cooler, looks, build } = props;
   const { depth, height } = caseProfile.dimensionsMm;
   const fanBySlot = new Map(fans.map((f) => [f.slotId, f]));
   const radSlots = slots.filter((s) => fanBySlot.get(s.id)?.radiator);
@@ -91,11 +94,11 @@ export function CaseView(props: Props) {
         </linearGradient>
       </defs>
 
-      <CaseShell caseProfile={caseProfile} looks={looks} />
+      <CaseShell caseProfile={caseProfile} looks={looks} build={build} />
       {/* Side-panel fans sit behind the graphics card, so they are drawn first. */}
       {sideRad && <RadiatorView slots={radSlots} />}
       {sideSlots.map(renderSlot)}
-      <GpuView caseProfile={caseProfile} gpu={gpu} color={looks.gpuColor} />
+      <GpuView caseProfile={caseProfile} gpu={gpu} color={looks.gpuColor} slotY={pcieY(build.board)} />
       {cooler.type === "aio" && !sideRad && <RadiatorView slots={radSlots} />}
       <CoolerView cooler={cooler} radSlots={radSlots} onToggleTower={props.onToggleTower} />
       {otherSlots.map(renderSlot)}
@@ -105,7 +108,7 @@ export function CaseView(props: Props) {
   );
 }
 
-function CaseShell({ caseProfile, looks }: { caseProfile: CaseProfile; looks: Looks }) {
+function CaseShell({ caseProfile, looks, build }: { caseProfile: CaseProfile; looks: Looks; build: Build }) {
   const { depth, height } = caseProfile.dimensionsMm;
   // Rear of the case is on the left (x = 0), front on the right (x = depth).
   const shroud = getShroud(caseProfile);
@@ -134,7 +137,7 @@ function CaseShell({ caseProfile, looks }: { caseProfile: CaseProfile; looks: Lo
         <rect x="30" y="0" width={depth - 60} height="6" rx="3" fill={top === "mesh" ? "url(#mesh)" : "url(#glass)"} className="front-panel" />
       )}
 
-      <BoardView looks={looks} />
+      <BoardView looks={looks} format={build.board} />
 
       {/* Rear I/O (below the rear fan) and expansion slot covers */}
       <rect className="rear-io" x="0" y="168" width="6" height="40" />
@@ -155,6 +158,7 @@ function CaseShell({ caseProfile, looks }: { caseProfile: CaseProfile; looks: Lo
           d={`M${shroud.vent.from} ${shroudTopAt(shroud, shroud.vent.from)}L${shroud.vent.to} ${shroudTopAt(shroud, shroud.vent.to)}V${shroud.bottom}H${shroud.vent.from}Z`}
         />
       )}
+      <PsuView caseProfile={caseProfile} length={build.psuLength} />
     </g>
   );
 }

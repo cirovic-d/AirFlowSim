@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 156,
     "psuMaxLength": 180
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "shroud": {
     "bottomFanVent": true,
     "note": "Two 120 mm fans can be mounted on top of the PSU shroud."
@@ -56,6 +63,7 @@
   ],
   "sources": [
     "https://manuals.plus/zalman/s2-atx-mid-tower-computer-case-manual.pdf",
-    "https://www.adorama.com/zas2tg.html"
+    "https://www.adorama.com/zas2tg.html",
+    "https://zalmanusa.com/products/s2"
   ]
 }

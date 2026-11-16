@@ -8,6 +8,8 @@ import { clampRpm } from "./pressure";
 import { getSlots } from "./layout";
 import { sanitizeSettings, type Settings } from "./settings";
 import { sanitizeLooks, type Looks } from "./looks";
+import { sanitizeBuild, type Build } from "./build";
+import { findCpu } from "../data/cpus";
 
 /** Everything needed to rebuild one simulator setup. */
 export interface Setup {
@@ -18,6 +20,8 @@ export interface Setup {
   fanSpeed: number;
   /** Colors of the parts. Files from before v0.6 have none: defaults are used. */
   looks: Looks;
+  /** Motherboard, CPU, loads, room temperature, PSU. Files from before v0.7 get the defaults. */
+  build: Build;
 }
 
 export interface AirflowColors {
@@ -167,5 +171,5 @@ function sanitizeSetup(r: Record<string, unknown>): Setup | null {
 
   const fanSpeed = typeof r.fanSpeed === "number" ? Math.min(1, Math.max(0.2, r.fanSpeed)) : 0.7;
 
-  return { caseId: caseProfile.id, fans: finalFans, gpu, cooler, fanSpeed, looks: sanitizeLooks(r.looks) };
+  return { caseId: caseProfile.id, fans: finalFans, gpu, cooler, fanSpeed, looks: sanitizeLooks(r.looks), build: sanitizeBuild(r.build, (id) => !!findCpu(id)) };
 }

@@ -12,6 +12,15 @@
     "gpuMaxLength": 420,
     "cpuCoolerMaxHeight": 170
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 277
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -68,6 +77,7 @@
   "sources": [
     "https://bit-tech.net/reviews/tech/cases/corsair-5000d-airflow-review/1/",
     "https://manuals.plus/asin/B08M49WW51.pdf",
-    "https://www.corsair.com/explorer/diy-builder/cases/5000d-core-airflow-case/"
+    "https://www.corsair.com/explorer/diy-builder/cases/5000d-core-airflow-case/",
+    "https://www.corsair.com/jp/ru/p/cc-9011210-ww/"
   ]
 }

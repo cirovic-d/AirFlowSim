@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 163,
     "psuMaxLength": 170
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -57,6 +64,7 @@
   ],
   "sources": [
     "https://www.deepcool.com/products/Cases/fulltowercases/CC560-Mid-Tower-ATX-PC-Case/2021/15216.shtml",
-    "https://deepcool.com/products/Cases/CC560WH-Mid-Tower-ATX-PC-Case-White/2021/15217.shtml"
+    "https://deepcool.com/products/Cases/CC560WH-Mid-Tower-ATX-PC-Case-White/2021/15217.shtml",
+    "https://www.avadirect.com/CC560-WH-Tempered-Glass-No-PSU-ATX-White-Mid-Tower-Case/Product/15886248"
   ]
 }

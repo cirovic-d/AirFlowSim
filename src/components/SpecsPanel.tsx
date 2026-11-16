@@ -1,22 +1,40 @@
 import type { CaseProfile, MountPosition } from "../types";
-import { useT } from "../lib/i18n";
+import { useT, type TKey } from "../lib/i18n";
 import { isCustomCase } from "../data/cases";
 import { externalLinkProps } from "../lib/updates";
+import type { Check } from "../lib/compat";
 
 const POSITIONS: MountPosition[] = ["front", "top", "side", "bottom", "rear"];
 
-export function SpecsPanel({ caseProfile: c }: { caseProfile: CaseProfile }) {
+export function SpecsPanel({ caseProfile: c, checks }: { caseProfile: CaseProfile; checks: Check[] }) {
   const t = useT();
 
   return (
     <section className="specs">
-      <h2>{t("caseSpecs")}</h2>
+      <h2>{t("buildCheck")}</h2>
+      <ul className="check-list">
+        {checks.map((ch) => (
+          <li key={ch.id}>
+            <div>
+              <span>{t(("check_" + ch.id) as TKey)}</span>
+              <span className="muted">
+                {ch.detail}
+                {ch.noteKey && ` · ${t(ch.noteKey).replace("{max}", String(c.motherboards?.eatxMaxWidth ?? ""))}`}
+              </span>
+            </div>
+            <strong className={"fit-" + ch.fit}>{t(ch.fit)}</strong>
+          </li>
+        ))}
+      </ul>
+
+      <h2 className="section-gap">{t("caseSpecs")}</h2>
       {isCustomCase(c) && <p className="note">{t("customCaseNote")}</p>}
 
       <dl className="spec-list">
         <Row label={t("gpuMax")} value={`${c.clearanceMm.gpuMaxLength} mm`} />
         <Row label={t("cpuMax")} value={`${c.clearanceMm.cpuCoolerMaxHeight} mm`} />
         {c.clearanceMm.psuMaxLength && <Row label={t("psuMax")} value={`${c.clearanceMm.psuMaxLength} mm`} />}
+        {c.motherboards && <Row label={t("motherboard")} value={c.motherboards.formats.join(", ")} wrap />}
       </dl>
 
       <h3>{t("fanMounts")}</h3>

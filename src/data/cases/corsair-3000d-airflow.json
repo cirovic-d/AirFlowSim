@@ -13,6 +13,13 @@
     "cpuCoolerMaxHeight": 170,
     "psuMaxLength": 220
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "shroud": {
     "bottomFanVent": true,
@@ -63,6 +70,7 @@
   "sources": [
     "https://www.corsair.com/br/en/explorer/diy-builder/cases/3000d-airflow-mid-tower-case/",
     "https://www.corsair.com/ww/en/p/pc-cases/cc-9011251-ww/3000d-tempered-glass-mid-tower-black-cc-9011251-ww",
-    "https://www.ldlc.com/en/reviews/PB00562985.html"
+    "https://www.ldlc.com/en/reviews/PB00562985.html",
+    "https://www.techbenchpro.com/hardware/case/corsair-3000d-airflow"
   ]
 }

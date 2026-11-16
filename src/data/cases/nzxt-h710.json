@@ -12,6 +12,15 @@
     "gpuMaxLength": 413,
     "cpuCoolerMaxHeight": 185
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 272
+  },
   "topPanel": "solid",
   "fanMounts": {
     "front": {
@@ -63,6 +72,7 @@
     "https://nzxt.com/product/h710?variant=0",
     "https://nzxt.com/en-BE/product/h710",
     "https://www.adorama.com/nzcah710iw1.html",
-    "https://www.tomshardware.com/reviews/nzxt-h710i-atx-gaming-case,6355.html"
+    "https://www.tomshardware.com/reviews/nzxt-h710i-atx-gaming-case,6355.html",
+    "https://www.evetech.co.za/nzxt-h710-tempered-glass-gaming-case-black-red/best-deal/11171"
   ]
 }

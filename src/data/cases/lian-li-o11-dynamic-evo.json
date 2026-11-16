@@ -13,6 +13,16 @@
     "cpuCoolerMaxHeight": 167,
     "psuMaxLength": 220
   },
+  "motherboards": {
+    "formats": [
+      "E-ATX",
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ],
+    "eatxMaxWidth": 280
+  },
+  "psuPosition": "behind",
   "frontPanel": "glass",
   "shroud": {
     "none": true,
@@ -53,6 +63,7 @@
   "sources": [
     "https://lian-li.com/product/o11-dynamic-evo/",
     "https://www.vortez.net/news_story/lian_lis_popular_o11_dynamic_experiences_a_new_evolution.html",
-    "https://www.memoryexpress.com/Products/MX00120644"
+    "https://www.memoryexpress.com/Products/MX00120644",
+    "https://www.bhphotovideo.com/c/product/1690347-REG/lian_li_o11dex_o11_dynamic_evo_atx.html"
   ]
 }

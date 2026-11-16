@@ -12,6 +12,13 @@
     "cpuCoolerMaxHeight": 160,
     "psuMaxLength": 150
   },
+  "motherboards": {
+    "formats": [
+      "ATX",
+      "Micro-ATX",
+      "Mini-ITX"
+    ]
+  },
   "frontPanel": "mesh",
   "fanMounts": {
     "front": {
@@ -51,6 +58,7 @@
   ],
   "sources": [
     "https://www.gamdias.com/en/aura/component/case/AURA_GC6",
-    "https://www.gamdias.com/User_Manuals/Gaming_Component/Gaming_Case/AURA_GC6.pdf"
+    "https://www.gamdias.com/User_Manuals/Gaming_Component/Gaming_Case/AURA_GC6.pdf",
+    "https://www.pcstudio.in/product/gamdias-aura-gc6-wh-argb-mid-tower-gaming-cabinet/"
   ]
 }
